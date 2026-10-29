@@ -12,6 +12,8 @@ class CheckoutRepository {
   CheckoutRepository(this._client);
 
   /// Get saved addresses.
+  /// If the user has no saved addresses, the backend returns HTTP 404,
+  /// which is treated as an empty address list.
   Future<List<AddressModel>> getAddresses() async {
     try {
       final response = await _client.dio.get(ApiConstants.address);
@@ -20,12 +22,19 @@ class CheckoutRepository {
           .map((e) => AddressModel.fromJson(e as Map<String, dynamic>))
           .toList();
     } on DioException catch (e) {
+      if (e.response?.statusCode == 404 ||
+          (e.error is ApiException &&
+              (e.error as ApiException).statusCode == 404)) {
+        return [];
+      }
       throw e.error as ApiException? ??
           const ApiException(message: 'Failed to load addresses');
     }
   }
 
   /// Add a new address.
+  /// Backend expects: { "address": { street, city, state, zip } }
+  /// The address OBJECT must be nested inside the 'address' key — NOT an array.
   Future<void> addAddress(
     String street,
     String city,
@@ -36,9 +45,12 @@ class CheckoutRepository {
       await _client.dio.post(
         ApiConstants.address,
         data: {
-          "address": [
-            {"zip": zip, "state": state, "street": street, "city": city},
-          ],
+          'address': {
+            'street': street,
+            'city': city,
+            'state': state,
+            'zip': zip,
+          },
         },
       );
     } on DioException catch (e) {
@@ -58,6 +70,8 @@ class CheckoutRepository {
   }
 
   /// Place an order.
+  /// Backend expects: `{ "address": "addressId" }`
+  /// The address must be the MongoDB _id of the user's saved address — NOT the full object.
   Future<OrderModel> placeOrder(
     String street,
     String city,
@@ -69,17 +83,10 @@ class CheckoutRepository {
       final response = await _client.dio.post(
         ApiConstants.order,
         data: {
-          "address": {
-            "street": street,
-            "city": city,
-            "state": state,
-            "zip": zip,
-            "_id": id,
-          },
+          'address': id, // ⚠️ must be the address _id string, not an object
         },
       );
       final data = response.data['data'] ?? response.data;
-      print("response data: $data");
       return OrderModel.fromJson(data as Map<String, dynamic>);
     } on DioException catch (e) {
       throw e.error as ApiException? ??

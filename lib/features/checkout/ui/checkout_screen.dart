@@ -1,5 +1,3 @@
-import 'package:e_commerce/features/profile/logic/cubit/cubit/get_profile_cubit.dart';
-import 'package:e_commerce/features/profile/logic/cubit/cubit/get_profile_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +5,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/widgets/hero_button.dart';
 import '../../../core/widgets/shimmer_loading.dart';
-import '../data/models/address_model.dart';
+import '../../cart/logic/cart_cubit.dart';
 import '../logic/checkout_cubit.dart';
 import 'order_success_screen.dart';
 
@@ -23,7 +21,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<GetProfileCubit>().getProfile();
+    context.read<CheckoutCubit>().fetchAddresses();
   }
 
   void _showAddAddressSheet() {
@@ -121,6 +119,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       body: BlocConsumer<CheckoutCubit, CheckoutState>(
         listener: (context, state) {
           if (state.status == CheckoutStatus.orderPlaced) {
+            // Backend deletes the cart upon order creation; refresh cart state
+            context.read<CartCubit>().fetchCart();
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -136,14 +136,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           }
         },
         builder: (context, state) {
-          if (state.status == CheckoutStatus.loading) {
+          if (state.status == CheckoutStatus.loading &&
+              state.addresses.isEmpty) {
             return Padding(
               padding: const EdgeInsets.all(AppDimensions.screenPadding),
               child: Column(
                 children: List.generate(
                   3,
-                  (_) => Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
+                  (_) => const Padding(
+                    padding: EdgeInsets.only(bottom: 12),
                     child: ShimmerLoading(
                       width: double.infinity,
                       height: 80,
@@ -160,54 +161,27 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               Expanded(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.all(AppDimensions.screenPadding),
-                  child: MultiBlocListener(
-                    listeners: [
-                      BlocListener<GetProfileCubit, GetProfileState>(
-                        listener: (context, profileState) {
-                          if (profileState is GetProfileSuccess) {
-                            context.read<CheckoutCubit>().getAddressesFromUser(
-                              profileState.user.addresses ?? [],
-                            );
-                          }
-                        },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Shipping Address',
+                            style: Theme.of(
+                              context,
+                            ).textTheme.headlineSmall,
+                          ),
+                          TextButton.icon(
+                            onPressed: _showAddAddressSheet,
+                            icon: const Icon(Icons.add, size: 18),
+                            label: const Text('Add New'),
+                          ),
+                        ],
                       ),
-                      BlocListener<CheckoutCubit, CheckoutState>(
-                        listener: (context, checkoutState) {
-                          if (checkoutState.status == CheckoutStatus.loaded) {
-                            context.read<GetProfileCubit>().getProfile();
-                          }
-                        },
-                      ),
-                    ],
-                    child: BlocBuilder<GetProfileCubit, GetProfileState>(
-                      builder: (context, profileState) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Shipping Address',
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.headlineSmall,
-                                ),
-                                TextButton.icon(
-                                  onPressed: _showAddAddressSheet,
-                                  icon: const Icon(Icons.add, size: 18),
-                                  label: const Text('Add New'),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 12),
-                            if (profileState is GetProfileLoading)
-                              const Center(child: CircularProgressIndicator())
-                            else if (profileState is GetProfileError &&
-                                state.addresses.isEmpty)
-                              Center(child: Text(profileState.message))
-                            else ...[
-                              if (state.addresses.isEmpty)
+                      const SizedBox(height: 12),
+                      if (state.addresses.isEmpty)
                                 Container(
                                   padding: const EdgeInsets.all(24),
                                   width: double.infinity,
@@ -310,12 +284,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         delay: Duration(milliseconds: 80 * i),
                                       );
                                 }),
-                            ],
-                          ],
-                        );
-                      },
+                      ],
                     ),
-                  ),
                 ),
               ),
               // Bottom confirm

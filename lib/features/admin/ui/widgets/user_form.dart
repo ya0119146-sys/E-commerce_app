@@ -25,6 +25,7 @@ class _UserFormState extends State<UserForm> {
   late TextEditingController _nameController;
   late TextEditingController _usernameController;
   late TextEditingController _emailController;
+  late TextEditingController _phoneController;
   late TextEditingController _passwordController;
   late TextEditingController _confirmPasswordController;
   String _selectedRole = 'user';
@@ -36,6 +37,7 @@ class _UserFormState extends State<UserForm> {
     _nameController = TextEditingController(text: widget.user?.name);
     _usernameController = TextEditingController(text: widget.user?.userName);
     _emailController = TextEditingController(text: widget.user?.email);
+    _phoneController = TextEditingController(text: widget.user?.phone);
     _passwordController = TextEditingController();
     _confirmPasswordController = TextEditingController();
     if (widget.user != null) {
@@ -48,6 +50,7 @@ class _UserFormState extends State<UserForm> {
     _nameController.dispose();
     _usernameController.dispose();
     _emailController.dispose();
+    _phoneController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
@@ -67,6 +70,7 @@ class _UserFormState extends State<UserForm> {
         'name': _nameController.text.trim(),
         'username': _usernameController.text.trim(),
         'email': _emailController.text.trim(),
+        'phone': _phoneController.text.trim(),
         'role': _selectedRole,
       };
 
@@ -83,7 +87,7 @@ class _UserFormState extends State<UserForm> {
       }
 
       widget.onSubmit(formData);
-      Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
     }
   }
 
@@ -182,6 +186,22 @@ class _UserFormState extends State<UserForm> {
                     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                         .hasMatch(v)) {
                       return 'Invalid email';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _phoneController,
+                  decoration: const InputDecoration(
+                    labelText: 'Phone',
+                    prefixIcon: Icon(Icons.phone_outlined),
+                  ),
+                  keyboardType: TextInputType.phone,
+                  validator: (v) {
+                    if (v == null || v.isEmpty) return 'Phone is required';
+                    if (!RegExp(r'^[0-9]{11,15}$').hasMatch(v)) {
+                      return 'Must be 11-15 digits';
                     }
                     return null;
                   },

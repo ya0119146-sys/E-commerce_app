@@ -17,10 +17,13 @@ class ProductRepository {
     String? subcategory,
     String? sort,
     int page = 1,
-    int limit = 10,
+    int limit = 8,
   }) async {
     try {
       final search = keyword?.trim();
+      final cat = category?.trim();
+      final sub = subcategory?.trim();
+      final s = sort?.trim();
 
       final response = await _client.dio.get(
         ApiConstants.products,
@@ -28,9 +31,9 @@ class ProductRepository {
           'page': page,
           'limit': limit,
           if (search != null && search.isNotEmpty) 'search': search,
-          if (category != null) 'category': category,
-          if (subcategory != null) 'subcategory': subcategory,
-          if (sort != null) 'sort': sort,
+          if (cat != null && cat.isNotEmpty) 'category': cat,
+          if (sub != null && sub.isNotEmpty) 'subcategory': sub,
+          if (s != null && s.isNotEmpty) 'sort': s,
         },
       );
       final data = response.data['data'] as List? ?? [];

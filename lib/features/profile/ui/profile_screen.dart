@@ -214,7 +214,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             // Determine which image to show (priority: local file > cached url > user.image)
                             final networkImageUrl =
                                 _localImageUrl ??
-                                (user.image != null ? user.image! : null);
+                                user.image;
 
                             return Container(
                               width: 90,

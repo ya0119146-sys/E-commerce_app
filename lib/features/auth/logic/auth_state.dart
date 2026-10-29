@@ -22,6 +22,10 @@ class AuthAuthenticated extends AuthState {
 
 class AuthUnauthenticated extends AuthState {}
 
+/// Emitted after a successful signup when no token is returned.
+/// UI should navigate to the login screen.
+class AuthSignupSuccess extends AuthState {}
+
 class AuthResetCodeSent extends AuthState {
   final String message;
   const AuthResetCodeSent(this.message);

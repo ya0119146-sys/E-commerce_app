@@ -14,8 +14,7 @@ class ProfileRepository {
   Future<UserModel> getProfile() async {
     try {
       final response = await _client.dio.get(ApiConstants.profile);
-      print("response.data['data']$response.data['data']");
-      return UserModel.fromJson(response.data['data'] ?? response.data);
+            return UserModel.fromJson(response.data['data'] ?? response.data);
     } on DioException catch (e) {
       throw e.error as ApiException? ??
           const ApiException(message: 'Failed to load profile');
@@ -50,7 +49,7 @@ class ProfileRepository {
   /// Delete profile.
   Future<void> deleteProfile() async {
     try {
-      await _client.dio.delete(ApiConstants.profile);
+      await _client.dio.delete(ApiConstants.profileDelete);
     } on DioException catch (e) {
       throw e.error as ApiException? ??
           const ApiException(message: 'Failed to delete profile');

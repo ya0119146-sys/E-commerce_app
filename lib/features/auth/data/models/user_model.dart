@@ -30,7 +30,7 @@ class UserModel {
       name: json['name'] as String? ?? '',
       userName: json['username'] as String? ?? '',
       email: json['email'] as String? ?? '',
-      phone: json['phone'] as String?,
+      phone: json['phone']?.toString(),
       image: json['image'] as String?,
       role: json['role'] as String? ?? 'user',
       addresses: (json['address'] as List? ?? [])
@@ -46,7 +46,8 @@ class UserModel {
     'email': email,
     if (phone != null) 'phone': phone,
     if (image != null) 'image': image,
-    if (addresses != null) 'address': addresses!.map((e) => e.toJson()).toList(),
+    if (addresses != null)
+      'address': addresses!.map((e) => e.toJson()).toList(),
   };
 
   UserModel copyWith({

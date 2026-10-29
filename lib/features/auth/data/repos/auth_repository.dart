@@ -14,6 +14,7 @@ class AuthRepository {
   Future<UserModel> signup({
     required String name,
     required String userName,
+    required String phone,
     required String email,
     required String password,
     required String confirmPassword,
@@ -24,15 +25,14 @@ class AuthRepository {
         data: {
           'name': name,
           'username': userName,
+          'phone': phone,
           'email': email,
           'password': password,
           'confirmPassword': confirmPassword,
         },
       );
+      // Signup returns { data: <user>, message: "..." } — no token.
       final user = UserModel.fromJson(response.data['data'] ?? response.data);
-      // if (user.token != null) {
-      //   await _client.saveToken(user.token!);
-      // }
       return user;
     } on DioException catch (e) {
       throw e.error as ApiException? ??
@@ -52,9 +52,8 @@ class AuthRepository {
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data['data'] ?? response.data;
-        final token = response.data['token'];
-        print("token : $token");
-        //final user = UserModel.fromJson(data).copyWith(token: token as String?);
+        // Backend returns { data: <user>, token: "<JWT>" } — lowercase 'token'.
+        final token = response.data['token'] as String?;
         if (token != null) {
           await _client.saveToken(token);
         }
@@ -69,21 +68,30 @@ class AuthRepository {
   }
 
   /// Change password.
+  /// Backend field: 'currantPassword' (typo in backend — not 'currentPassword').
+  /// HTTP method: PUT (not PATCH).
+  /// Returns a new token that must be saved.
   Future<String> changePassword({
     required String currentPassword,
     required String password,
     required String confirmPassword,
   }) async {
     try {
-      final response = await _client.dio.patch(
+      final response = await _client.dio.put(
         ApiConstants.changePassword,
         data: {
-          'currentPassword': currentPassword,
+          'currantPassword': currentPassword, // ⚠️ backend typo: 'currantPassword'
           'password': password,
           'confirmPassword': confirmPassword,
         },
       );
-      return response.data['message'] ?? 'Password changed successfully!';
+      // Backend returns { data: <user>, token: "<new JWT>" }.
+      // Save the new token so subsequent requests continue to work.
+      final newToken = response.data['token'] as String?;
+      if (newToken != null) {
+        await _client.saveToken(newToken);
+      }
+      return response.data['message'] as String? ?? 'Password changed successfully!';
     } on DioException catch (e) {
       throw e.error as ApiException? ??
           const ApiException(message: 'Failed to change password');
@@ -101,38 +109,11 @@ class AuthRepository {
     }
   }
 
-  // /// Update user profile.
-  // Future<UserModel> updateProfile({String? name, String? imagePath}) async {
-  //   try {
-  //     final formData = FormData();
-  //     if (name != null) formData.fields.add(MapEntry('name', name));
-
-  //     if (imagePath != null) {
-  //       formData.files.add(
-  //         MapEntry(
-  //           'image',
-  //           await MultipartFile.fromFile(imagePath),
-  //         ),
-  //       );
-  //     }
-
-  //     final response = await _client.dio.patch(
-  //       ApiConstants.profileUpdate,
-  //       data: formData,
-  //     );
-
-  //     final data = response.data['data'] ?? response.data;
-  //     return UserModel.fromJson(data);
-  //   } on DioException catch (e) {
-  //     throw e.error as ApiException? ??
-  //         const ApiException(message: 'Failed to update profile');
-  //   }
-  // }
-
   /// Delete profile.
+  /// Endpoint: DELETE /api/v1/profile/delete
   Future<void> deleteProfile() async {
     try {
-      await _client.dio.delete(ApiConstants.profile);
+      await _client.dio.delete(ApiConstants.profileDelete);
     } on DioException catch (e) {
       throw e.error as ApiException? ??
           const ApiException(message: 'Failed to delete profile');
@@ -142,16 +123,24 @@ class AuthRepository {
   /// Logout — clear stored token.
   Future<void> logout() async {
     await _client.clearToken();
+    await _client.clearResetToken();
   }
 
   /// Forget password — send reset code to email.
+  /// Backend returns `{ message: "...", Token: "RESET_JWT" }` — capital T.
+  /// The reset token must be stored and sent in verifyCode + resetPassword.
   Future<String> forgetPassword(String email) async {
     try {
       final response = await _client.dio.post(
         ApiConstants.forgetPassword,
         data: {'email': email},
       );
-      return response.data['message'] ?? 'Reset code sent to your email';
+      // ⚠️ Backend uses capital 'Token' (not 'token').
+      final resetToken = response.data['Token'] as String?;
+      if (resetToken != null) {
+        await _client.saveResetToken(resetToken);
+      }
+      return response.data['message'] as String? ?? 'Reset code sent to your email';
     } on DioException catch (e) {
       throw e.error as ApiException? ??
           const ApiException(message: 'Failed to send reset code');
@@ -159,16 +148,54 @@ class AuthRepository {
   }
 
   /// Verify reset code.
+  /// Requires the reset token from forgetPassword as Authorization header.
+  /// Body field: 'resetcode' (lowercase, one word — backend exact spelling).
   Future<String> verifyCode(String code) async {
     try {
+      final resetToken = await _client.getResetToken();
+      if (resetToken == null || resetToken.isEmpty) {
+        throw const ApiException(
+          message: 'Reset session expired. Please request a new reset code.',
+        );
+      }
       final response = await _client.dio.post(
         ApiConstants.verifyCode,
-        data: {'resetCode': code},
+        data: {'resetcode': code}, // ⚠️ exact key: 'resetcode' (all lowercase)
+        options: Options(
+          headers: {'Authorization': 'Bearer $resetToken'},
+        ),
       );
-      return response.data['status'] ?? 'Success';
+      return response.data['message'] as String? ?? 'Code verified';
     } on DioException catch (e) {
       throw e.error as ApiException? ??
           const ApiException(message: 'Invalid reset code');
+    }
+  }
+
+  /// Reset password using the stored reset token.
+  Future<void> resetPassword({
+    required String password,
+    required String confirmPassword,
+  }) async {
+    try {
+      final resetToken = await _client.getResetToken();
+      if (resetToken == null || resetToken.isEmpty) {
+        throw const ApiException(
+          message: 'Reset session expired. Please request a new reset code.',
+        );
+      }
+      await _client.dio.post(
+        ApiConstants.resetPassword,
+        data: {'password': password, 'confirmPassword': confirmPassword},
+        options: Options(
+          headers: {'Authorization': 'Bearer $resetToken'},
+        ),
+      );
+      // Clear the one-time reset token after use.
+      await _client.clearResetToken();
+    } on DioException catch (e) {
+      throw e.error as ApiException? ??
+          const ApiException(message: 'Failed to reset password');
     }
   }
 

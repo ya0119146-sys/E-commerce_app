@@ -32,6 +32,7 @@ class _ProductFormState extends State<ProductForm> {
   late TextEditingController _descController;
   late TextEditingController _priceController;
   late TextEditingController _qtyController;
+  late TextEditingController _sizeController;
   String? _selectedCategoryId;
   String? _selectedSubcategoryId;
   File? _coverImage;
@@ -42,6 +43,7 @@ class _ProductFormState extends State<ProductForm> {
     super.initState();
     _nameController = TextEditingController(text: widget.product?.name);
     _descController = TextEditingController(text: widget.product?.description);
+    _sizeController = TextEditingController(text: widget.product?.size ?? 'M');
     _priceController = TextEditingController(
       text: widget.product?.price.toString(),
     );
@@ -54,6 +56,7 @@ class _ProductFormState extends State<ProductForm> {
   void dispose() {
     _nameController.dispose();
     _descController.dispose();
+    _sizeController.dispose();
     _priceController.dispose();
     _qtyController.dispose();
     super.dispose();
@@ -80,8 +83,11 @@ class _ProductFormState extends State<ProductForm> {
   void _submit() async {
     if (_formKey.currentState!.validate()) {
       final Map<String, dynamic> data = {
-        'name': _nameController.text,
-        'description': _descController.text,
+        'name': _nameController.text.trim(),
+        'description': _descController.text.trim(),
+        'size': _sizeController.text.trim().isNotEmpty
+            ? _sizeController.text.trim()
+            : 'M',
         'price': double.parse(_priceController.text),
         'quantity': int.parse(_qtyController.text),
         if (_selectedCategoryId != null) 'category': _selectedCategoryId,
@@ -102,7 +108,7 @@ class _ProductFormState extends State<ProductForm> {
       }
 
       widget.onSubmit(formData);
-      Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
     }
   }
 
@@ -289,6 +295,14 @@ class _ProductFormState extends State<ProductForm> {
                   decoration: const InputDecoration(labelText: 'Description'),
                   maxLines: 3,
                   validator: (v) => v!.isEmpty ? 'Required' : null,
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: _sizeController,
+                  decoration: const InputDecoration(
+                    labelText: 'Size (e.g. S, M, L, XL, Standard)',
+                  ),
+                  validator: (v) => v!.isEmpty ? 'Size is required' : null,
                 ),
                 const SizedBox(height: 12),
                 Row(

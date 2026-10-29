@@ -229,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onSelected: (id) {
                     context.read<CategoriesCubit>().selectCategory(id);
                     context.read<ProductsCubit>().fetchProducts(
-                      category: id ?? '',
+                      category: id,
                       refresh: true,
                     );
                   },

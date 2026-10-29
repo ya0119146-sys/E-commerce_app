@@ -20,42 +20,53 @@ class ProductsCubit extends Cubit<ProductsState> {
     bool refresh = false,
   }) async {
     if (refresh) {
-      emit(state.copyWith(
-        status: ProductsStatus.loading,
-        products: [],
-        page: 1,
-        hasMore: true,
-      ));
+      emit(
+        state.copyWith(
+          status: ProductsStatus.loading,
+          products: [],
+          page: 1,
+          hasMore: true,
+        ),
+      );
     } else {
       emit(state.copyWith(status: ProductsStatus.loading));
     }
 
+    final effectiveCategory = (category != null)
+        ? (category.trim().isEmpty ? null : category.trim())
+        : state.category;
+    final effectiveKeyword = keyword?.trim() ?? state.keyword;
+    final effectiveSort = sort?.trim() ?? state.sort;
+
     try {
       final products = await _repository.getProducts(
-        keyword: keyword ?? state.keyword,
-        category: category ?? state.category,
-        sort: sort ?? state.sort,
+        keyword: effectiveKeyword,
+        category: effectiveCategory,
+        sort: effectiveSort,
         page: 1,
       );
-      emit(state.copyWith(
-        status: ProductsStatus.loaded,
-        products: products,
-        page: 1,
-        hasMore: products.length >= 10,
-        keyword: keyword,
-        category: category,
-        sort: sort,
-      ));
+      emit(
+        state.copyWith(
+          status: ProductsStatus.loaded,
+          products: products,
+          page: 1,
+          hasMore: products.length >= 8,
+          keyword: effectiveKeyword,
+          category: effectiveCategory,
+          sort: effectiveSort,
+        ),
+      );
     } on ApiException catch (e) {
-      emit(state.copyWith(
-        status: ProductsStatus.error,
-        errorMessage: e.message,
-      ));
+      emit(
+        state.copyWith(status: ProductsStatus.error, errorMessage: e.message),
+      );
     } catch (_) {
-      emit(state.copyWith(
-        status: ProductsStatus.error,
-        errorMessage: 'Failed to load products',
-      ));
+      emit(
+        state.copyWith(
+          status: ProductsStatus.error,
+          errorMessage: 'Failed to load products',
+        ),
+      );
     }
   }
 
@@ -73,17 +84,18 @@ class ProductsCubit extends Cubit<ProductsState> {
         sort: state.sort,
         page: nextPage,
       );
-      emit(state.copyWith(
-        status: ProductsStatus.loaded,
-        products: [...state.products, ...newProducts],
-        page: nextPage,
-        hasMore: newProducts.length >= 10,
-      ));
+      emit(
+        state.copyWith(
+          status: ProductsStatus.loaded,
+          products: [...state.products, ...newProducts],
+          page: nextPage,
+          hasMore: newProducts.length >= 8,
+        ),
+      );
     } on ApiException catch (e) {
-      emit(state.copyWith(
-        status: ProductsStatus.error,
-        errorMessage: e.message,
-      ));
+      emit(
+        state.copyWith(status: ProductsStatus.error, errorMessage: e.message),
+      );
     }
   }
 

@@ -14,7 +14,12 @@ class AdminCubit extends Cubit<AdminState> {
     emit(state.copyWith(status: AdminStatus.loading));
     try {
       await _repository.createCategory(data);
-      emit(state.copyWith(status: AdminStatus.success, message: 'Category created successfully!'));
+      emit(
+        state.copyWith(
+          status: AdminStatus.success,
+          message: 'Category created successfully!',
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
     }
@@ -24,7 +29,12 @@ class AdminCubit extends Cubit<AdminState> {
     emit(state.copyWith(status: AdminStatus.loading));
     try {
       await _repository.updateCategory(id, data);
-      emit(state.copyWith(status: AdminStatus.success, message: 'Category updated successfully!'));
+      emit(
+        state.copyWith(
+          status: AdminStatus.success,
+          message: 'Category updated successfully!',
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
     }
@@ -34,7 +44,12 @@ class AdminCubit extends Cubit<AdminState> {
     emit(state.copyWith(status: AdminStatus.loading));
     try {
       await _repository.deleteCategory(id);
-      emit(state.copyWith(status: AdminStatus.success, message: 'Category deleted successfully!'));
+      emit(
+        state.copyWith(
+          status: AdminStatus.success,
+          message: 'Category deleted successfully!',
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
     }
@@ -46,7 +61,12 @@ class AdminCubit extends Cubit<AdminState> {
     emit(state.copyWith(status: AdminStatus.loading));
     try {
       await _repository.createSubcategory(data);
-      emit(state.copyWith(status: AdminStatus.success, message: 'Subcategory created successfully!'));
+      emit(
+        state.copyWith(
+          status: AdminStatus.success,
+          message: 'Subcategory created successfully!',
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
     }
@@ -56,7 +76,12 @@ class AdminCubit extends Cubit<AdminState> {
     emit(state.copyWith(status: AdminStatus.loading));
     try {
       await _repository.updateSubcategory(id, data);
-      emit(state.copyWith(status: AdminStatus.success, message: 'Subcategory updated successfully!'));
+      emit(
+        state.copyWith(
+          status: AdminStatus.success,
+          message: 'Subcategory updated successfully!',
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
     }
@@ -66,7 +91,12 @@ class AdminCubit extends Cubit<AdminState> {
     emit(state.copyWith(status: AdminStatus.loading));
     try {
       await _repository.deleteSubcategory(id);
-      emit(state.copyWith(status: AdminStatus.success, message: 'Subcategory deleted successfully!'));
+      emit(
+        state.copyWith(
+          status: AdminStatus.success,
+          message: 'Subcategory deleted successfully!',
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
     }
@@ -78,7 +108,12 @@ class AdminCubit extends Cubit<AdminState> {
     emit(state.copyWith(status: AdminStatus.loading));
     try {
       await _repository.createProduct(data);
-      emit(state.copyWith(status: AdminStatus.success, message: 'Product created successfully!'));
+      emit(
+        state.copyWith(
+          status: AdminStatus.success,
+          message: 'Product created successfully!',
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
     }
@@ -88,7 +123,12 @@ class AdminCubit extends Cubit<AdminState> {
     emit(state.copyWith(status: AdminStatus.loading));
     try {
       await _repository.updateProduct(id, data);
-      emit(state.copyWith(status: AdminStatus.success, message: 'Product updated successfully!'));
+      emit(
+        state.copyWith(
+          status: AdminStatus.success,
+          message: 'Product updated successfully!',
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
     }
@@ -98,7 +138,12 @@ class AdminCubit extends Cubit<AdminState> {
     emit(state.copyWith(status: AdminStatus.loading));
     try {
       await _repository.deleteProduct(id);
-      emit(state.copyWith(status: AdminStatus.success, message: 'Product deleted successfully!'));
+      emit(
+        state.copyWith(
+          status: AdminStatus.success,
+          message: 'Product deleted successfully!',
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
     }
@@ -110,10 +155,12 @@ class AdminCubit extends Cubit<AdminState> {
     emit(state.copyWith(status: AdminStatus.loading));
     try {
       await _repository.createUser(data);
-      emit(state.copyWith(
-        status: AdminStatus.success,
-        message: 'User created successfully!',
-      ));
+      emit(
+        state.copyWith(
+          status: AdminStatus.success,
+          message: 'User created successfully!',
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
     }
@@ -123,10 +170,12 @@ class AdminCubit extends Cubit<AdminState> {
     emit(state.copyWith(status: AdminStatus.loading));
     try {
       await _repository.updateUser(id, data);
-      emit(state.copyWith(
-        status: AdminStatus.success,
-        message: 'User updated successfully!',
-      ));
+      emit(
+        state.copyWith(
+          status: AdminStatus.success,
+          message: 'User updated successfully!',
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
     }
@@ -136,10 +185,12 @@ class AdminCubit extends Cubit<AdminState> {
     emit(state.copyWith(status: AdminStatus.loading));
     try {
       await _repository.deleteUser(id);
-      emit(state.copyWith(
-        status: AdminStatus.success,
-        message: 'User deleted successfully!',
-      ));
+      emit(
+        state.copyWith(
+          status: AdminStatus.success,
+          message: 'User deleted successfully!',
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
     }

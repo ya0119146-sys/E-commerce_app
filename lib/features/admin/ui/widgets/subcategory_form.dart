@@ -77,7 +77,7 @@ class _SubcategoryFormState extends State<SubcategoryForm> {
       }
 
       widget.onSubmit(formData);
-      Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
     }
   }
 

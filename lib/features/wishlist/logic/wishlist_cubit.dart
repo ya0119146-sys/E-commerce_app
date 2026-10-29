@@ -59,10 +59,15 @@ class WishlistCubit extends Cubit<WishlistState> {
     emit(state.copyWith(wishlistIds: currentIds, products: currentProducts));
 
     try {
-      final updatedIds = await _repository.toggleWishlist(productId);
-      // After sync, we might want to re-fetch or just trust the IDs.
-      // To keep products in sync with the server list:
-      emit(state.copyWith(wishlistIds: updatedIds.toSet()));
+      final updatedProducts = await _repository.toggleWishlist(
+        productId,
+        isInWishlist: wasInWishlist,
+      );
+      final newIds = updatedProducts.map((p) => p.id).toSet();
+      emit(state.copyWith(
+        products: updatedProducts,
+        wishlistIds: newIds,
+      ));
     } catch (_) {
       // Revert on error
       if (wasInWishlist) {

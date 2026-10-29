@@ -41,23 +41,28 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   /// Signup with name, email, and password.
+  /// Backend does NOT return a token on signup — navigates to login.
   Future<void> signup({
     required String name,
     required String userName,
+    required String phone,
     required String email,
     required String password,
     required String confirmPassword,
   }) async {
     emit(AuthLoading());
     try {
-      final user = await _repository.signup(
+      await _repository.signup(
         name: name,
         userName: userName,
+        phone: phone,
         email: email,
         password: password,
         confirmPassword: confirmPassword,
       );
-      emit(AuthAuthenticated(user));
+      // No token returned on signup — emit unauthenticated so the UI
+      // redirects to login.
+      emit(AuthSignupSuccess());
     } on ApiException catch (e) {
       emit(AuthError(e.message));
     } catch (e) {
@@ -71,7 +76,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthUnauthenticated());
   }
 
-  /// Forget password.
+  /// Forget password — request reset code via email.
   Future<void> forgetPassword(String email) async {
     emit(AuthLoading());
     try {
@@ -84,7 +89,7 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  /// Verify reset code.
+  /// Verify reset code sent to email.
   Future<void> verifyCode(String code) async {
     emit(AuthLoading());
     try {
@@ -97,6 +102,28 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  /// Reset password using the verified reset token.
+  Future<void> resetPassword({
+    required String password,
+    required String confirmPassword,
+  }) async {
+    emit(AuthLoading());
+    try {
+      await _repository.resetPassword(
+        password: password,
+        confirmPassword: confirmPassword,
+      );
+      // After password reset, direct to login.
+      emit(AuthUnauthenticated());
+    } on ApiException catch (e) {
+      emit(AuthError(e.message));
+    } catch (e) {
+      emit(const AuthError('Failed to reset password.'));
+    }
+  }
+
+  /// Change password (authenticated user).
+  /// Backend issues a new token after change — the repository saves it.
   Future<void> changePassword({
     required String currentPassword,
     required String password,
@@ -109,6 +136,9 @@ class AuthCubit extends Cubit<AuthState> {
         password: password,
         confirmPassword: confirmPassword,
       );
+      // New token already saved in repository. Clear session so user re-logs in
+      // with the new token — the old token is now invalid per backend rules.
+      await _repository.logout();
       emit(AuthUnauthenticated());
     } on ApiException catch (e) {
       emit(AuthError(e.message));

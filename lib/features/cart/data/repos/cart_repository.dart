@@ -11,6 +11,8 @@ class CartRepository {
   CartRepository(this._client);
 
   /// Get current cart.
+  /// If the cart is empty, the backend returns HTTP 404, which is treated
+  /// as an empty cart state rather than an error.
   Future<CartModel> getCart() async {
     try {
       final response = await _client.dio.get(ApiConstants.cart);
@@ -20,6 +22,11 @@ class CartRepository {
       }
       return CartModel.empty;
     } on DioException catch (e) {
+      if (e.response?.statusCode == 404 ||
+          (e.error is ApiException &&
+              (e.error as ApiException).statusCode == 404)) {
+        return CartModel.empty;
+      }
       throw e.error as ApiException? ??
           const ApiException(message: 'Failed to load cart');
     }

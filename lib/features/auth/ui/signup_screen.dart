@@ -1,4 +1,3 @@
-import 'package:e_commerce/features/store/ui/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,6 +23,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _phoneController = TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirm = true;
 
@@ -33,6 +33,7 @@ class _SignupScreenState extends State<SignupScreen> {
     _userNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _phoneController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
   }
@@ -45,6 +46,7 @@ class _SignupScreenState extends State<SignupScreen> {
         email: _emailController.text.trim(),
         password: _passwordController.text,
         confirmPassword: _confirmPasswordController.text,
+        phone: _phoneController.text.trim(),
       );
     }
   }
@@ -62,13 +64,14 @@ class _SignupScreenState extends State<SignupScreen> {
               context,
             ).showSnackBar(SnackBar(content: Text(state.message)));
           }
-          if (state is AuthAuthenticated) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomeScreen(role: state.user.role),
+          // Backend does NOT return a token on signup — navigate to login.
+          if (state is AuthSignupSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Account created! Please log in.'),
               ),
             );
+            Navigator.pop(context); // back to login screen
           }
         },
         child: Container(
@@ -191,6 +194,28 @@ class _SignupScreenState extends State<SignupScreen> {
                                   }
                                   if (!value.contains('@')) {
                                     return 'Please enter a valid email';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(
+                                height: AppDimensions.spacingDefault,
+                              ),
+                              TextFormField(
+                                controller: _phoneController,
+                                keyboardType: TextInputType.phone,
+                                decoration: const InputDecoration(
+                                  labelText: 'Phone Number',
+                                  prefixIcon: Icon(Icons.phone_outlined),
+                                  hintText: 'e.g. 01012345678',
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your phone number';
+                                  }
+                                  final phoneRegExp = RegExp(r'^[0-9]{10,15}$');
+                                  if (!phoneRegExp.hasMatch(value)) {
+                                    return 'Please enter a valid phone number (10–15 digits)';
                                   }
                                   return null;
                                 },

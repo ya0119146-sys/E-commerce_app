@@ -50,7 +50,7 @@ class _CategoryFormState extends State<CategoryForm> {
           'image': await MultipartFile.fromFile(_selectedImage!.path),
       });
       widget.onSubmit(formData);
-      Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
     }
   }
 

@@ -70,8 +70,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     prefixIcon: Icon(Icons.lock_outline),
                   ),
                   validator: (value) {
-                    if (value == null || value.isEmpty)
-                      return 'Please enter current password';
+                    if (value == null || value.isEmpty) { return 'Please enter current password'; }
                     return null;
                   },
                 ),
@@ -84,10 +83,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     prefixIcon: Icon(Icons.lock_reset),
                   ),
                   validator: (value) {
-                    if (value == null || value.isEmpty)
-                      return 'Please enter new password';
-                    if (value.length < 6)
-                      return 'Password must be at least 6 characters';
+                    if (value == null || value.isEmpty) { return 'Please enter new password'; }
+                    if (value.length < 6) { return 'Password must be at least 6 characters'; }
                     return null;
                   },
                 ),
@@ -100,8 +97,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     prefixIcon: Icon(Icons.lock_reset),
                   ),
                   validator: (value) {
-                    if (value != _newPasswordController.text)
-                      return 'Passwords do not match';
+                    if (value != _newPasswordController.text) { return 'Passwords do not match'; }
                     return null;
                   },
                 ),

@@ -55,7 +55,7 @@ class ReviewRepository {
   /// Get my reviews.
   Future<List<ReviewModel>> getMyReviews() async {
     try {
-      final response = await _client.dio.get(ApiConstants.reviews);
+      final response = await _client.dio.get(ApiConstants.reviewsMe);
       final data = response.data['data'] as List? ?? [];
       return data
           .map((e) => ReviewModel.fromJson(e as Map<String, dynamic>))

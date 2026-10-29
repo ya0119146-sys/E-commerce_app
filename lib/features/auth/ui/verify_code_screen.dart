@@ -7,6 +7,7 @@ import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_gradients.dart';
 import '../../../core/widgets/hero_button.dart';
 import '../logic/auth_cubit.dart';
+import 'reset_password_screen.dart';
 
 /// Verify code screen for password recovery.
 class VerifyCodeScreen extends StatefulWidget {
@@ -55,9 +56,10 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Code verified successfully!')),
             );
-            // In a real app, you would navigate to ResetPasswordScreen
-            // For now, let's just go back to login as a placeholder
-            Navigator.of(context).popUntil((route) => route.isFirst);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const ResetPasswordScreen()),
+            );
           }
         },
         child: Container(
