@@ -2,6 +2,7 @@ import 'package:e_commerce/features/profile/data/repos/profile_repo.dart';
 import 'package:get_it/get_it.dart';
 import '../network/dio_client.dart';
 import '../../features/auth/data/repos/auth_repository.dart';
+import '../../features/auth/data/services/saved_accounts_service.dart';
 import '../../features/store/data/repos/product_repository.dart';
 import '../../features/store/data/repos/category_repository.dart';
 import '../../features/cart/data/repos/cart_repository.dart';
@@ -16,6 +17,7 @@ final getIt = GetIt.instance;
 Future<void> setupServiceLocator() async {
   // ─── Network ───
   getIt.registerLazySingleton<DioClient>(() => DioClient());
+  getIt.registerLazySingleton<SavedAccountsService>(() => SavedAccountsService());
 
   // ─── Repositories ───
   getIt.registerLazySingleton<AuthRepository>(

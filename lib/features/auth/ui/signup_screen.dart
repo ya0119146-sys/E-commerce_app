@@ -147,6 +147,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                         child: Form(
                           key: _formKey,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           child: Column(
                             children: [
                               TextFormField(

@@ -169,9 +169,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         children: [
                           Text(
                             'Shipping Address',
-                            style: Theme.of(
-                              context,
-                            ).textTheme.headlineSmall,
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
                           TextButton.icon(
                             onPressed: _showAddAddressSheet,
@@ -182,110 +180,97 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ),
                       const SizedBox(height: 12),
                       if (state.addresses.isEmpty)
-                                Container(
-                                  padding: const EdgeInsets.all(24),
-                                  width: double.infinity,
+                        Container(
+                          padding: const EdgeInsets.all(24),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: AppColors.muted(brightness),
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.radiusDefault,
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.location_off_outlined,
+                                size: 40,
+                                color: AppColors.foreground(
+                                  brightness,
+                                ).withValues(alpha: 0.3),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'No addresses saved',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ],
+                          ),
+                        )
+                      else
+                        ...state.addresses.asMap().entries.map((entry) {
+                          final i = entry.key;
+                          final addr = entry.value;
+                          final isSelected = state.selectedAddressId == addr.id;
+                          return GestureDetector(
+                                onTap: () => context
+                                    .read<CheckoutCubit>()
+                                    .selectAddress(addr.id),
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 250),
+                                  margin: const EdgeInsets.only(bottom: 10),
+                                  padding: const EdgeInsets.all(16),
                                   decoration: BoxDecoration(
-                                    color: AppColors.muted(brightness),
+                                    color: AppColors.card(brightness),
                                     borderRadius: BorderRadius.circular(
                                       AppDimensions.radiusDefault,
                                     ),
+                                    border: Border.all(
+                                      color: isSelected
+                                          ? AppColors.primary(brightness)
+                                          : AppColors.border(brightness),
+                                      width: isSelected ? 2 : 1,
+                                    ),
                                   ),
-                                  child: Column(
+                                  child: Row(
                                     children: [
                                       Icon(
-                                        Icons.location_off_outlined,
-                                        size: 40,
-                                        color: AppColors.foreground(
-                                          brightness,
-                                        ).withValues(alpha: 0.3),
+                                        isSelected
+                                            ? Icons.radio_button_checked
+                                            : Icons.radio_button_off,
+                                        color: isSelected
+                                            ? AppColors.primary(brightness)
+                                            : AppColors.foreground(
+                                                brightness,
+                                              ).withValues(alpha: 0.3),
+                                        size: 22,
                                       ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        'No addresses saved',
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.bodyMedium,
+                                      const SizedBox(width: 14),
+                                      Expanded(
+                                        child: Text(
+                                          addr.displayAddress,
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium,
+                                        ),
                                       ),
                                     ],
                                   ),
-                                )
-                              else
-                                ...state.addresses.asMap().entries.map((entry) {
-                                  final i = entry.key;
-                                  final addr = entry.value;
-                                  final isSelected =
-                                      state.selectedAddressId == addr.id;
-                                  return GestureDetector(
-                                        onTap: () => context
-                                            .read<CheckoutCubit>()
-                                            .selectAddress(addr.id),
-                                        child: AnimatedContainer(
-                                          duration: const Duration(
-                                            milliseconds: 250,
-                                          ),
-                                          margin: const EdgeInsets.only(
-                                            bottom: 10,
-                                          ),
-                                          padding: const EdgeInsets.all(16),
-                                          decoration: BoxDecoration(
-                                            color: AppColors.card(brightness),
-                                            borderRadius: BorderRadius.circular(
-                                              AppDimensions.radiusDefault,
-                                            ),
-                                            border: Border.all(
-                                              color: isSelected
-                                                  ? AppColors.primary(
-                                                      brightness,
-                                                    )
-                                                  : AppColors.border(
-                                                      brightness,
-                                                    ),
-                                              width: isSelected ? 2 : 1,
-                                            ),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                isSelected
-                                                    ? Icons.radio_button_checked
-                                                    : Icons.radio_button_off,
-                                                color: isSelected
-                                                    ? AppColors.primary(
-                                                        brightness,
-                                                      )
-                                                    : AppColors.foreground(
-                                                        brightness,
-                                                      ).withValues(alpha: 0.3),
-                                                size: 22,
-                                              ),
-                                              const SizedBox(width: 14),
-                                              Expanded(
-                                                child: Text(
-                                                  addr.displayAddress,
-                                                  style: Theme.of(
-                                                    context,
-                                                  ).textTheme.bodyMedium,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                      .animate()
-                                      .fade(
-                                        duration: 300.ms,
-                                        delay: Duration(milliseconds: 80 * i),
-                                      )
-                                      .moveY(
-                                        begin: 15,
-                                        end: 0,
-                                        duration: 300.ms,
-                                        delay: Duration(milliseconds: 80 * i),
-                                      );
-                                }),
-                      ],
-                    ),
+                                ),
+                              )
+                              .animate()
+                              .fade(
+                                duration: 300.ms,
+                                delay: Duration(milliseconds: 80 * i),
+                              )
+                              .moveY(
+                                begin: 15,
+                                end: 0,
+                                duration: 300.ms,
+                                delay: Duration(milliseconds: 80 * i),
+                              );
+                        }),
+                    ],
+                  ),
                 ),
               ),
               // Bottom confirm

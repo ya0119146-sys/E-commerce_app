@@ -113,6 +113,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     ),
                     child: Form(
                       key: _formKey,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       child: Column(
                         children: [
                           TextFormField(

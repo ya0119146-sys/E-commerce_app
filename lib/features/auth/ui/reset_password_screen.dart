@@ -112,6 +112,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     ),
                     child: Form(
                       key: _formKey,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       child: Column(
                         children: [
                           TextFormField(

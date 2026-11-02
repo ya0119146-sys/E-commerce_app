@@ -110,6 +110,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                     ),
                     child: Form(
                       key: _formKey,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       child: Column(
                         children: [
                           TextFormField(
