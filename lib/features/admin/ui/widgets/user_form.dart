@@ -59,6 +59,7 @@ class _UserFormState extends State<UserForm> {
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (!mounted) return;
     if (pickedFile != null) {
       setState(() => _imageFile = File(pickedFile.path));
     }

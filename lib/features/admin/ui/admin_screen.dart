@@ -37,15 +37,18 @@ class _AdminScreenState extends State<AdminScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 5, vsync: this);
-    _tabController.addListener(() {
-      if (!_tabController.indexIsChanging) {
-        setState(() {});
-      }
-    });
+    _tabController.addListener(_onTabChanged);
     _refreshData();
   }
 
+  void _onTabChanged() {
+    if (!_tabController.indexIsChanging && mounted) {
+      setState(() {});
+    }
+  }
+
   Future<void> _refreshData() async {
+    if (!mounted) return;
     context.read<ProductsCubit>().fetchProducts(refresh: true);
     context.read<CategoriesCubit>().fetchCategories();
     context.read<CheckoutCubit>().fetchOrderHistory();
@@ -54,16 +57,20 @@ class _AdminScreenState extends State<AdminScreen>
   }
 
   Future<void> _fetchSubcategories() async {
+    if (!mounted) return;
     setState(() => _isLoadingSubcats = true);
     try {
       final subcats = await getIt<AdminRepository>().getAllSubcategories();
+      if (!mounted) return;
       setState(() => _allSubcategories = subcats);
     } catch (_) {}
+    if (!mounted) return;
     setState(() => _isLoadingSubcats = false);
   }
 
   @override
   void dispose() {
+    _tabController.removeListener(_onTabChanged);
     _tabController.dispose();
     super.dispose();
   }

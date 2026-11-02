@@ -37,6 +37,7 @@ class _CategoryFormState extends State<CategoryForm> {
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (!mounted) return;
     if (pickedFile != null) {
       setState(() => _selectedImage = File(pickedFile.path));
     }

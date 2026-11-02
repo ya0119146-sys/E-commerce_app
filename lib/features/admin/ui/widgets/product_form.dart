@@ -65,6 +65,7 @@ class _ProductFormState extends State<ProductForm> {
   Future<void> _pickCover() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (!mounted) return;
     if (pickedFile != null) {
       setState(() => _coverImage = File(pickedFile.path));
     }
@@ -73,6 +74,7 @@ class _ProductFormState extends State<ProductForm> {
   Future<void> _pickAdditional() async {
     final picker = ImagePicker();
     final pickedFiles = await picker.pickMultiImage();
+    if (!mounted) return;
     if (pickedFiles.isNotEmpty) {
       setState(
         () => _additionalImages.addAll(pickedFiles.map((e) => File(e.path))),
