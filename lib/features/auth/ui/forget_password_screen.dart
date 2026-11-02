@@ -8,6 +8,7 @@ import '../../../core/constants/app_gradients.dart';
 import '../../../core/widgets/hero_button.dart';
 import '../logic/auth_cubit.dart';
 import 'verify_code_screen.dart';
+import '../../../core/localization/app_translations.dart';
 
 /// Forget password screen to request reset code.
 class ForgetPasswordScreen extends StatefulWidget {
@@ -89,12 +90,12 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   ).animate().fade(duration: 600.ms).scale(),
                   const SizedBox(height: 12),
                   Text(
-                    'Forgot Password?',
+                    'Forgot Password?'.tr(context),
                     style: Theme.of(context).textTheme.headlineMedium,
                   ).animate().fade(duration: 500.ms, delay: 200.ms).moveY(begin: 15, end: 0),
                   const SizedBox(height: 8),
                   Text(
-                    'Enter your email to receive a reset code',
+                    'Enter your email to receive a reset code'.tr(context),
                     style: Theme.of(context).textTheme.bodySmall,
                     textAlign: TextAlign.center,
                   ).animate().fade(duration: 500.ms, delay: 300.ms),
@@ -131,16 +132,16 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                               AutofillHints.username,
                             ],
                             onFieldSubmitted: (_) => _onSendCode(),
-                            decoration: const InputDecoration(
-                              labelText: 'Email Address',
-                              prefixIcon: Icon(Icons.email_outlined),
+                            decoration: InputDecoration(
+                              labelText: 'Email Address'.tr(context),
+                              prefixIcon: const Icon(Icons.email_outlined),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter your email';
+                                return 'please_enter_email'.tr(context);
                               }
                               if (!value.contains('@')) {
-                                return 'Please enter a valid email';
+                                return 'please_enter_valid_email'.tr(context);
                               }
                               return null;
                             },
@@ -149,7 +150,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                           BlocBuilder<AuthCubit, AuthState>(
                             builder: (context, state) {
                               return HeroButton(
-                                text: 'Send Reset Code',
+                                text: 'Send Code'.tr(context),
                                 isLoading: state is AuthLoading,
                                 onPressed: _onSendCode,
                               );

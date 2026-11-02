@@ -7,6 +7,7 @@ import '../../../core/constants/app_dimensions.dart';
 import '../../../core/widgets/shimmer_loading.dart';
 import '../../store/ui/widgets/product_card.dart';
 import '../logic/wishlist_cubit.dart';
+import '../../../core/localization/app_translations.dart';
 
 /// Wishlist screen showing all favorited products.
 class WishlistScreen extends StatefulWidget {
@@ -36,10 +37,12 @@ class _WishlistScreenState extends State<WishlistScreen> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Wishlist'),
+                Text('Wishlist'.tr(context)),
                 if (count > 0)
                   Text(
-                    '$count ${count == 1 ? 'item' : 'items'}',
+                    context.isArabic
+                        ? '$count ${'items'.tr(context)}'
+                        : '$count ${count == 1 ? 'item' : 'items'}',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: AppColors.secondary(brightness),
                       fontWeight: FontWeight.w600,
@@ -146,7 +149,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      'Your wishlist is empty',
+                      'Your wishlist is empty'.tr(context),
                       style: Theme.of(context).textTheme.headlineSmall
                           ?.copyWith(fontWeight: FontWeight.bold),
                     ),
@@ -154,7 +157,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40),
                       child: Text(
-                        'Save items you love to your wishlist and they\'ll show up here.',
+                        'Save items you love to your wishlist and they will appear here.'.tr(context),
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppColors.foreground(
@@ -186,7 +189,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                           ),
                         ),
                       ),
-                      child: const Text('Explore Products'),
+                      child: Text('Explore Products'.tr(context)),
                     ),
                   ],
                 )

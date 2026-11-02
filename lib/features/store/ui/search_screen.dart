@@ -7,6 +7,7 @@ import '../../../core/constants/app_dimensions.dart';
 import '../../../core/widgets/shimmer_loading.dart';
 import '../logic/products_cubit.dart';
 import 'widgets/product_card.dart';
+import '../../../core/localization/app_translations.dart';
 
 /// Search screen with debounced text input and product results.
 class SearchScreen extends StatefulWidget {
@@ -72,7 +73,7 @@ class _SearchScreenState extends State<SearchScreen> {
             textInputAction: TextInputAction.search,
             style: Theme.of(context).textTheme.bodyMedium,
             decoration: InputDecoration(
-              hintText: 'Search products...',
+              hintText: 'Search products...'.tr(context),
               contentPadding: const EdgeInsets.symmetric(horizontal: 16),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
@@ -135,12 +136,12 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'No products found',
+                    'No products found'.tr(context),
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Try a different search term',
+                    'Try a different search term'.tr(context),
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
+import '../../../core/localization/app_translations.dart';
 import '../../store/logic/products_cubit.dart';
 import '../../store/logic/categories_cubit.dart';
 import '../../store/data/models/sub_category_model.dart';
@@ -97,13 +98,13 @@ class _AdminScreenState extends State<AdminScreen>
       listener: (context, state) {
         if (state.status == AdminStatus.success) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message ?? 'Operation successful')),
+            SnackBar(content: Text((state.message ?? 'Operation successful').tr(context))),
           );
           _refreshData();
         } else if (state.status == AdminStatus.error) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(state.error ?? 'Error occurred'),
+              content: Text((state.error ?? 'Error occurred').tr(context)),
               backgroundColor: AppColors.error,
             ),
           );
@@ -111,7 +112,7 @@ class _AdminScreenState extends State<AdminScreen>
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Admin Panel'),
+          title: Text('Admin Panel'.tr(context)),
           actions: [
             IconButton(
               onPressed: _refreshData,
@@ -122,12 +123,12 @@ class _AdminScreenState extends State<AdminScreen>
             isScrollable: isScrollable,
             tabAlignment: isScrollable ? TabAlignment.start : TabAlignment.fill,
             controller: _tabController,
-            tabs: const [
-              Tab(text: 'Products', icon: Icon(Icons.inventory_2_outlined)),
-              Tab(text: 'Orders', icon: Icon(Icons.receipt_long_outlined)),
-              Tab(text: 'Users', icon: Icon(Icons.people_outline)),
-              Tab(text: 'Categories', icon: Icon(Icons.category_outlined)),
-              Tab(text: 'Subcategories', icon: Icon(Icons.subtitles_outlined)),
+            tabs: [
+              Tab(text: 'Products'.tr(context), icon: const Icon(Icons.inventory_2_outlined)),
+              Tab(text: 'Orders'.tr(context), icon: const Icon(Icons.receipt_long_outlined)),
+              Tab(text: 'Users'.tr(context), icon: const Icon(Icons.people_outline)),
+              Tab(text: 'Categories'.tr(context), icon: const Icon(Icons.category_outlined)),
+              Tab(text: 'Subcategories'.tr(context), icon: const Icon(Icons.subtitles_outlined)),
             ],
           ),
         ),
@@ -219,7 +220,7 @@ class _AdminScreenState extends State<AdminScreen>
                       : const Icon(Icons.image_not_supported),
                 ),
                 title: Text(product.name),
-                subtitle: Text('\$${product.price} • Qty: ${product.quantity}'),
+                subtitle: Text('\$${product.price} • ${'Quantity'.tr(context)}: ${product.quantity}'),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -357,7 +358,7 @@ class _AdminScreenState extends State<AdminScreen>
                   : const Icon(Icons.subtitles_outlined),
             ),
             title: Text(subcat.name),
-            subtitle: Text('Category: ${subcat.categoryName}'),
+            subtitle: Text('${'Category'.tr(context)}: ${subcat.categoryName}'),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -406,7 +407,7 @@ class _AdminScreenState extends State<AdminScreen>
           return const Center(child: CircularProgressIndicator());
         }
         if (state.orders.isEmpty) {
-          return const Center(child: Text('No orders found'));
+          return Center(child: Text('No orders found'.tr(context)));
         }
         return ListView.separated(
           padding: const EdgeInsets.all(AppDimensions.screenPadding),
@@ -414,6 +415,7 @@ class _AdminScreenState extends State<AdminScreen>
           separatorBuilder: (_, __) => const SizedBox(height: 12),
           itemBuilder: (context, index) {
             final order = state.orders[index];
+            final orderIdSnippet = order.id.substring(order.id.length > 8 ? order.id.length - 8 : 0);
             return Card(
               child: ListTile(
                 contentPadding: const EdgeInsets.only(left: 12, right: 8),
@@ -427,7 +429,7 @@ class _AdminScreenState extends State<AdminScreen>
                       : null,
                 ),
                 title: Text(
-                  'Order #${order.id.substring(order.id.length > 8 ? order.id.length - 8 : 0)}',
+                  '${'Order ID'.tr(context)} #$orderIdSnippet',
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 subtitle: Column(
@@ -435,7 +437,7 @@ class _AdminScreenState extends State<AdminScreen>
                   children: [
                     if (order.userName != null)
                       Text(
-                        'By: ${order.userName}',
+                        '${'By'.tr(context)}: ${order.userName}',
                         style: TextStyle(
                           color: AppColors.primary(brightness),
                           fontWeight: FontWeight.w600,
@@ -453,11 +455,11 @@ class _AdminScreenState extends State<AdminScreen>
                         ),
                       ),
                     Text(
-                      'Total: \$${order.totalPrice.toStringAsFixed(2)} • ${order.items.length} items',
+                      '${'Total'.tr(context)}: \$${order.totalPrice.toStringAsFixed(2)} • ${order.items.length} ${'items'.tr(context)}',
                       style: const TextStyle(fontSize: 12),
                     ),
                     Text(
-                      'Status: ${order.isDelivered ? 'Delivered' : 'Pending'} • ${order.isPaid ? 'Paid' : 'Unpaid'}',
+                      '${'Status'.tr(context)}: ${order.isDelivered ? 'Delivered'.tr(context) : 'Pending'.tr(context)} • ${order.isPaid ? 'Paid'.tr(context) : 'Unpaid'.tr(context)}',
                       style: TextStyle(
                         fontSize: 11,
                         color: order.isDelivered ? Colors.green : Colors.orange,
@@ -493,7 +495,7 @@ class _AdminScreenState extends State<AdminScreen>
           return const Center(child: CircularProgressIndicator());
         }
         if (state.users.isEmpty) {
-          return const Center(child: Text('No users found'));
+          return Center(child: Text('No users found'.tr(context)));
         }
         return ListView.builder(
           padding: const EdgeInsets.all(AppDimensions.screenPadding),
@@ -511,7 +513,7 @@ class _AdminScreenState extends State<AdminScreen>
                   child: user.image == null ? const Icon(Icons.person) : null,
                 ),
                 title: Text(user.name),
-                subtitle: Text('${user.email} • ${user.role}'),
+                subtitle: Text('${user.email} • ${user.role.tr(context)}'),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -554,21 +556,21 @@ class _AdminScreenState extends State<AdminScreen>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Confirm Delete'),
-        content: const Text('Are you sure you want to delete this item?'),
+        title: Text('Confirm Delete'.tr(context)),
+        content: Text('Are you sure you want to delete this item?'.tr(context)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text('Cancel'.tr(context)),
           ),
           TextButton(
             onPressed: () {
               onDelete();
               Navigator.pop(context);
             },
-            child: const Text(
-              'Delete',
-              style: TextStyle(color: AppColors.error),
+            child: Text(
+              'Delete'.tr(context),
+              style: const TextStyle(color: AppColors.error),
             ),
           ),
         ],

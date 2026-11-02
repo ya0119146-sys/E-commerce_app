@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_dimensions.dart';
+import '../../../core/localization/app_translations.dart';
 import '../../../core/widgets/hero_button.dart';
 import '../../auth/logic/auth_cubit.dart';
 
@@ -46,7 +47,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Change Password')),
+      appBar: AppBar(title: Text('Change Password'.tr(context))),
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthError) {
@@ -58,9 +59,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             TextInput.finishAutofillContext(shouldSave: true);
             FocusScope.of(context).unfocus();
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
+              SnackBar(
                 content: Text(
-                  'Password changed successfully! Please login again.',
+                  'Password changed successfully! Please login again.'.tr(context),
                 ),
               ),
             );
@@ -96,13 +97,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     keyboardType: TextInputType.visiblePassword,
                     textInputAction: TextInputAction.next,
                     autofillHints: const [AutofillHints.password],
-                    decoration: const InputDecoration(
-                      labelText: 'Current Password',
-                      prefixIcon: Icon(Icons.lock_outline),
+                    decoration: InputDecoration(
+                      labelText: 'Current Password'.tr(context),
+                      prefixIcon: const Icon(Icons.lock_outline),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter current password';
+                        return 'Please enter current password'.tr(context);
                       }
                       return null;
                     },
@@ -114,16 +115,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     keyboardType: TextInputType.visiblePassword,
                     textInputAction: TextInputAction.next,
                     autofillHints: const [AutofillHints.newPassword],
-                    decoration: const InputDecoration(
-                      labelText: 'New Password',
-                      prefixIcon: Icon(Icons.lock_reset),
+                    decoration: InputDecoration(
+                      labelText: 'New Password'.tr(context),
+                      prefixIcon: const Icon(Icons.lock_reset),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter new password';
+                        return 'Please enter new password'.tr(context);
                       }
                       if (value.length < 6) {
-                        return 'Password must be at least 6 characters';
+                        return 'Password must be at least 6 characters'.tr(context);
                       }
                       return null;
                     },
@@ -136,13 +137,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     textInputAction: TextInputAction.done,
                     autofillHints: const [AutofillHints.newPassword],
                     onFieldSubmitted: (_) => _onChangePassword(),
-                    decoration: const InputDecoration(
-                      labelText: 'Confirm New Password',
-                      prefixIcon: Icon(Icons.lock_reset),
+                    decoration: InputDecoration(
+                      labelText: 'Confirm New Password'.tr(context),
+                      prefixIcon: const Icon(Icons.lock_reset),
                     ),
                     validator: (value) {
                       if (value != _newPasswordController.text) {
-                        return 'Passwords do not match';
+                        return 'Passwords do not match'.tr(context);
                       }
                       return null;
                     },
@@ -151,7 +152,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   BlocBuilder<AuthCubit, AuthState>(
                     builder: (context, state) {
                       return HeroButton(
-                        text: 'Change Password',
+                        text: 'Change Password'.tr(context),
                         isLoading: state is AuthLoading,
                         onPressed: _onChangePassword,
                       );

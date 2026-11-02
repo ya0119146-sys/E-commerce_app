@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
+import '../../../core/localization/app_translations.dart';
 import '../../checkout/logic/checkout_cubit.dart';
 import '../../checkout/data/models/address_model.dart';
 
@@ -47,15 +48,15 @@ class _AddressScreenState extends State<AddressScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Add New Address',
+                'Add New Address'.tr(context),
                 style: Theme.of(context).textTheme.titleLarge,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
               TextFormField(
                 controller: streetController,
-                decoration: const InputDecoration(labelText: 'Street Address'),
-                validator: (v) => v!.isEmpty ? 'Required' : null,
+                decoration: InputDecoration(labelText: 'Street Address'.tr(context)),
+                validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
               ),
               const SizedBox(height: 12),
               Row(
@@ -63,16 +64,16 @@ class _AddressScreenState extends State<AddressScreen> {
                   Expanded(
                     child: TextFormField(
                       controller: cityController,
-                      decoration: const InputDecoration(labelText: 'City'),
-                      validator: (v) => v!.isEmpty ? 'Required' : null,
+                      decoration: InputDecoration(labelText: 'City'.tr(context)),
+                      validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: TextFormField(
                       controller: stateController,
-                      decoration: const InputDecoration(labelText: 'State'),
-                      validator: (v) => v!.isEmpty ? 'Required' : null,
+                      decoration: InputDecoration(labelText: 'State'.tr(context)),
+                      validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
                     ),
                   ),
                 ],
@@ -80,9 +81,9 @@ class _AddressScreenState extends State<AddressScreen> {
               const SizedBox(height: 12),
               TextFormField(
                 controller: zipController,
-                decoration: const InputDecoration(labelText: 'Zip Code'),
+                decoration: InputDecoration(labelText: 'Zip Code'.tr(context)),
                 keyboardType: TextInputType.number,
-                validator: (v) => v!.isEmpty ? 'Required' : null,
+                validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
               ),
               const SizedBox(height: 24),
               ElevatedButton(
@@ -97,7 +98,7 @@ class _AddressScreenState extends State<AddressScreen> {
                     Navigator.pop(context);
                   }
                 },
-                child: const Text('Save Address'),
+                child: Text('Save Address'.tr(context)),
               ),
               const SizedBox(height: 20),
             ],
@@ -113,7 +114,7 @@ class _AddressScreenState extends State<AddressScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Addresses'),
+        title: Text('My Addresses'.tr(context)),
       ),
       body: BlocConsumer<CheckoutCubit, CheckoutState>(
         listener: (context, state) {
@@ -135,12 +136,12 @@ class _AddressScreenState extends State<AddressScreen> {
                 children: [
                   Icon(Icons.location_off_outlined, size: 64, color: AppColors.muted(brightness)),
                   const SizedBox(height: 16),
-                  const Text('No addresses saved yet'),
+                  Text('No addresses saved yet'.tr(context)),
                   const SizedBox(height: 24),
                   ElevatedButton.icon(
                     onPressed: _showAddAddressDialog,
                     icon: const Icon(Icons.add),
-                    label: const Text('Add First Address'),
+                    label: Text('Add First Address'.tr(context)),
                   ),
                 ],
               ),
@@ -184,19 +185,19 @@ class _AddressScreenState extends State<AddressScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Address'),
-        content: const Text('Are you sure you want to remove this address?'),
+        title: Text('Delete Address'.tr(context)),
+        content: Text('Are you sure you want to remove this address?'.tr(context)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text('Cancel'.tr(context)),
           ),
           TextButton(
             onPressed: () {
               this.context.read<CheckoutCubit>().removeAddress(address.id);
               Navigator.pop(context);
             },
-            child: const Text('Delete', style: TextStyle(color: AppColors.error)),
+            child: Text('Delete'.tr(context), style: const TextStyle(color: AppColors.error)),
           ),
         ],
       ),

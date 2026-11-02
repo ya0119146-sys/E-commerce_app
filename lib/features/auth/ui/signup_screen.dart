@@ -8,6 +8,7 @@ import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_gradients.dart';
 import '../../../core/widgets/hero_button.dart';
 import '../logic/auth_cubit.dart';
+import '../../../core/localization/app_translations.dart';
 
 /// Signup screen with luxury glassmorphism design.
 class SignupScreen extends StatefulWidget {
@@ -77,7 +78,7 @@ class _SignupScreenState extends State<SignupScreen> {
             TextInput.finishAutofillContext(shouldSave: true);
             FocusScope.of(context).unfocus();
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Account created! Please log in.')),
+              SnackBar(content: Text('account_created'.tr(context))),
             );
             Future.delayed(const Duration(milliseconds: 300), () {
               if (!context.mounted) return;
@@ -112,7 +113,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                   const SizedBox(height: 8),
                   Text(
-                        'Create Account',
+                        'create_account'.tr(context),
                         style: Theme.of(context).textTheme.headlineMedium,
                       )
                       .animate()
@@ -125,7 +126,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                   const SizedBox(height: 4),
                   Text(
-                    'Join the world of luxury beauty',
+                    'Join the world of luxury beauty'.tr(context),
                     style: Theme.of(context).textTheme.bodySmall,
                     textAlign: TextAlign.center,
                   ).animate().fade(duration: 500.ms, delay: 300.ms),
@@ -170,13 +171,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                   showCursor: true,
                                   textInputAction: TextInputAction.next,
                                   autofillHints: const [AutofillHints.name],
-                                  decoration: const InputDecoration(
-                                    labelText: 'Full Name',
-                                    prefixIcon: Icon(Icons.person_outline),
+                                  decoration: InputDecoration(
+                                    labelText: 'Full Name'.tr(context),
+                                    prefixIcon: const Icon(Icons.person_outline),
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'Please enter your name';
+                                      return 'please_enter_name'.tr(context);
                                     }
                                     return null;
                                   },
@@ -190,13 +191,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                   cursorWidth: 2.0,
                                   showCursor: true,
                                   textInputAction: TextInputAction.next,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Username',
-                                    prefixIcon: Icon(Icons.person_outline),
+                                  decoration: InputDecoration(
+                                    labelText: 'Username'.tr(context),
+                                    prefixIcon: const Icon(Icons.person_outline),
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'Please enter your username';
+                                      return 'please_enter_username'.tr(context);
                                     }
                                     return null;
                                   },
@@ -215,16 +216,16 @@ class _SignupScreenState extends State<SignupScreen> {
                                     AutofillHints.email,
                                     AutofillHints.username,
                                   ],
-                                  decoration: const InputDecoration(
-                                    labelText: 'Email',
-                                    prefixIcon: Icon(Icons.email_outlined),
+                                  decoration: InputDecoration(
+                                    labelText: 'Email'.tr(context),
+                                    prefixIcon: const Icon(Icons.email_outlined),
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'Please enter your email';
+                                      return 'please_enter_email'.tr(context);
                                     }
                                     if (!value.contains('@')) {
-                                      return 'Please enter a valid email';
+                                      return 'please_enter_valid_email'.tr(context);
                                     }
                                     return null;
                                   },
@@ -242,20 +243,20 @@ class _SignupScreenState extends State<SignupScreen> {
                                   autofillHints: const [
                                     AutofillHints.telephoneNumber,
                                   ],
-                                  decoration: const InputDecoration(
-                                    labelText: 'Phone Number',
-                                    prefixIcon: Icon(Icons.phone_outlined),
-                                    hintText: 'e.g. 01012345678',
+                                  decoration: InputDecoration(
+                                    labelText: 'Phone Number'.tr(context),
+                                    prefixIcon: const Icon(Icons.phone_outlined),
+                                    hintText: 'e.g. 01012345678'.tr(context),
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'Please enter your phone number';
+                                      return 'please_enter_phone'.tr(context);
                                     }
                                     final phoneRegExp = RegExp(
                                       r'^[0-9]{10,15}$',
                                     );
                                     if (!phoneRegExp.hasMatch(value)) {
-                                      return 'Please enter a valid phone number (10–15 digits)';
+                                      return 'phone_invalid'.tr(context);
                                     }
                                     return null;
                                   },
@@ -275,7 +276,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     AutofillHints.newPassword,
                                   ],
                                   decoration: InputDecoration(
-                                    labelText: 'Password',
+                                    labelText: 'Password'.tr(context),
                                     prefixIcon: const Icon(Icons.lock_outline),
                                     suffixIcon: IconButton(
                                       icon: Icon(
@@ -291,10 +292,10 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'Please enter a password';
+                                      return 'please_enter_password'.tr(context);
                                     }
                                     if (value.length < 6) {
-                                      return 'Password must be at least 6 characters';
+                                      return 'password_too_short'.tr(context);
                                     }
                                     return null;
                                   },
@@ -314,7 +315,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     AutofillHints.newPassword,
                                   ],
                                   decoration: InputDecoration(
-                                    labelText: 'Confirm Password',
+                                    labelText: 'Confirm Password'.tr(context),
                                     prefixIcon: const Icon(Icons.lock_outline),
                                     suffixIcon: IconButton(
                                       icon: Icon(
@@ -330,7 +331,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ),
                                   validator: (value) {
                                     if (value != _passwordController.text) {
-                                      return 'Passwords do not match';
+                                      return 'passwords_dont_match'.tr(context);
                                     }
                                     return null;
                                   },
@@ -339,7 +340,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 BlocBuilder<AuthCubit, AuthState>(
                                   builder: (context, state) {
                                     return HeroButton(
-                                      text: 'Create Account',
+                                      text: 'create_account'.tr(context),
                                       isLoading: state is AuthLoading,
                                       onPressed: _onSignup,
                                     );
@@ -366,13 +367,13 @@ class _SignupScreenState extends State<SignupScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Already have an account? ',
+                        '${'already_have_account'.tr(context)} ',
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: Text(
-                          'Sign In',
+                          'Sign In'.tr(context),
                           style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(
                                 color: AppColors.secondary(brightness),

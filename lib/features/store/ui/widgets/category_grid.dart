@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_dimensions.dart';
+import '../../../../core/localization/app_translations.dart';
 import '../../data/models/category_model.dart';
 
 /// A horizontal scrolling list of category chips.
@@ -34,7 +35,7 @@ class CategoryGrid extends StatelessWidget {
             final isSelected = selectedId == null || selectedId!.isEmpty;
             return _chip(
               context,
-              label: 'All',
+              label: 'All'.tr(context),
               isSelected: isSelected,
               brightness: brightness,
               onTap: () => onSelected(null),

@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
+import '../../../core/localization/app_translations.dart';
 import '../../../core/widgets/hero_button.dart';
 import '../../../core/widgets/shimmer_loading.dart';
 import '../../cart/logic/cart_cubit.dart';
@@ -52,12 +53,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Add Address', style: Theme.of(ctx).textTheme.headlineSmall),
+              Text('Add Address'.tr(ctx), style: Theme.of(ctx).textTheme.headlineSmall),
               const SizedBox(height: 20),
               TextFormField(
                 controller: streetC,
-                decoration: const InputDecoration(labelText: 'Street'),
-                validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+                decoration: InputDecoration(labelText: 'Street'.tr(ctx)),
+                validator: (v) => v == null || v.isEmpty ? 'Required'.tr(ctx) : null,
               ),
               const SizedBox(height: 12),
               Row(
@@ -65,18 +66,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   Expanded(
                     child: TextFormField(
                       controller: cityC,
-                      decoration: const InputDecoration(labelText: 'City'),
+                      decoration: InputDecoration(labelText: 'City'.tr(ctx)),
                       validator: (v) =>
-                          v == null || v.isEmpty ? 'Required' : null,
+                          v == null || v.isEmpty ? 'Required'.tr(ctx) : null,
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: TextFormField(
                       controller: stateC,
-                      decoration: const InputDecoration(labelText: 'State'),
+                      decoration: InputDecoration(labelText: 'State'.tr(ctx)),
                       validator: (v) =>
-                          v == null || v.isEmpty ? 'Required' : null,
+                          v == null || v.isEmpty ? 'Required'.tr(ctx) : null,
                     ),
                   ),
                 ],
@@ -84,13 +85,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               const SizedBox(height: 12),
               TextFormField(
                 controller: zipC,
-                decoration: const InputDecoration(labelText: 'ZIP Code'),
+                decoration: InputDecoration(labelText: 'ZIP Code'.tr(ctx)),
                 keyboardType: TextInputType.number,
-                validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+                validator: (v) => v == null || v.isEmpty ? 'Required'.tr(ctx) : null,
               ),
               const SizedBox(height: 20),
               HeroButton(
-                text: 'Save Address',
+                text: 'Save Address'.tr(ctx),
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
                     context.read<CheckoutCubit>().addAddress(
@@ -115,7 +116,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final brightness = Theme.of(context).brightness;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Checkout')),
+      appBar: AppBar(title: Text('Checkout'.tr(context))),
       body: BlocConsumer<CheckoutCubit, CheckoutState>(
         listener: (context, state) {
           if (state.status == CheckoutStatus.orderPlaced) {
@@ -168,13 +169,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Shipping Address',
+                            'Shipping Address'.tr(context),
                             style: Theme.of(context).textTheme.headlineSmall,
                           ),
                           TextButton.icon(
                             onPressed: _showAddAddressSheet,
                             icon: const Icon(Icons.add, size: 18),
-                            label: const Text('Add New'),
+                            label: Text('Add New'.tr(context)),
                           ),
                         ],
                       ),
@@ -200,7 +201,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                'No addresses saved',
+                                'No addresses saved'.tr(context),
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
                             ],
@@ -287,7 +288,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                 ),
                 child: HeroButton(
-                  text: 'Confirm Order',
+                  text: 'Confirm Order'.tr(context),
                   icon: Icons.check_circle_outline,
                   isLoading: state.status == CheckoutStatus.placingOrder,
                   onPressed: state.selectedAddressId != null

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:e_commerce/core/constants/app_colors.dart';
 import 'package:e_commerce/core/constants/app_dimensions.dart';
+import 'package:e_commerce/core/localization/app_translations.dart';
 import 'package:e_commerce/features/store/data/models/category_model.dart';
 import 'package:e_commerce/features/store/data/models/product_model.dart';
 import 'package:e_commerce/features/store/data/models/sub_category_model.dart';
@@ -135,16 +136,16 @@ class _ProductFormState extends State<ProductForm> {
                 Center(
                   child: Text(
                     widget.product == null
-                        ? 'Create Product'
-                        : 'Update Product',
+                        ? 'Create Product'.tr(context)
+                        : 'Update Product'.tr(context),
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ),
                 const SizedBox(height: 20),
                 // Cover Image
-                const Text(
-                  'Cover Image',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                Text(
+                  'Cover Image'.tr(context),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 GestureDetector(
@@ -179,14 +180,14 @@ class _ProductFormState extends State<ProductForm> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Additional Images',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    Text(
+                      'Additional Images'.tr(context),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     TextButton.icon(
                       onPressed: _pickAdditional,
                       icon: const Icon(Icons.add_photo_alternate_outlined),
-                      label: const Text('Add More'),
+                      label: Text('Add More'.tr(context)),
                     ),
                   ],
                 ),
@@ -271,14 +272,14 @@ class _ProductFormState extends State<ProductForm> {
                           ).withValues(alpha: 0.3),
                         ),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.add_photo_alternate_outlined),
+                            const Icon(Icons.add_photo_alternate_outlined),
                             Text(
-                              'Pick multiple images',
-                              style: TextStyle(fontSize: 12),
+                              'Pick multiple images'.tr(context),
+                              style: const TextStyle(fontSize: 12),
                             ),
                           ],
                         ),
@@ -288,23 +289,23 @@ class _ProductFormState extends State<ProductForm> {
                 const SizedBox(height: 20),
                 TextFormField(
                   controller: _nameController,
-                  decoration: const InputDecoration(labelText: 'Product Name'),
-                  validator: (v) => v!.isEmpty ? 'Required' : null,
+                  decoration: InputDecoration(labelText: 'Product Name'.tr(context)),
+                  validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
                   controller: _descController,
-                  decoration: const InputDecoration(labelText: 'Description'),
+                  decoration: InputDecoration(labelText: 'Description'.tr(context)),
                   maxLines: 3,
-                  validator: (v) => v!.isEmpty ? 'Required' : null,
+                  validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
                   controller: _sizeController,
-                  decoration: const InputDecoration(
-                    labelText: 'Size (e.g. S, M, L, XL, Standard)',
+                  decoration: InputDecoration(
+                    labelText: 'Size (e.g. S, M, L, XL, Standard)'.tr(context),
                   ),
-                  validator: (v) => v!.isEmpty ? 'Size is required' : null,
+                  validator: (v) => v!.isEmpty ? 'Size is required'.tr(context) : null,
                 ),
                 const SizedBox(height: 12),
                 Row(
@@ -312,20 +313,20 @@ class _ProductFormState extends State<ProductForm> {
                     Expanded(
                       child: TextFormField(
                         controller: _priceController,
-                        decoration: const InputDecoration(labelText: 'Price'),
+                        decoration: InputDecoration(labelText: 'Price'.tr(context)),
                         keyboardType: TextInputType.number,
-                        validator: (v) => v!.isEmpty ? 'Required' : null,
+                        validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
                       ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: TextFormField(
                         controller: _qtyController,
-                        decoration: const InputDecoration(
-                          labelText: 'Quantity',
+                        decoration: InputDecoration(
+                          labelText: 'Quantity'.tr(context),
                         ),
                         keyboardType: TextInputType.number,
-                        validator: (v) => v!.isEmpty ? 'Required' : null,
+                        validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
                       ),
                     ),
                   ],
@@ -333,7 +334,7 @@ class _ProductFormState extends State<ProductForm> {
                 const SizedBox(height: 12),
                 DropdownButtonFormField<String>(
                   value: _selectedCategoryId,
-                  decoration: const InputDecoration(labelText: 'Category'),
+                  decoration: InputDecoration(labelText: 'Category'.tr(context)),
                   items: widget.categories
                       .map(
                         (c) =>
@@ -345,7 +346,7 @@ class _ProductFormState extends State<ProductForm> {
                 const SizedBox(height: 12),
                 DropdownButtonFormField<String>(
                   value: _selectedSubcategoryId,
-                  decoration: const InputDecoration(labelText: 'Subcategory'),
+                  decoration: InputDecoration(labelText: 'Subcategory'.tr(context)),
                   items: widget.subcategories
                       .map(
                         (c) =>
@@ -359,7 +360,7 @@ class _ProductFormState extends State<ProductForm> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: _submit,
-                    child: Text(widget.product == null ? 'Create' : 'Update'),
+                    child: Text(widget.product == null ? 'Create'.tr(context) : 'Update'.tr(context)),
                   ),
                 ),
                 const SizedBox(height: 20),

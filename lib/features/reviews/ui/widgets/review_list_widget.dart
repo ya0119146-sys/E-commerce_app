@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_dimensions.dart';
+import '../../../../core/localization/app_translations.dart';
 import '../../../../core/widgets/glass_panel.dart';
 import '../../../../core/widgets/shimmer_loading.dart';
 import '../../../../core/widgets/star_rating.dart';
@@ -74,7 +75,7 @@ class _ReviewListWidgetState extends State<ReviewListWidget> {
     if (state is ReviewError) {
       return _ReviewStateCard(
         icon: Icons.error_outline_rounded,
-        title: 'Could not load reviews',
+        title: 'Could not load reviews'.tr(context),
         message: state.message,
         brightness: brightness,
         action: TextButton(
@@ -84,7 +85,7 @@ class _ReviewListWidgetState extends State<ReviewListWidget> {
           style: TextButton.styleFrom(
             foregroundColor: AppColors.secondary(brightness),
           ),
-          child: const Text('Try Again'),
+          child: Text('Try Again'.tr(context)),
         ),
       );
     }
@@ -93,10 +94,10 @@ class _ReviewListWidgetState extends State<ReviewListWidget> {
       if (state.reviews.isEmpty) {
         return _ReviewStateCard(
           icon: Icons.rate_review_outlined,
-          title: 'No reviews yet',
+          title: 'No reviews yet'.tr(context),
           message: widget.role == 'admin'
-              ? 'Reviews will appear here when customers share feedback.'
-              : 'Be the first to share your experience.',
+              ? 'Reviews will appear here when customers share feedback.'.tr(context)
+              : 'Be the first to share your experience.'.tr(context),
           brightness: brightness,
         );
       }
@@ -130,7 +131,9 @@ class _ReviewListWidgetState extends State<ReviewListWidget> {
     if (state is! ReviewLoaded) return null;
 
     final count = state.reviews.length;
-    return count == 1 ? '1 review' : '$count reviews';
+    return count == 1
+        ? '1 ${'review'.tr(context)}'
+        : '$count ${'reviews'.tr(context)}';
   }
 
   void _showAddReview(BuildContext context) {
@@ -144,19 +147,19 @@ class _ReviewListWidgetState extends State<ReviewListWidget> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Review'),
-        content: const Text('Are you sure you want to delete this review?'),
+        title: Text('Delete Review'.tr(context)),
+        content: Text('Are you sure you want to delete this review?'.tr(context)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text('Cancel'.tr(context)),
           ),
           TextButton(
             onPressed: () {
               context.read<ReviewCubit>().deleteReview(reviewId);
               Navigator.pop(context);
             },
-            child: const Text('Delete'),
+            child: Text('Delete'.tr(context)),
           ),
         ],
       ),
@@ -181,7 +184,7 @@ class _ReviewHeader extends StatelessWidget {
     final title = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Customer Reviews', style: Theme.of(context).textTheme.titleLarge),
+        Text('Customer Reviews'.tr(context), style: Theme.of(context).textTheme.titleLarge),
         if (countLabel != null) ...[
           const SizedBox(height: AppDimensions.spacingXs),
           Text(countLabel!, style: Theme.of(context).textTheme.bodySmall),
@@ -194,7 +197,7 @@ class _ReviewHeader extends StatelessWidget {
     final addButton = TextButton.icon(
       onPressed: onAddReview,
       icon: const Icon(Icons.add_rounded, size: 18),
-      label: const Text('Add Review'),
+      label: Text('Add Review'.tr(context)),
       style: TextButton.styleFrom(
         foregroundColor: AppColors.secondary(brightness),
         padding: const EdgeInsets.symmetric(
@@ -244,7 +247,7 @@ class _ReviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final reviewerName = review.name.trim().isEmpty ? 'Customer' : review.name.trim();
+    final reviewerName = review.name.trim().isEmpty ? 'Customer'.tr(context) : review.name.trim();
     final formattedDate = review.createdAt == null ? null : DateFormat.yMMMd().format(review.createdAt!);
 
     return GlassPanel(
@@ -290,7 +293,7 @@ class _ReviewCard extends StatelessWidget {
                         Material(
                           color: Colors.transparent,
                           child: Tooltip(
-                            message: 'Delete review',
+                            message: 'Delete review'.tr(context),
                             child: InkWell(
                               onTap: onDelete,
                               borderRadius: BorderRadius.circular(20),

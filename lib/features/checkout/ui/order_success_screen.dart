@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
+import '../../../core/localization/app_translations.dart';
 import '../../../core/widgets/hero_button.dart';
 
 import '../data/models/order_model.dart';
@@ -51,7 +52,7 @@ class OrderSuccessScreen extends StatelessWidget {
                 const SizedBox(height: 32),
 
                 Text(
-                  'Order Confirmed!',
+                  'Order Confirmed!'.tr(context),
                   style: GoogleFonts.playfairDisplay(
                     fontSize: 28,
                     fontWeight: FontWeight.w700,
@@ -65,7 +66,7 @@ class OrderSuccessScreen extends StatelessWidget {
                 const SizedBox(height: 12),
 
                 Text(
-                  'Thank you for your purchase.\nYour order is being processed.',
+                  'Thank you for your purchase.\nYour order is being processed.'.tr(context),
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         height: 1.5,
@@ -75,7 +76,7 @@ class OrderSuccessScreen extends StatelessWidget {
                 const SizedBox(height: 40),
 
                 HeroButton(
-                  text: 'View Order Details',
+                  text: 'View Order Details'.tr(context),
                   icon: Icons.receipt_long_outlined,
                   onPressed: () {
                     Navigator.push(
@@ -99,7 +100,7 @@ class OrderSuccessScreen extends StatelessWidget {
                     Navigator.popUntil(context, (route) => route.isFirst);
                   },
                   icon: const Icon(Icons.shopping_bag_outlined),
-                  label: const Text('Continue Shopping'),
+                  label: Text('Continue Shopping'.tr(context)),
                   style: OutlinedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 54),
                     shape: RoundedRectangleBorder(

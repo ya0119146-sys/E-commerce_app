@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:e_commerce/core/constants/app_colors.dart';
 import 'package:e_commerce/core/constants/app_dimensions.dart';
+import 'package:e_commerce/core/localization/app_translations.dart';
 import 'package:e_commerce/features/store/data/models/category_model.dart';
 import 'package:e_commerce/features/store/data/models/sub_category_model.dart';
 import 'package:flutter/material.dart';
@@ -57,8 +58,8 @@ class _SubcategoryFormState extends State<SubcategoryForm> {
     if (_formKey.currentState!.validate()) {
       if (_selectedCategoryId == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please select a parent category'),
+          SnackBar(
+            content: Text('Please select a parent category'.tr(context)),
             backgroundColor: AppColors.error,
           ),
         );
@@ -103,16 +104,16 @@ class _SubcategoryFormState extends State<SubcategoryForm> {
                 Center(
                   child: Text(
                     widget.subcategory == null
-                        ? 'Create Subcategory'
-                        : 'Update Subcategory',
+                        ? 'Create Subcategory'.tr(context)
+                        : 'Update Subcategory'.tr(context),
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ),
                 const SizedBox(height: 20),
                 // Subcategory Image
-                const Text(
-                  'Subcategory Image',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                Text(
+                  'Subcategory Image'.tr(context),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 GestureDetector(
@@ -145,25 +146,25 @@ class _SubcategoryFormState extends State<SubcategoryForm> {
                 const SizedBox(height: 24),
                 DropdownButtonFormField<String>(
                   value: _selectedCategoryId,
-                  decoration: const InputDecoration(
-                    labelText: 'Parent Category',
-                    prefixIcon: Icon(Icons.category_outlined),
+                  decoration: InputDecoration(
+                    labelText: 'Parent Category'.tr(context),
+                    prefixIcon: const Icon(Icons.category_outlined),
                   ),
                   items: widget.categories.map((c) {
                     return DropdownMenuItem(value: c.id, child: Text(c.name));
                   }).toList(),
                   onChanged: (v) => setState(() => _selectedCategoryId = v),
                   validator: (v) =>
-                      v == null ? 'Parent category is required' : null,
+                      v == null ? 'Parent category is required'.tr(context) : null,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _nameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Subcategory Name',
-                    prefixIcon: Icon(Icons.subtitles_outlined),
+                  decoration: InputDecoration(
+                    labelText: 'Subcategory Name'.tr(context),
+                    prefixIcon: const Icon(Icons.subtitles_outlined),
                   ),
-                  validator: (v) => v!.isEmpty ? 'Name is required' : null,
+                  validator: (v) => v!.isEmpty ? 'Name is required'.tr(context) : null,
                 ),
                 const SizedBox(height: 30),
                 SizedBox(
@@ -173,7 +174,7 @@ class _SubcategoryFormState extends State<SubcategoryForm> {
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    child: Text(widget.subcategory == null ? 'Create' : 'Update'),
+                    child: Text(widget.subcategory == null ? 'Create'.tr(context) : 'Update'.tr(context)),
                   ),
                 ),
                 const SizedBox(height: 20),

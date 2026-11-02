@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_dimensions.dart';
+import '../../../../core/localization/app_translations.dart';
 import '../../../../core/widgets/hero_button.dart';
 import '../../logic/review_cubit.dart';
 import '../../logic/review_state.dart';
@@ -62,7 +63,7 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
           ),
-          title: const Text('Write a Review'),
+          title: Text('Write a Review'.tr(context)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -83,14 +84,14 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
               TextFormField(
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a review';
+                    return 'Please enter a review'.tr(context);
                   }
                   return null;
                 },
                 controller: _reviewController,
                 maxLines: 4,
                 decoration: InputDecoration(
-                  hintText: 'Share your experience with this product...',
+                  hintText: 'Share your experience with this product...'.tr(context),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
                   ),
@@ -101,12 +102,12 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text('Cancel'.tr(context)),
             ),
             SizedBox(
               width: 120,
               child: HeroButton(
-                text: 'Submit',
+                text: 'Submit'.tr(context),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _onSubmit();

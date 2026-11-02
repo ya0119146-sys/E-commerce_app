@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_dimensions.dart';
+import '../../../../core/localization/app_translations.dart';
 
 class CategoryForm extends StatefulWidget {
   final CategoryModel? category;
@@ -72,7 +73,7 @@ class _CategoryFormState extends State<CategoryForm> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              widget.category == null ? 'Create Category' : 'Update Category',
+              widget.category == null ? 'Create Category'.tr(context) : 'Update Category'.tr(context),
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 20),
@@ -104,15 +105,15 @@ class _CategoryFormState extends State<CategoryForm> {
             const SizedBox(height: 20),
             TextFormField(
               controller: _nameController,
-              decoration: const InputDecoration(labelText: 'Category Name'),
-              validator: (v) => v!.isEmpty ? 'Name is required' : null,
+              decoration: InputDecoration(labelText: 'Category Name'.tr(context)),
+              validator: (v) => v!.isEmpty ? 'Name is required'.tr(context) : null,
             ),
             const SizedBox(height: 30),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: _submit,
-                child: Text(widget.category == null ? 'Create' : 'Update'),
+                child: Text(widget.category == null ? 'Create'.tr(context) : 'Update'.tr(context)),
               ),
             ),
           ],

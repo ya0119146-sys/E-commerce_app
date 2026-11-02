@@ -10,6 +10,7 @@ import '../../../wishlist/logic/wishlist_cubit.dart';
 import '../../../cart/logic/cart_cubit.dart';
 import '../../data/models/product_model.dart';
 import '../product_detail_screen.dart';
+import '../../../../core/localization/app_translations.dart';
 
 /// Product Card matching the Labella design:
 /// Image (4:5), badges, heart, shopping bag, title, rating, price.
@@ -127,7 +128,7 @@ class _ProductCardState extends State<ProductCard>
                               child: Text(
                                 product.onSale
                                     ? '-${product.discountPercent.toStringAsFixed(0)}%'
-                                    : 'Out of Stock',
+                                    : 'out_of_stock'.tr(context),
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 10,
@@ -356,7 +357,7 @@ class _AddToCartButtonState extends State<_AddToCartButton>
             context.read<CartCubit>().addToCart(widget.product.id);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: const Text('Added to cart ✨'),
+                content: Text('Added to cart ✨'.tr(context)),
                 duration: const Duration(seconds: 1),
                 behavior: SnackBarBehavior.floating,
                 margin: const EdgeInsets.fromLTRB(20, 0, 20, 80),

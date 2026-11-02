@@ -68,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text('nav_profile'.tr(context)),
         actions: [
           if (_isEditing)
             BlocConsumer<ProfileCubit, ProfileState>(
@@ -307,8 +307,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         controller: _nameController,
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.headlineMedium,
-                        decoration: const InputDecoration(
-                          hintText: 'Enter name',
+                        decoration: InputDecoration(
+                          hintText: 'Enter name'.tr(context),
                           border: InputBorder.none,
                         ),
                         onChanged: (val) {
@@ -577,7 +577,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               if (context.mounted) {
                 Navigator.pop(ctx);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Profile deleted successfully')),
+                  SnackBar(content: Text('Profile deleted successfully'.tr(context))),
                 );
                 Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(builder: (_) => const LoginScreen()),

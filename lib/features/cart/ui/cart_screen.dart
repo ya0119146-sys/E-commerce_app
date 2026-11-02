@@ -10,6 +10,7 @@ import '../../../core/widgets/shimmer_loading.dart';
 import '../../checkout/ui/checkout_screen.dart';
 import '../data/models/cart_model.dart';
 import '../logic/cart_cubit.dart';
+import '../../../core/localization/app_translations.dart';
 
 /// Cart screen showing all cart items with quantity controls.
 class CartScreen extends StatefulWidget {
@@ -32,7 +33,7 @@ class _CartScreenState extends State<CartScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Cart'),
+        title: Text('My Cart'.tr(context)),
         actions: [
           BlocBuilder<CartCubit, CartState>(
             builder: (context, state) {
@@ -40,8 +41,8 @@ class _CartScreenState extends State<CartScreen> {
               return TextButton(
                 onPressed: () => _showClearCartDialog(context),
                 child: Text(
-                  'Clear All',
-                  style: TextStyle(color: AppColors.error),
+                  'Clear All'.tr(context),
+                  style: const TextStyle(color: AppColors.error),
                 ),
               );
             },
@@ -130,14 +131,14 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    'Your cart is empty',
+                    'Your cart is empty'.tr(context),
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'Add some items to get started',
+                    'Add some items to get started'.tr(context),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: AppColors.foreground(
                         brightness,
@@ -148,7 +149,7 @@ class _CartScreenState extends State<CartScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: HeroButton(
-                      text: 'Start Shopping',
+                      text: 'Start Shopping'.tr(context),
                       icon: Icons.shopping_bag_outlined,
                       onPressed: () {
                         Navigator.push(
@@ -200,7 +201,7 @@ class _CartScreenState extends State<CartScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Subtotal',
+                'Subtotal'.tr(context),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.foreground(
                     brightness,
@@ -220,7 +221,7 @@ class _CartScreenState extends State<CartScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Shipping & Tax',
+                'delivery_fee'.tr(context),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.foreground(
                     brightness,
@@ -228,7 +229,7 @@ class _CartScreenState extends State<CartScreen> {
                 ),
               ),
               Text(
-                tax == 0 ? 'Free' : '\$${tax.toStringAsFixed(2)}',
+                tax == 0 ? (context.isArabic ? 'مجاني' : 'Free') : '\$${tax.toStringAsFixed(2)}',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: tax == 0 ? AppColors.success : null,
@@ -240,7 +241,7 @@ class _CartScreenState extends State<CartScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Total', style: Theme.of(context).textTheme.titleLarge),
+              Text('Total'.tr(context), style: Theme.of(context).textTheme.titleLarge),
               Text(
                 '\$${total.toStringAsFixed(2)}',
                 style: TextStyle(
@@ -253,7 +254,7 @@ class _CartScreenState extends State<CartScreen> {
           ),
           const SizedBox(height: 14),
           HeroButton(
-            text: 'Proceed to Checkout',
+            text: 'checkout'.tr(context),
             icon: Icons.arrow_forward_rounded,
             onPressed: () {
               Navigator.push(
@@ -276,21 +277,21 @@ class _CartScreenState extends State<CartScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Clear Cart?'),
-        content: const Text('Are you sure you want to remove all items?'),
+        title: Text('Clear Cart?'.tr(context)),
+        content: Text('Are you sure you want to remove all items?'.tr(context)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text('cancel'.tr(context)),
           ),
           TextButton(
             onPressed: () {
               context.read<CartCubit>().clearCart();
               Navigator.pop(context);
             },
-            child: const Text(
-              'Clear All',
-              style: TextStyle(color: AppColors.error),
+            child: Text(
+              'Clear All'.tr(context),
+              style: const TextStyle(color: AppColors.error),
             ),
           ),
         ],
@@ -478,7 +479,9 @@ class _CartItemCard extends StatelessWidget {
                                           ).showSnackBar(
                                             SnackBar(
                                               content: Text(
-                                                'Reached maximum stock ($maxStock)',
+                                                context.isArabic
+                                                    ? 'وصلت للحد الأقصى ($maxStock)'
+                                                    : 'Reached maximum stock ($maxStock)',
                                               ),
                                               duration: const Duration(
                                                 seconds: 1,

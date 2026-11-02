@@ -22,6 +22,7 @@
         "image_picker",
         "intl",
         "lucide_icons",
+        "photo_view",
         "shared_preferences",
         "shimmer"
       ],
@@ -77,6 +78,13 @@
         "test_api",
         "vector_math",
         "vm_service"
+      ]
+    },
+    {
+      "name": "photo_view",
+      "version": "0.15.0",
+      "dependencies": [
+        "flutter"
       ]
     },
     {

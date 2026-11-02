@@ -112,10 +112,10 @@ class _BottomNavShellState extends State<BottomNavShell> {
                   label: 'nav_profile'.tr(context),
                 ),
                 if (widget.role == 'admin')
-                  const BottomNavigationBarItem(
-                    icon: Icon(Icons.admin_panel_settings_outlined),
-                    activeIcon: Icon(Icons.admin_panel_settings),
-                    label: 'Admin',
+                  BottomNavigationBarItem(
+                    icon: const Icon(Icons.admin_panel_settings_outlined),
+                    activeIcon: const Icon(Icons.admin_panel_settings),
+                    label: 'Admin'.tr(context),
                   ),
               ],
             );

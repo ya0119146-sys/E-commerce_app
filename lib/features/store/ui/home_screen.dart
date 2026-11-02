@@ -11,6 +11,7 @@ import '../logic/categories_cubit.dart';
 import 'widgets/product_card.dart';
 import 'widgets/category_grid.dart';
 import 'search_screen.dart';
+import '../../../core/localization/app_translations.dart';
 
 /// Home screen with hero banner, categories, and trending products.
 class HomeScreen extends StatefulWidget {
@@ -124,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                      'New Collection',
+                                      'New Collection'.tr(context),
                                       style: GoogleFonts.playfairDisplay(
                                         fontSize: 26,
                                         fontWeight: FontWeight.w700,
@@ -140,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Discover luxury beauty essentials',
+                                  'Discover luxury beauty essentials'.tr(context),
                                   style: GoogleFonts.poppins(
                                     fontSize: 13,
                                     color: Colors.white.withValues(alpha: 0.85),
@@ -162,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   child: Text(
-                                    'Shop Now',
+                                    'Shop Now'.tr(context),
                                     style: GoogleFonts.poppins(
                                       fontSize: 13,
                                       fontWeight: FontWeight.w600,
@@ -197,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 bottom: 12,
               ),
               child: Text(
-                'Categories',
+                'Categories'.tr(context),
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
@@ -248,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 bottom: 12,
               ),
               child: Text(
-                'Trending Now',
+                'Trending Now'.tr(context),
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
@@ -301,7 +302,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           onPressed: () => context
                               .read<ProductsCubit>()
                               .fetchProducts(refresh: true),
-                          child: const Text('Retry'),
+                          child: Text('Retry'.tr(context)),
                         ),
                       ],
                     ),
@@ -324,7 +325,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          'No products found',
+                          'No products found'.tr(context),
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ],

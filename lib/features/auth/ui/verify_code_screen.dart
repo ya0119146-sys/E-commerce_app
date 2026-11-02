@@ -8,6 +8,7 @@ import '../../../core/constants/app_gradients.dart';
 import '../../../core/widgets/hero_button.dart';
 import '../logic/auth_cubit.dart';
 import 'reset_password_screen.dart';
+import '../../../core/localization/app_translations.dart';
 
 /// Verify code screen for password recovery.
 class VerifyCodeScreen extends StatefulWidget {
@@ -60,7 +61,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
             );
           } else if (state is AuthResetCodeVerified) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Code verified successfully!')),
+              SnackBar(content: Text('Code verified successfully!'.tr(context))),
             );
             Navigator.pushReplacement(
               context,
@@ -89,12 +90,14 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                   ).animate().fade(duration: 600.ms).scale(),
                   const SizedBox(height: 12),
                   Text(
-                    'Verify Code',
+                    'Verify Code'.tr(context),
                     style: Theme.of(context).textTheme.headlineMedium,
                   ).animate().fade(duration: 500.ms, delay: 200.ms).moveY(begin: 15, end: 0),
                   const SizedBox(height: 8),
                   Text(
-                    'We\'ve sent a code to ${widget.email}',
+                    context.isArabic
+                        ? 'لقد أرسلنا رمز التحقق إلى ${widget.email}'
+                        : 'We\'ve sent a code to ${widget.email}',
                     style: Theme.of(context).textTheme.bodySmall,
                     textAlign: TextAlign.center,
                   ).animate().fade(duration: 500.ms, delay: 300.ms),
@@ -130,13 +133,13 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                               fontWeight: FontWeight.bold,
                               letterSpacing: 8,
                             ),
-                            decoration: const InputDecoration(
-                              labelText: 'Reset Code',
+                            decoration: InputDecoration(
+                              labelText: 'Reset Code'.tr(context),
                               hintText: '000000',
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter the code';
+                                return context.isArabic ? 'يرجى إدخال الرمز' : 'Please enter the code';
                               }
                               return null;
                             },
@@ -145,7 +148,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                           BlocBuilder<AuthCubit, AuthState>(
                             builder: (context, state) {
                               return HeroButton(
-                                text: 'Verify',
+                                text: 'Confirm'.tr(context),
                                 isLoading: state is AuthLoading,
                                 onPressed: _onVerify,
                               );

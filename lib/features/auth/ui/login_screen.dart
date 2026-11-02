@@ -11,6 +11,7 @@ import '../logic/auth_cubit.dart';
 import 'signup_screen.dart';
 import 'forget_password_screen.dart';
 import '../../../app/bottom_nav_shell.dart';
+import '../../../core/localization/app_translations.dart';
 
 /// Login screen with luxury glassmorphism design.
 class LoginScreen extends StatefulWidget {
@@ -107,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                   const SizedBox(height: 8),
                   Text(
-                        'Welcome back',
+                        'Welcome back'.tr(context),
                         style: Theme.of(context).textTheme.headlineMedium,
                       )
                       .animate()
@@ -120,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                   const SizedBox(height: 4),
                   Text(
-                    'Sign in to continue your luxury experience',
+                    'Sign in to continue your luxury experience'.tr(context),
                     style: Theme.of(context).textTheme.bodySmall,
                     textAlign: TextAlign.center,
                   ).animate().fade(duration: 500.ms, delay: 300.ms),
@@ -172,16 +173,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                         AutofillHints.username,
                                         AutofillHints.email,
                                       ],
-                                      decoration: const InputDecoration(
-                                        labelText: 'Email',
-                                        prefixIcon: Icon(Icons.email_outlined),
+                                      decoration: InputDecoration(
+                                        labelText: 'Email'.tr(context),
+                                        prefixIcon: const Icon(Icons.email_outlined),
                                       ),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          return 'Please enter your email';
+                                          return 'please_enter_email'.tr(context);
                                         }
                                         if (!value.contains('@')) {
-                                          return 'Please enter a valid email';
+                                          return 'please_enter_valid_email'.tr(context);
                                         }
                                         return null;
                                       },
@@ -204,7 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ],
                                       onFieldSubmitted: (_) => _onLogin(),
                                       decoration: InputDecoration(
-                                        labelText: 'Password',
+                                        labelText: 'Password'.tr(context),
                                         prefixIcon: const Icon(
                                           Icons.lock_outline,
                                         ),
@@ -224,10 +225,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          return 'Please enter your password';
+                                          return 'please_enter_password'.tr(context);
                                         }
                                         if (value.length < 6) {
-                                          return 'Password must be at least 6 characters';
+                                          return 'password_too_short'.tr(context);
                                         }
                                         return null;
                                       },
@@ -248,7 +249,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     );
                                   },
                                   child: Text(
-                                    'Forgot Password?',
+                                    'Forgot Password?'.tr(context),
                                     style: Theme.of(context).textTheme.bodySmall
                                         ?.copyWith(
                                           color: AppColors.secondary(
@@ -264,7 +265,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               BlocBuilder<AuthCubit, AuthState>(
                                 builder: (context, state) {
                                   return HeroButton(
-                                    text: 'Sign In',
+                                    text: 'Sign In'.tr(context),
                                     isLoading: state is AuthLoading,
                                     onPressed: _onLogin,
                                   );
@@ -290,7 +291,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Don\'t have an account? ',
+                        '${'dont_have_account'.tr(context)} ',
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                       GestureDetector(
@@ -303,7 +304,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           );
                         },
                         child: Text(
-                          'Sign Up',
+                          'Sign Up'.tr(context),
                           style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(
                                 color: AppColors.secondary(brightness),

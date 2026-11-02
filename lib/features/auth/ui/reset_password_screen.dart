@@ -8,6 +8,7 @@ import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_gradients.dart';
 import '../../../core/widgets/hero_button.dart';
 import '../logic/auth_cubit.dart';
+import '../../../core/localization/app_translations.dart';
 
 /// Reset password screen for setting a new password after code verification.
 class ResetPasswordScreen extends StatefulWidget {
@@ -68,8 +69,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             TextInput.finishAutofillContext(shouldSave: true);
             FocusScope.of(context).unfocus();
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Password reset successfully! Please log in.'),
+              SnackBar(
+                content: Text('password_reset_success'.tr(context)),
               ),
             );
             Future.delayed(const Duration(milliseconds: 300), () {
@@ -97,12 +98,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   ).animate().fade(duration: 600.ms).scale(),
                   const SizedBox(height: 12),
                   Text(
-                    'Set New Password',
+                    'Set New Password'.tr(context),
                     style: Theme.of(context).textTheme.headlineMedium,
                   ).animate().fade(duration: 500.ms, delay: 200.ms).moveY(begin: 15, end: 0),
                   const SizedBox(height: 8),
                   Text(
-                    'Enter your new password below',
+                    'Enter your new password below'.tr(context),
                     style: Theme.of(context).textTheme.bodySmall,
                     textAlign: TextAlign.center,
                   ).animate().fade(duration: 500.ms, delay: 300.ms),
@@ -148,16 +149,16 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               keyboardType: TextInputType.visiblePassword,
                               textInputAction: TextInputAction.next,
                               autofillHints: const [AutofillHints.newPassword],
-                              decoration: const InputDecoration(
-                                labelText: 'New Password',
-                                prefixIcon: Icon(Icons.lock_outline),
+                              decoration: InputDecoration(
+                                labelText: 'New Password'.tr(context),
+                                prefixIcon: const Icon(Icons.lock_outline),
                               ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter a password';
+                                  return 'please_enter_password'.tr(context);
                                 }
                                 if (value.length < 6) {
-                                  return 'Password must be at least 6 characters';
+                                  return 'password_too_short'.tr(context);
                                 }
                                 return null;
                               },
@@ -170,16 +171,16 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               textInputAction: TextInputAction.done,
                               autofillHints: const [AutofillHints.newPassword],
                               onFieldSubmitted: (_) => _onResetPassword(),
-                              decoration: const InputDecoration(
-                                labelText: 'Confirm Password',
-                                prefixIcon: Icon(Icons.lock_reset),
+                              decoration: InputDecoration(
+                                labelText: 'Confirm Password'.tr(context),
+                                prefixIcon: const Icon(Icons.lock_reset),
                               ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please confirm your password';
+                                  return 'confirm_password_hint'.tr(context);
                                 }
                                 if (value != _passwordController.text) {
-                                  return 'Passwords do not match';
+                                  return 'passwords_dont_match'.tr(context);
                                 }
                                 return null;
                               },
@@ -188,7 +189,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             BlocBuilder<AuthCubit, AuthState>(
                               builder: (context, state) {
                                 return HeroButton(
-                                  text: 'Reset Password',
+                                  text: 'Reset Password'.tr(context),
                                   isLoading: state is AuthLoading,
                                   onPressed: _onResetPassword,
                                 );

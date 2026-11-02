@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:e_commerce/core/constants/app_colors.dart';
 import 'package:e_commerce/core/constants/app_dimensions.dart';
+import 'package:e_commerce/core/localization/app_translations.dart';
 import 'package:e_commerce/features/auth/data/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -112,7 +113,7 @@ class _UserFormState extends State<UserForm> {
               children: [
                 Center(
                   child: Text(
-                    widget.user == null ? 'Create User' : 'Update User',
+                    widget.user == null ? 'Create User'.tr(context) : 'Update User'.tr(context),
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ),
@@ -159,34 +160,34 @@ class _UserFormState extends State<UserForm> {
                 const SizedBox(height: 30),
                 TextFormField(
                   controller: _nameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Full Name',
-                    prefixIcon: Icon(Icons.person_outline),
+                  decoration: InputDecoration(
+                    labelText: 'Full Name'.tr(context),
+                    prefixIcon: const Icon(Icons.person_outline),
                   ),
-                  validator: (v) => v!.isEmpty ? 'Required' : null,
+                  validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _usernameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Username',
-                    prefixIcon: Icon(Icons.alternate_email),
+                  decoration: InputDecoration(
+                    labelText: 'Username'.tr(context),
+                    prefixIcon: const Icon(Icons.alternate_email),
                   ),
-                  validator: (v) => v!.isEmpty ? 'Required' : null,
+                  validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: Icon(Icons.email_outlined),
+                  decoration: InputDecoration(
+                    labelText: 'Email'.tr(context),
+                    prefixIcon: const Icon(Icons.email_outlined),
                   ),
                   keyboardType: TextInputType.emailAddress,
                   validator: (v) {
-                    if (v!.isEmpty) return 'Required';
+                    if (v!.isEmpty) return 'Required'.tr(context);
                     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                         .hasMatch(v)) {
-                      return 'Invalid email';
+                      return 'Invalid email'.tr(context);
                     }
                     return null;
                   },
@@ -194,15 +195,15 @@ class _UserFormState extends State<UserForm> {
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _phoneController,
-                  decoration: const InputDecoration(
-                    labelText: 'Phone',
-                    prefixIcon: Icon(Icons.phone_outlined),
+                  decoration: InputDecoration(
+                    labelText: 'Phone'.tr(context),
+                    prefixIcon: const Icon(Icons.phone_outlined),
                   ),
                   keyboardType: TextInputType.phone,
                   validator: (v) {
-                    if (v == null || v.isEmpty) return 'Phone is required';
+                    if (v == null || v.isEmpty) return 'Phone is required'.tr(context);
                     if (!RegExp(r'^[0-9]{11,15}$').hasMatch(v)) {
-                      return 'Must be 11-15 digits';
+                      return 'Must be 11-15 digits'.tr(context);
                     }
                     return null;
                   },
@@ -211,26 +212,26 @@ class _UserFormState extends State<UserForm> {
                 if (widget.user == null) ...[
                   TextFormField(
                     controller: _passwordController,
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
-                      prefixIcon: Icon(Icons.lock_outline),
+                    decoration: InputDecoration(
+                      labelText: 'Password'.tr(context),
+                      prefixIcon: const Icon(Icons.lock_outline),
                     ),
                     obscureText: true,
                     validator: (v) =>
-                        v!.length < 6 ? 'Min 6 characters' : null,
+                        v!.length < 6 ? 'Min 6 characters'.tr(context) : null,
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _confirmPasswordController,
-                    decoration: const InputDecoration(
-                      labelText: 'Confirm Password',
-                      prefixIcon: Icon(Icons.lock_clock_outlined),
+                    decoration: InputDecoration(
+                      labelText: 'Confirm Password'.tr(context),
+                      prefixIcon: const Icon(Icons.lock_clock_outlined),
                     ),
                     obscureText: true,
                     validator: (v) {
-                      if (v!.isEmpty) return 'Required';
+                      if (v!.isEmpty) return 'Required'.tr(context);
                       if (v != _passwordController.text) {
-                        return 'Passwords do not match';
+                        return 'Passwords do not match'.tr(context);
                       }
                       return null;
                     },
@@ -239,13 +240,13 @@ class _UserFormState extends State<UserForm> {
                 ],
                 DropdownButtonFormField<String>(
                   value: _selectedRole,
-                  decoration: const InputDecoration(
-                    labelText: 'Role',
-                    prefixIcon: Icon(Icons.admin_panel_settings_outlined),
+                  decoration: InputDecoration(
+                    labelText: 'Role'.tr(context),
+                    prefixIcon: const Icon(Icons.admin_panel_settings_outlined),
                   ),
-                  items: const [
-                    DropdownMenuItem(value: 'user', child: Text('User')),
-                    DropdownMenuItem(value: 'admin', child: Text('Admin')),
+                  items: [
+                    DropdownMenuItem(value: 'user', child: Text('User'.tr(context))),
+                    DropdownMenuItem(value: 'admin', child: Text('Admin'.tr(context))),
                   ],
                   onChanged: (v) => setState(() => _selectedRole = v!),
                 ),
@@ -262,7 +263,7 @@ class _UserFormState extends State<UserForm> {
                         ),
                       ),
                     ),
-                    child: Text(widget.user == null ? 'Create User' : 'Update User'),
+                    child: Text(widget.user == null ? 'Create User'.tr(context) : 'Update User'.tr(context)),
                   ),
                 ),
                 const SizedBox(height: 20),

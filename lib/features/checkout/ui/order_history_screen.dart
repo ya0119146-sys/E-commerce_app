@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
+import '../../../core/localization/app_translations.dart';
 import '../../../core/widgets/shimmer_loading.dart';
 import '../logic/checkout_cubit.dart';
 import 'order_detail_screen.dart';
@@ -29,7 +30,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
     final dateFormat = DateFormat('MMM dd, yyyy');
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Order History')),
+      appBar: AppBar(title: Text('Order History'.tr(context))),
       body: BlocBuilder<CheckoutCubit, CheckoutState>(
         builder: (context, state) {
           if (state.ordersStatus == OrdersStatus.loading) {
@@ -59,7 +60,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'No orders yet',
+                    'No orders yet'.tr(context),
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ],
@@ -73,6 +74,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
             separatorBuilder: (_, __) => const SizedBox(height: 12),
             itemBuilder: (context, index) {
               final order = state.orders[index];
+              final orderIdSnippet = order.id.substring(order.id.length > 8 ? order.id.length - 8 : 0);
               return InkWell(
                 onTap: () => Navigator.push(
                   context,
@@ -98,7 +100,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Order #${order.id.substring(order.id.length > 8 ? order.id.length - 8 : 0)}',
+                            '${'Order ID'.tr(context)} #$orderIdSnippet',
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
                           if (order.status != null)
@@ -115,7 +117,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                                 ),
                               ),
                               child: Text(
-                                order.status!,
+                                order.status!.tr(context),
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w600,
@@ -147,7 +149,9 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                       if (order.items.isNotEmpty) ...[
                         const SizedBox(height: 8),
                         Text(
-                          '${order.items.length} item${order.items.length > 1 ? 's' : ''}',
+                          context.isArabic
+                              ? '${order.items.length} ${'items'.tr(context)}'
+                              : '${order.items.length} item${order.items.length > 1 ? 's' : ''}',
                           style: Theme.of(context).textTheme.labelSmall,
                         ),
                       ],
