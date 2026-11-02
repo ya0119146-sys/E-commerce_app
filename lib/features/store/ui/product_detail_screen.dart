@@ -49,6 +49,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     super.dispose();
   }
 
+  Future<void> _openLightbox(List<String> allImages) async {
+    final newIndex = await ProductImageLightbox.show(
+      context,
+      images: allImages,
+      initialIndex: _selectedImageIndex,
+      heroTagPrefix: 'product_${widget.product.id}',
+    );
+    if (newIndex != null && newIndex != _selectedImageIndex && mounted) {
+      _pageController.jumpToPage(newIndex);
+      setState(() => _selectedImageIndex = newIndex);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final brightness = Theme.of(context).brightness;
@@ -136,33 +149,30 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             maxScale: 3.5,
                             clipBehavior: Clip.hardEdge,
                             child: GestureDetector(
-                              onTap: () {
-                                ProductImageLightbox.show(
-                                  context,
-                                  images: allImages,
-                                  initialIndex: _selectedImageIndex,
-                                  heroTagPrefix: 'product_${product.id}',
-                                );
-                              },
-                              child: Hero(
-                                tag: 'product_${product.id}_$i',
-                                child: CachedNetworkImage(
-                                  imageUrl: allImages[i],
-                                  fit: BoxFit.cover,
-                                  placeholder: (_, __) => const ShimmerLoading(
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    borderRadius: 0,
-                                  ),
-                                  errorWidget: (_, __, ___) => Container(
-                                    color: AppColors.muted(brightness),
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.image_outlined,
-                                        size: 60,
-                                        color: AppColors.foreground(
-                                          brightness,
-                                        ).withValues(alpha: 0.15),
+                              onTap: () => _openLightbox(allImages),
+                              child: Container(
+                                color: AppColors.card(brightness),
+                                alignment: Alignment.center,
+                                child: Hero(
+                                  tag: 'product_${product.id}_$i',
+                                  child: CachedNetworkImage(
+                                    imageUrl: allImages[i],
+                                    fit: BoxFit.contain,
+                                    placeholder: (_, __) => const ShimmerLoading(
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      borderRadius: 0,
+                                    ),
+                                    errorWidget: (_, __, ___) => Container(
+                                      color: AppColors.muted(brightness),
+                                      child: Center(
+                                        child: Icon(
+                                          Icons.image_outlined,
+                                          size: 60,
+                                          color: AppColors.foreground(
+                                            brightness,
+                                          ).withValues(alpha: 0.15),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -184,41 +194,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ),
                         ),
 
-                  // Bottom subtle gradient overlay
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: 70,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.transparent,
-                            AppColors.background(brightness)
-                                .withValues(alpha: 0.4),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-
                   // Floating Counter & Fullscreen Zoom Pill
                   if (allImages.isNotEmpty)
                     Positioned(
                       bottom: 14,
                       right: 16,
                       child: GestureDetector(
-                        onTap: () {
-                          ProductImageLightbox.show(
-                            context,
-                            images: allImages,
-                            initialIndex: _selectedImageIndex,
-                            heroTagPrefix: 'product_${product.id}',
-                          );
-                        },
+                        onTap: () => _openLightbox(allImages),
                         child: Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 12,
