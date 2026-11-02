@@ -1,3 +1,4 @@
+import '../localization/app_translations.dart';
 import '../localization/locale_cubit.dart';
 
 /// Custom API exception for user-friendly error messages.
@@ -12,12 +13,14 @@ class ApiException implements Exception {
   String toString() => 'ApiException($statusCode): $message';
 
   /// Map common HTTP status codes to user-friendly messages.
-  /// If [serverMessage] is present, it is prioritized.
+  /// If [serverMessage] is present, it is translated to the current language.
   static String friendlyMessage(int? statusCode, [String? serverMessage]) {
+    final lang = LocaleCubit.currentLanguage;
     if (serverMessage != null && serverMessage.trim().isNotEmpty) {
-      return serverMessage.trim();
+      final trimmed = serverMessage.trim();
+      return AppTranslations.translate(trimmed, lang);
     }
-    final isAr = LocaleCubit.currentLanguage == 'ar';
+    final isAr = lang == 'ar';
     switch (statusCode) {
       case 400:
         return isAr
