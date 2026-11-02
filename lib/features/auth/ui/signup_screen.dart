@@ -77,9 +77,7 @@ class _SignupScreenState extends State<SignupScreen> {
             TextInput.finishAutofillContext(shouldSave: true);
             FocusScope.of(context).unfocus();
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Account created! Please log in.'),
-              ),
+              const SnackBar(content: Text('Account created! Please log in.')),
             );
             Future.delayed(const Duration(milliseconds: 300), () {
               if (!context.mounted) return;
@@ -164,190 +162,193 @@ class _SignupScreenState extends State<SignupScreen> {
                             key: _formKey,
                             autovalidateMode: _autovalidateMode,
                             child: Column(
-                            children: [
-                              TextFormField(
-                                controller: _nameController,
-                                cursorColor: AppColors.secondary(brightness),
-                                cursorWidth: 2.0,
-                                showCursor: true,
-                                textInputAction: TextInputAction.next,
-                                autofillHints: const [AutofillHints.name],
-                                decoration: const InputDecoration(
-                                  labelText: 'Full Name',
-                                  prefixIcon: Icon(Icons.person_outline),
+                              children: [
+                                TextFormField(
+                                  controller: _nameController,
+                                  cursorColor: AppColors.secondary(brightness),
+                                  cursorWidth: 2.0,
+                                  showCursor: true,
+                                  textInputAction: TextInputAction.next,
+                                  autofillHints: const [AutofillHints.name],
+                                  decoration: const InputDecoration(
+                                    labelText: 'Full Name',
+                                    prefixIcon: Icon(Icons.person_outline),
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter your name';
+                                    }
+                                    return null;
+                                  },
                                 ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter your name';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(
-                                height: AppDimensions.spacingDefault,
-                              ),
-                              TextFormField(
-                                controller: _userNameController,
-                                cursorColor: AppColors.secondary(brightness),
-                                cursorWidth: 2.0,
-                                showCursor: true,
-                                textInputAction: TextInputAction.next,
-                                decoration: const InputDecoration(
-                                  labelText: 'Username',
-                                  prefixIcon: Icon(Icons.person_outline),
+                                const SizedBox(
+                                  height: AppDimensions.spacingDefault,
                                 ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter your username';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(
-                                height: AppDimensions.spacingDefault,
-                              ),
-                              TextFormField(
-                                controller: _emailController,
-                                cursorColor: AppColors.secondary(brightness),
-                                cursorWidth: 2.0,
-                                showCursor: true,
-                                keyboardType: TextInputType.emailAddress,
-                                textInputAction: TextInputAction.next,
-                                autofillHints: const [
-                                  AutofillHints.email,
-                                  AutofillHints.username,
-                                ],
-                                decoration: const InputDecoration(
-                                  labelText: 'Email',
-                                  prefixIcon: Icon(Icons.email_outlined),
+                                TextFormField(
+                                  controller: _userNameController,
+                                  cursorColor: AppColors.secondary(brightness),
+                                  cursorWidth: 2.0,
+                                  showCursor: true,
+                                  textInputAction: TextInputAction.next,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Username',
+                                    prefixIcon: Icon(Icons.person_outline),
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter your username';
+                                    }
+                                    return null;
+                                  },
                                 ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter your email';
-                                  }
-                                  if (!value.contains('@')) {
-                                    return 'Please enter a valid email';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(
-                                height: AppDimensions.spacingDefault,
-                              ),
-                              TextFormField(
-                                controller: _phoneController,
-                                cursorColor: AppColors.secondary(brightness),
-                                cursorWidth: 2.0,
-                                showCursor: true,
-                                keyboardType: TextInputType.phone,
-                                textInputAction: TextInputAction.next,
-                                autofillHints: const [
-                                  AutofillHints.telephoneNumber,
-                                ],
-                                decoration: const InputDecoration(
-                                  labelText: 'Phone Number',
-                                  prefixIcon: Icon(Icons.phone_outlined),
-                                  hintText: 'e.g. 01012345678',
+                                const SizedBox(
+                                  height: AppDimensions.spacingDefault,
                                 ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter your phone number';
-                                  }
-                                  final phoneRegExp = RegExp(r'^[0-9]{10,15}$');
-                                  if (!phoneRegExp.hasMatch(value)) {
-                                    return 'Please enter a valid phone number (10–15 digits)';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(
-                                height: AppDimensions.spacingDefault,
-                              ),
-                              TextFormField(
-                                controller: _passwordController,
-                                cursorColor: AppColors.secondary(brightness),
-                                cursorWidth: 2.0,
-                                showCursor: true,
-                                obscureText: _obscurePassword,
-                                keyboardType: TextInputType.visiblePassword,
-                                textInputAction: TextInputAction.next,
-                                autofillHints: const [
-                                  AutofillHints.newPassword,
-                                ],
-                                decoration: InputDecoration(
-                                  labelText: 'Password',
-                                  prefixIcon: const Icon(Icons.lock_outline),
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                      _obscurePassword
-                                          ? Icons.visibility_off_outlined
-                                          : Icons.visibility_outlined,
-                                    ),
-                                    onPressed: () => setState(
-                                      () =>
-                                          _obscurePassword = !_obscurePassword,
+                                TextFormField(
+                                  controller: _emailController,
+                                  cursorColor: AppColors.secondary(brightness),
+                                  cursorWidth: 2.0,
+                                  showCursor: true,
+                                  keyboardType: TextInputType.emailAddress,
+                                  textInputAction: TextInputAction.next,
+                                  autofillHints: const [
+                                    AutofillHints.email,
+                                    AutofillHints.username,
+                                  ],
+                                  decoration: const InputDecoration(
+                                    labelText: 'Email',
+                                    prefixIcon: Icon(Icons.email_outlined),
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter your email';
+                                    }
+                                    if (!value.contains('@')) {
+                                      return 'Please enter a valid email';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: AppDimensions.spacingDefault,
+                                ),
+                                TextFormField(
+                                  controller: _phoneController,
+                                  cursorColor: AppColors.secondary(brightness),
+                                  cursorWidth: 2.0,
+                                  showCursor: true,
+                                  keyboardType: TextInputType.phone,
+                                  textInputAction: TextInputAction.next,
+                                  autofillHints: const [
+                                    AutofillHints.telephoneNumber,
+                                  ],
+                                  decoration: const InputDecoration(
+                                    labelText: 'Phone Number',
+                                    prefixIcon: Icon(Icons.phone_outlined),
+                                    hintText: 'e.g. 01012345678',
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter your phone number';
+                                    }
+                                    final phoneRegExp = RegExp(
+                                      r'^[0-9]{10,15}$',
+                                    );
+                                    if (!phoneRegExp.hasMatch(value)) {
+                                      return 'Please enter a valid phone number (10–15 digits)';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: AppDimensions.spacingDefault,
+                                ),
+                                TextFormField(
+                                  controller: _passwordController,
+                                  cursorColor: AppColors.secondary(brightness),
+                                  cursorWidth: 2.0,
+                                  showCursor: true,
+                                  obscureText: _obscurePassword,
+                                  keyboardType: TextInputType.visiblePassword,
+                                  textInputAction: TextInputAction.next,
+                                  autofillHints: const [
+                                    AutofillHints.newPassword,
+                                  ],
+                                  decoration: InputDecoration(
+                                    labelText: 'Password',
+                                    prefixIcon: const Icon(Icons.lock_outline),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        _obscurePassword
+                                            ? Icons.visibility_off_outlined
+                                            : Icons.visibility_outlined,
+                                      ),
+                                      onPressed: () => setState(
+                                        () => _obscurePassword =
+                                            !_obscurePassword,
+                                      ),
                                     ),
                                   ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter a password';
+                                    }
+                                    if (value.length < 6) {
+                                      return 'Password must be at least 6 characters';
+                                    }
+                                    return null;
+                                  },
                                 ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter a password';
-                                  }
-                                  if (value.length < 6) {
-                                    return 'Password must be at least 6 characters';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(
-                                height: AppDimensions.spacingDefault,
-                              ),
-                              TextFormField(
-                                controller: _confirmPasswordController,
-                                cursorColor: AppColors.secondary(brightness),
-                                cursorWidth: 2.0,
-                                showCursor: true,
-                                obscureText: _obscureConfirm,
-                                keyboardType: TextInputType.visiblePassword,
-                                textInputAction: TextInputAction.done,
-                                autofillHints: const [
-                                  AutofillHints.newPassword,
-                                ],
-                                decoration: InputDecoration(
-                                  labelText: 'Confirm Password',
-                                  prefixIcon: const Icon(Icons.lock_outline),
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                      _obscureConfirm
-                                          ? Icons.visibility_off_outlined
-                                          : Icons.visibility_outlined,
-                                    ),
-                                    onPressed: () => setState(
-                                      () => _obscureConfirm = !_obscureConfirm,
+                                const SizedBox(
+                                  height: AppDimensions.spacingDefault,
+                                ),
+                                TextFormField(
+                                  controller: _confirmPasswordController,
+                                  cursorColor: AppColors.secondary(brightness),
+                                  cursorWidth: 2.0,
+                                  showCursor: true,
+                                  obscureText: _obscureConfirm,
+                                  keyboardType: TextInputType.visiblePassword,
+                                  textInputAction: TextInputAction.done,
+                                  autofillHints: const [
+                                    AutofillHints.newPassword,
+                                  ],
+                                  decoration: InputDecoration(
+                                    labelText: 'Confirm Password',
+                                    prefixIcon: const Icon(Icons.lock_outline),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        _obscureConfirm
+                                            ? Icons.visibility_off_outlined
+                                            : Icons.visibility_outlined,
+                                      ),
+                                      onPressed: () => setState(
+                                        () =>
+                                            _obscureConfirm = !_obscureConfirm,
+                                      ),
                                     ),
                                   ),
+                                  validator: (value) {
+                                    if (value != _passwordController.text) {
+                                      return 'Passwords do not match';
+                                    }
+                                    return null;
+                                  },
                                 ),
-                                validator: (value) {
-                                  if (value != _passwordController.text) {
-                                    return 'Passwords do not match';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(height: AppDimensions.spacingLg),
-                              BlocBuilder<AuthCubit, AuthState>(
-                                builder: (context, state) {
-                                  return HeroButton(
-                                    text: 'Create Account',
-                                    isLoading: state is AuthLoading,
-                                    onPressed: _onSignup,
-                                  );
-                                },
-                              ),
-                            ],
+                                const SizedBox(height: AppDimensions.spacingLg),
+                                BlocBuilder<AuthCubit, AuthState>(
+                                  builder: (context, state) {
+                                    return HeroButton(
+                                      text: 'Create Account',
+                                      isLoading: state is AuthLoading,
+                                      onPressed: _onSignup,
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
                       )
                       .animate()
                       .fade(duration: 600.ms, delay: 400.ms)
