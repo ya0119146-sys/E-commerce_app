@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -60,12 +61,15 @@ class _SignupScreenState extends State<SignupScreen> {
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthError) {
+            TextInput.finishAutofillContext(shouldSave: false);
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(SnackBar(content: Text(state.message)));
           }
           // Backend does NOT return a token on signup — navigate to login.
           if (state is AuthSignupSuccess) {
+            FocusScope.of(context).unfocus();
+            TextInput.finishAutofillContext(shouldSave: true);
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Account created! Please log in.'),
@@ -145,13 +149,17 @@ class _SignupScreenState extends State<SignupScreen> {
                             ),
                           ],
                         ),
-                        child: Form(
-                          key: _formKey,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          child: Column(
+                        child: AutofillGroup(
+                          onDisposeAction: AutofillContextAction.cancel,
+                          child: Form(
+                            key: _formKey,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            child: Column(
                             children: [
                               TextFormField(
                                 controller: _nameController,
+                                textInputAction: TextInputAction.next,
+                                autofillHints: const [AutofillHints.name],
                                 decoration: const InputDecoration(
                                   labelText: 'Full Name',
                                   prefixIcon: Icon(Icons.person_outline),
@@ -168,6 +176,8 @@ class _SignupScreenState extends State<SignupScreen> {
                               ),
                               TextFormField(
                                 controller: _userNameController,
+                                textInputAction: TextInputAction.next,
+                                autofillHints: const [AutofillHints.username],
                                 decoration: const InputDecoration(
                                   labelText: 'Username',
                                   prefixIcon: Icon(Icons.person_outline),
@@ -185,6 +195,11 @@ class _SignupScreenState extends State<SignupScreen> {
                               TextFormField(
                                 controller: _emailController,
                                 keyboardType: TextInputType.emailAddress,
+                                textInputAction: TextInputAction.next,
+                                autofillHints: const [
+                                  AutofillHints.email,
+                                  AutofillHints.newUsername,
+                                ],
                                 decoration: const InputDecoration(
                                   labelText: 'Email',
                                   prefixIcon: Icon(Icons.email_outlined),
@@ -205,6 +220,10 @@ class _SignupScreenState extends State<SignupScreen> {
                               TextFormField(
                                 controller: _phoneController,
                                 keyboardType: TextInputType.phone,
+                                textInputAction: TextInputAction.next,
+                                autofillHints: const [
+                                  AutofillHints.telephoneNumber,
+                                ],
                                 decoration: const InputDecoration(
                                   labelText: 'Phone Number',
                                   prefixIcon: Icon(Icons.phone_outlined),
@@ -227,6 +246,11 @@ class _SignupScreenState extends State<SignupScreen> {
                               TextFormField(
                                 controller: _passwordController,
                                 obscureText: _obscurePassword,
+                                keyboardType: TextInputType.visiblePassword,
+                                textInputAction: TextInputAction.next,
+                                autofillHints: const [
+                                  AutofillHints.newPassword,
+                                ],
                                 decoration: InputDecoration(
                                   labelText: 'Password',
                                   prefixIcon: const Icon(Icons.lock_outline),
@@ -258,6 +282,11 @@ class _SignupScreenState extends State<SignupScreen> {
                               TextFormField(
                                 controller: _confirmPasswordController,
                                 obscureText: _obscureConfirm,
+                                keyboardType: TextInputType.visiblePassword,
+                                textInputAction: TextInputAction.done,
+                                autofillHints: const [
+                                  AutofillHints.newPassword,
+                                ],
                                 decoration: InputDecoration(
                                   labelText: 'Confirm Password',
                                   prefixIcon: const Icon(Icons.lock_outline),
@@ -292,6 +321,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             ],
                           ),
                         ),
+                      ),
                       )
                       .animate()
                       .fade(duration: 600.ms, delay: 400.ms)

@@ -361,7 +361,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const ChangePasswordScreen(),
+                      builder: (_) =>
+                          ChangePasswordScreen(userEmail: user.email),
                     ),
                   ),
                   index: 2,

@@ -58,7 +58,9 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
             );
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (_) => const ResetPasswordScreen()),
+              MaterialPageRoute(
+                builder: (_) => ResetPasswordScreen(email: widget.email),
+              ),
             );
           }
         },
