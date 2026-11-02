@@ -77,7 +77,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         slivers: [
           // ─── Image Header ───
           SliverAppBar(
-            expandedHeight: (MediaQuery.of(context).size.height * 0.36).clamp(280.0, 360.0) +
+            expandedHeight:
+                (MediaQuery.of(context).size.height * 0.36).clamp(
+                  280.0,
+                  360.0,
+                ) +
                 MediaQuery.of(context).padding.top,
             pinned: true,
             backgroundColor: AppColors.background(brightness),
@@ -166,13 +170,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       AppDimensions.radiusLg,
                                     ),
                                     border: Border.all(
-                                      color: AppColors.border(brightness)
-                                          .withValues(alpha: 0.35),
+                                      color: AppColors.border(
+                                        brightness,
+                                      ).withValues(alpha: 0.35),
                                     ),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black
-                                            .withValues(alpha: 0.04),
+                                        color: Colors.black.withValues(
+                                          alpha: 0.04,
+                                        ),
                                         blurRadius: 8,
                                         offset: const Offset(0, 2),
                                       ),
@@ -189,10 +195,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                         fit: BoxFit.contain,
                                         placeholder: (_, __) =>
                                             const ShimmerLoading(
-                                          width: double.infinity,
-                                          height: double.infinity,
-                                          borderRadius: 0,
-                                        ),
+                                              width: double.infinity,
+                                              height: double.infinity,
+                                              borderRadius: 0,
+                                            ),
                                         errorWidget: (_, __, ___) => Container(
                                           color: AppColors.muted(brightness),
                                           child: Center(
@@ -243,14 +249,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               vertical: 5,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColors.card(brightness)
-                                  .withValues(alpha: 0.9),
+                              color: AppColors.card(
+                                brightness,
+                              ).withValues(alpha: 0.9),
                               borderRadius: BorderRadius.circular(
                                 AppDimensions.radiusXl,
                               ),
                               border: Border.all(
-                                color: AppColors.border(brightness)
-                                    .withValues(alpha: 0.6),
+                                color: AppColors.border(
+                                  brightness,
+                                ).withValues(alpha: 0.6),
                               ),
                               boxShadow: [
                                 BoxShadow(
@@ -300,8 +308,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.primary(brightness)
-                                    .withValues(alpha: 0.4),
+                                color: AppColors.primary(
+                                  brightness,
+                                ).withValues(alpha: 0.4),
                                 blurRadius: 8,
                                 offset: const Offset(0, 2),
                               ),
@@ -368,8 +377,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 boxShadow: isSelected
                                     ? [
                                         BoxShadow(
-                                          color: AppColors.secondary(brightness)
-                                              .withValues(alpha: 0.25),
+                                          color: AppColors.secondary(
+                                            brightness,
+                                          ).withValues(alpha: 0.25),
                                           blurRadius: 8,
                                           offset: const Offset(0, 3),
                                         ),
@@ -636,9 +646,9 @@ class _ExpandableDescriptionState extends State<_ExpandableDescription> {
                 ? TextOverflow.visible
                 : TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  height: 1.6,
-                  color: AppColors.foreground(brightness).withValues(alpha: 0.85),
-                ),
+              height: 1.6,
+              color: AppColors.foreground(brightness).withValues(alpha: 0.85),
+            ),
           ),
         ),
         if (isLong) ...[

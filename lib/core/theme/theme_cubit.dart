@@ -4,20 +4,38 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Theme Cubit — manages light/dark mode toggle with persistence.
+/// On first launch, defaults to the device's system brightness.
 class ThemeCubit extends Cubit<ThemeState> {
-  ThemeCubit() : super(const ThemeState(themeMode: ThemeMode.light)) {
+  ThemeCubit() : super(ThemeState(themeMode: _initialDeviceTheme())) {
     _loadTheme();
   }
 
   static const _key = 'labella_theme_mode';
 
+  static ThemeMode _initialDeviceTheme() {
+    try {
+      final brightness =
+          WidgetsBinding.instance.platformDispatcher.platformBrightness;
+      return brightness == Brightness.dark ? ThemeMode.dark : ThemeMode.light;
+    } catch (_) {
+      return ThemeMode.light;
+    }
+  }
+
   Future<void> _loadTheme() async {
-    final prefs = await SharedPreferences.getInstance();
-    final value = prefs.getString(_key);
-    if (value == 'dark') {
-      emit(const ThemeState(themeMode: ThemeMode.dark));
-    } else {
-      emit(const ThemeState(themeMode: ThemeMode.light));
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final value = prefs.getString(_key);
+      if (value == 'dark') {
+        emit(const ThemeState(themeMode: ThemeMode.dark));
+      } else if (value == 'light') {
+        emit(const ThemeState(themeMode: ThemeMode.light));
+      } else {
+        // First launch: match device brightness
+        emit(ThemeState(themeMode: _initialDeviceTheme()));
+      }
+    } catch (_) {
+      emit(ThemeState(themeMode: _initialDeviceTheme()));
     }
   }
 

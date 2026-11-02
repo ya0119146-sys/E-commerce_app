@@ -13,12 +13,23 @@ class LocaleState extends Equatable {
 }
 
 /// Cubit managing application language (English/Arabic) with SharedPreferences persistence.
+/// On first launch, defaults to the device's system language.
 class LocaleCubit extends Cubit<LocaleState> {
-  LocaleCubit() : super(const LocaleState(locale: Locale('en'))) {
+  LocaleCubit() : super(LocaleState(locale: _initialDeviceLocale())) {
     _loadLocale();
   }
 
   static const _key = 'labella_language_code';
+
+  static Locale _initialDeviceLocale() {
+    try {
+      final deviceLocale = WidgetsBinding.instance.platformDispatcher.locale;
+      if (deviceLocale.languageCode == 'ar') {
+        return const Locale('ar');
+      }
+    } catch (_) {}
+    return const Locale('en');
+  }
 
   Future<void> _loadLocale() async {
     try {
@@ -26,8 +37,13 @@ class LocaleCubit extends Cubit<LocaleState> {
       final code = prefs.getString(_key);
       if (code != null && (code == 'ar' || code == 'en')) {
         emit(LocaleState(locale: Locale(code)));
+      } else {
+        // First launch: match device language
+        emit(LocaleState(locale: _initialDeviceLocale()));
       }
-    } catch (_) {}
+    } catch (_) {
+      emit(LocaleState(locale: _initialDeviceLocale()));
+    }
   }
 
   Future<void> toggleLocale() async {
@@ -50,3 +66,4 @@ class LocaleCubit extends Cubit<LocaleState> {
 
   bool get isArabic => state.locale.languageCode == 'ar';
 }
+
