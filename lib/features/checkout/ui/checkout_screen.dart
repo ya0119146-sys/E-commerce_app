@@ -119,8 +119,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       body: BlocConsumer<CheckoutCubit, CheckoutState>(
         listener: (context, state) {
           if (state.status == CheckoutStatus.orderPlaced) {
-            // Backend deletes the cart upon order creation; refresh cart state
-            context.read<CartCubit>().fetchCart();
+            // Backend deletes the cart upon order creation; reset cart state immediately
+            context.read<CartCubit>().resetCart();
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(

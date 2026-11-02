@@ -229,9 +229,7 @@ class _CartScreenState extends State<CartScreen> {
               ),
               Text(
                 tax == 0 ? 'Free' : '\$${tax.toStringAsFixed(2)}',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: tax == 0 ? AppColors.success : null,
                 ),

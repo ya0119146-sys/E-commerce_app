@@ -17,7 +17,13 @@ class CartCubit extends Cubit<CartState> {
     emit(state.copyWith(status: CartStatus.loading));
     try {
       final cart = await _repository.getCart();
-      emit(state.copyWith(status: CartStatus.loaded, cart: cart));
+      emit(
+        state.copyWith(
+          status: CartStatus.loaded,
+          cart: cart,
+          cartItemCount: cart.itemCount,
+        ),
+      );
     } on ApiException catch (e) {
       emit(state.copyWith(status: CartStatus.error, errorMessage: e.message));
     } catch (_) {
@@ -28,6 +34,11 @@ class CartCubit extends Cubit<CartState> {
         ),
       );
     }
+  }
+
+  /// Reset cart state to empty (e.g. after order placement).
+  void resetCart() {
+    emit(const CartState(status: CartStatus.loaded));
   }
 
   /// Add a product to cart (optimistic).

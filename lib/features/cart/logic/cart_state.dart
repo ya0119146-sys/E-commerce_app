@@ -24,10 +24,12 @@ class CartState extends Equatable {
     bool? cartPulse,
     String? errorMessage,
   }) {
+    final nextCart = cart ?? this.cart;
     return CartState(
       status: status ?? this.status,
-      cart: cart ?? this.cart,
-      cartItemCount: cartItemCount ?? this.cartItemCount,
+      cart: nextCart,
+      cartItemCount:
+          cartItemCount ?? (cart != null ? nextCart.itemCount : this.cartItemCount),
       cartPulse: cartPulse ?? this.cartPulse,
       errorMessage: errorMessage,
     );

@@ -59,9 +59,6 @@ class _BottomNavShellState extends State<BottomNavShell> {
               currentIndex: _currentIndex,
               onTap: (i) {
                 setState(() => _currentIndex = i);
-                if (widget.role != 'admin' && i == 3) {
-                  context.read<CartCubit>().fetchCart();
-                }
               },
               items: [
                 const BottomNavigationBarItem(
