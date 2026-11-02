@@ -224,7 +224,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                     if (value == null || value.isEmpty) {
                                       return 'please_enter_email'.tr(context);
                                     }
-                                    if (!value.contains('@')) {
+                                    final emailRegExp = RegExp(r'^[\w\.\-]+@[a-zA-Z0-9\-]+(\.[a-zA-Z0-9\-]+)+$');
+                                    if (!emailRegExp.hasMatch(value.trim())) {
                                       return 'please_enter_valid_email'.tr(context);
                                     }
                                     return null;
@@ -253,7 +254,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       return 'please_enter_phone'.tr(context);
                                     }
                                     final phoneRegExp = RegExp(
-                                      r'^[0-9]{10,15}$',
+                                      r'^[0-9]{11,15}$',
                                     );
                                     if (!phoneRegExp.hasMatch(value)) {
                                       return 'phone_invalid'.tr(context);

@@ -35,6 +35,17 @@ void main() {
       expect(ApiConstants.reviewsMe, equals('/api/v1/reviews/me'));
       expect(ApiConstants.deleteWishlist('123'), equals('/api/v1/wishlist/123'));
     });
+    });
+
+    test('Translates server validation keys properly', () {
+      expect(
+        ApiException.friendlyMessage(400, 'validation_email_check'),
+        anyOf(equals('Email already exists'), equals('البريد الإلكتروني موجود بالفعل')),
+      );
+      expect(
+        ApiException.friendlyMessage(400, 'validation_email_invalid'),
+        anyOf(equals('Please enter a valid email address'), equals('يرجى إدخال بريد إلكتروني صالح')),
+      );
   });
 
   group('Model Deserialization Contracts', () {

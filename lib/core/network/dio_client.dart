@@ -120,36 +120,64 @@ class DioClient {
         final statusCode = error.response?.statusCode;
         final data = error.response?.data;
         String? serverMessage;
-        if (data is Map<String, dynamic>) {
+        if (data is Map) {
           // 1. express-validator errors format: { "errors": [ { "msg": "..." } ] }
           if (data['errors'] is List) {
             final errList = data['errors'] as List;
             final msgs = errList
                 .map((e) {
-                  if (e is Map && e.containsKey('msg')) {
-                    return e['msg']?.toString() ?? '';
+                  if (e is Map) {
+                    return (e['msg'] ?? e['message'])?.toString() ?? '';
                   }
                   return e?.toString() ?? '';
                 })
-                .where((m) => m.isNotEmpty)
+                .where((m) => m.trim().isNotEmpty)
                 .toList();
             if (msgs.isNotEmpty) {
               serverMessage = msgs.first;
             }
+          } else if (data['errors'] is Map) {
+            final errMap = data['errors'] as Map;
+            final firstVal = errMap.values.firstOrNull;
+            if (firstVal is Map) {
+              serverMessage = (firstVal['msg'] ?? firstVal['message'])?.toString();
+            } else if (firstVal is String) {
+              serverMessage = firstVal;
+            }
           }
           // 2. Standard backend ApiErrors format: { "status": "failed", "message": "..." }
-          serverMessage ??= data['message'] as String?;
+          serverMessage ??= data['message']?.toString();
           // 3. Fallback to error field
           if (serverMessage == null && data['error'] != null) {
             if (data['error'] is String) {
               serverMessage = data['error'] as String;
             } else if (data['error'] is Map &&
                 data['error']['message'] != null) {
-              serverMessage = data['error']['message'].toString();
+              serverMessage = data['error']['message']?.toString();
             }
           }
         } else if (data is String && data.isNotEmpty) {
           serverMessage = data;
+        }
+
+        // Sanitize serverMessage: never display undefined/null/[object Object] or unhandled crashes
+        if (serverMessage != null) {
+          final clean = serverMessage.trim();
+          final lower = clean.toLowerCase();
+          if (clean.isEmpty ||
+              lower == 'undefined' ||
+              lower == 'null' ||
+              lower == '[object object]' ||
+              lower == 'error' ||
+              lower.startsWith('cannot read properties of undefined')) {
+            serverMessage = null;
+          } else if (lower.contains('e11000') || lower.contains('duplicate key')) {
+            if (lower.contains('username')) {
+              serverMessage = 'UserName already exist';
+            } else {
+              serverMessage = 'validation_email_check';
+            }
+          }
         }
 
         return ApiException(
