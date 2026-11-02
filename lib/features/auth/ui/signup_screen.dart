@@ -68,14 +68,17 @@ class _SignupScreenState extends State<SignupScreen> {
           }
           // Backend does NOT return a token on signup — navigate to login.
           if (state is AuthSignupSuccess) {
-            FocusScope.of(context).unfocus();
             TextInput.finishAutofillContext(shouldSave: true);
+            FocusScope.of(context).unfocus();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Account created! Please log in.'),
               ),
             );
-            Navigator.pop(context); // back to login screen
+            Future.delayed(const Duration(milliseconds: 300), () {
+              if (!context.mounted) return;
+              Navigator.pop(context); // back to login screen
+            });
           }
         },
         child: Container(
@@ -150,7 +153,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           ],
                         ),
                         child: AutofillGroup(
-                          onDisposeAction: AutofillContextAction.cancel,
+                          onDisposeAction: AutofillContextAction.commit,
                           child: Form(
                             key: _formKey,
                             autovalidateMode: AutovalidateMode.onUserInteraction,

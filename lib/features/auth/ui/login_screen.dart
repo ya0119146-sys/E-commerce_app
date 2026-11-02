@@ -34,7 +34,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _onLogin() {
-    FocusScope.of(context).unfocus();
     if (_formKey.currentState!.validate()) {
       context.read<AuthCubit>().login(
         email: _emailController.text.trim(),
@@ -52,14 +51,20 @@ class _LoginScreenState extends State<LoginScreen> {
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthAuthenticated) {
-            FocusScope.of(context).unfocus();
+            // 1. Commit autofill while inputs and controller values are still active
             TextInput.finishAutofillContext(shouldSave: true);
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (_) => BottomNavShell(role: state.user.role),
-              ),
-              (route) => false,
-            );
+            // 2. Unfocus keyboard
+            FocusScope.of(context).unfocus();
+            // 3. Allow Android AutofillManager / Google Password Manager time to intercept the commit
+            Future.delayed(const Duration(milliseconds: 300), () {
+              if (!context.mounted) return;
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (_) => BottomNavShell(role: state.user.role),
+                ),
+                (route) => false,
+              );
+            });
           }
 
           if (state is AuthError) {
@@ -141,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                         ),
                         child: AutofillGroup(
-                          onDisposeAction: AutofillContextAction.cancel,
+                          onDisposeAction: AutofillContextAction.commit,
                           child: Column(
                             children: [
                               Form(

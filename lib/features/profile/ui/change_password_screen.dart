@@ -49,8 +49,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               context,
             ).showSnackBar(SnackBar(content: Text(state.message)));
           } else if (state is AuthUnauthenticated) {
-            FocusScope.of(context).unfocus();
             TextInput.finishAutofillContext(shouldSave: true);
+            FocusScope.of(context).unfocus();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text(
@@ -58,13 +58,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 ),
               ),
             );
-            Navigator.of(context).popUntil((route) => route.isFirst);
+            Future.delayed(const Duration(milliseconds: 300), () {
+              if (!context.mounted) return;
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            });
           }
         },
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(AppDimensions.screenPadding),
           child: AutofillGroup(
-            onDisposeAction: AutofillContextAction.cancel,
+            onDisposeAction: AutofillContextAction.commit,
             child: Form(
               key: _formKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,

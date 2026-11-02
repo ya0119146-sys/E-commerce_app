@@ -59,14 +59,17 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               SnackBar(content: Text(state.message)),
             );
           } else if (state is AuthUnauthenticated) {
-            FocusScope.of(context).unfocus();
             TextInput.finishAutofillContext(shouldSave: true);
+            FocusScope.of(context).unfocus();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Password reset successfully! Please log in.'),
               ),
             );
-            Navigator.of(context).popUntil((route) => route.isFirst);
+            Future.delayed(const Duration(milliseconds: 300), () {
+              if (!context.mounted) return;
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            });
           }
         },
         child: Container(
@@ -116,7 +119,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       ],
                     ),
                     child: AutofillGroup(
-                      onDisposeAction: AutofillContextAction.cancel,
+                      onDisposeAction: AutofillContextAction.commit,
                       child: Form(
                         key: _formKey,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
