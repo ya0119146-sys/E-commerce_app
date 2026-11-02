@@ -91,7 +91,9 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
                 controller: _reviewController,
                 maxLines: 4,
                 decoration: InputDecoration(
-                  hintText: 'Share your experience with this product...'.tr(context),
+                  hintText: 'Share your experience with this product...'.tr(
+                    context,
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
                   ),

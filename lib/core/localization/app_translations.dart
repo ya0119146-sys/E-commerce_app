@@ -9,11 +9,13 @@ class AppTranslations {
 
   /// English Dictionary
   static const Map<String, String> en = {
+
     // ─── App General & Common ───
     'app_name': 'Labella',
     'Labella': 'Labella',
     'app_tagline': 'Sign in to continue your luxury experience',
-    'Sign in to continue your luxury experience': 'Sign in to continue your luxury experience',
+    'Sign in to continue your luxury experience':
+        'Sign in to continue your luxury experience',
     'luxury_tagline': 'Join the world of luxury beauty',
     'Join the world of luxury beauty': 'Join the world of luxury beauty',
     'Discover luxury beauty essentials': 'Discover luxury beauty essentials',
@@ -78,8 +80,8 @@ class AppTranslations {
     'Sign Up': 'Sign Up',
     'create_account': 'Create Account',
     'Create Account': 'Create Account',
-    'dont_have_account': "Don't have an account?",
     "Don't have an account?": "Don't have an account?",
+    'dont_have_account': "Don't have an account?",
     'already_have_account': 'Already have an account?',
     'Already have an account?': 'Already have an account?',
     'email': 'Email',
@@ -106,14 +108,17 @@ class AppTranslations {
     'forgot_password': 'Forgot Password?',
     'Forgot Password?': 'Forgot Password?',
     'forgot_password_title': 'Reset Password',
-    'forgot_password_subtitle': 'Enter your email address to receive a reset code',
-    'Enter your email to receive a reset code': 'Enter your email to receive a reset code',
+    'forgot_password_subtitle':
+        'Enter your email address to receive a reset code',
+    'Enter your email to receive a reset code':
+        'Enter your email to receive a reset code',
     'send_code': 'Send Code',
     'Send Code': 'Send Code',
     'verify_code': 'Verify Code',
     'Verify Code': 'Verify Code',
     'verify_code_subtitle': 'Enter the 6-digit code sent to your email',
-    'We have sent a verification code to your email': 'We have sent a verification code to your email',
+    'We have sent a verification code to your email':
+        'We have sent a verification code to your email',
     'Reset Code': 'Reset Code',
     'Code verified successfully!': 'Code verified successfully!',
     'enter_new_password': 'Enter New Password',
@@ -124,7 +129,8 @@ class AppTranslations {
     'reset_password': 'Reset Password',
     'Reset Password': 'Reset Password',
     'password_reset_success': 'Password reset successfully! Please log in.',
-    'Password reset successfully! Please log in.': 'Password reset successfully! Please log in.',
+    'Password reset successfully! Please log in.':
+        'Password reset successfully! Please log in.',
     'account_created': 'Account created! Please log in.',
     'Account created! Please log in.': 'Account created! Please log in.',
     'login_success': 'Welcome back!',
@@ -168,15 +174,18 @@ class AppTranslations {
     'Customer Reviews': 'Customer Reviews',
     'no_reviews': 'No reviews yet',
     'No reviews yet': 'No reviews yet',
-    'No reviews yet. Be the first to review!': 'No reviews yet. Be the first to review!',
+    'No reviews yet. Be the first to review!':
+        'No reviews yet. Be the first to review!',
     'write_review': 'Write a Review',
     'Write a Review': 'Write a Review',
     'Add Review': 'Add Review',
     'Delete Review': 'Delete Review',
-    'Are you sure you want to delete this review?': 'Are you sure you want to delete this review?',
+    'Are you sure you want to delete this review?':
+        'Are you sure you want to delete this review?',
     'Could not load reviews': 'Could not load reviews',
     'your_review': 'Your Review',
-    'Share your experience with this product...': 'Share your experience with this product...',
+    'Share your experience with this product...':
+        'Share your experience with this product...',
     'submit_review': 'Submit Review',
     'review_submitted': 'Review submitted successfully!',
     'description': 'Description',
@@ -195,11 +204,13 @@ class AppTranslations {
     'My Cart': 'My Cart',
     'cart_empty': 'Your cart is empty',
     'Your cart is empty': 'Your cart is empty',
-    'cart_empty_subtitle': 'Explore our luxury collection and add items to your cart',
+    'cart_empty_subtitle':
+        'Explore our luxury collection and add items to your cart',
     'Add some items to get started': 'Add some items to get started',
     'Clear All': 'Clear All',
     'Clear Cart?': 'Clear Cart?',
-    'Are you sure you want to remove all items?': 'Are you sure you want to remove all items?',
+    'Are you sure you want to remove all items?':
+        'Are you sure you want to remove all items?',
     'start_shopping': 'Start Shopping',
     'subtotal': 'Subtotal',
     'Subtotal': 'Subtotal',
@@ -220,7 +231,8 @@ class AppTranslations {
     'thank_you_order': 'Thank you for your order.',
     'Order Confirmed!': 'Order Confirmed!',
     'Continue Shopping': 'Continue Shopping',
-    'Thank you for your purchase.\nYour order is being processed.': 'Thank you for your purchase.\nYour order is being processed.',
+    'Thank you for your purchase.\nYour order is being processed.':
+        'Thank you for your purchase.\nYour order is being processed.',
     'address': 'Address',
     'Street': 'Street',
     'Street Address': 'Street Address',
@@ -236,7 +248,8 @@ class AppTranslations {
     'Add First Address': 'Add First Address',
     'Save Address': 'Save Address',
     'Delete Address': 'Delete Address',
-    'Are you sure you want to remove this address?': 'Are you sure you want to remove this address?',
+    'Are you sure you want to remove this address?':
+        'Are you sure you want to remove this address?',
     'My Addresses': 'My Addresses',
     'No addresses saved yet': 'No addresses saved yet',
     'No addresses saved': 'No addresses saved',
@@ -253,7 +266,8 @@ class AppTranslations {
     'your_wishlist': 'Your Wishlist',
     'Your wishlist is empty': 'Your wishlist is empty',
     'wishlist_empty_subtitle': 'Save items you love to revisit anytime',
-    'Save items you love to your wishlist and they will appear here.': 'Save items you love to your wishlist and they will appear here.',
+    'Save items you love to your wishlist and they will appear here.':
+        'Save items you love to your wishlist and they will appear here.',
     'Explore Products': 'Explore Products',
     'added_to_wishlist': 'Added to wishlist',
     'removed_from_wishlist': 'Removed from wishlist',
@@ -286,7 +300,8 @@ class AppTranslations {
     'current_password': 'Current Password',
     'Current Password': 'Current Password',
     'Confirm New Password': 'Confirm New Password',
-    'Password changed successfully! Please login again.': 'Password changed successfully! Please login again.',
+    'Password changed successfully! Please login again.':
+        'Password changed successfully! Please login again.',
     'Enter name': 'Enter name',
     'Not logged in': 'Not logged in',
     'logout': 'Log Out',
@@ -295,14 +310,18 @@ class AppTranslations {
     'logout_confirm_message': 'Are you sure you want to log out?',
     'delete_account': 'Delete Account',
     'Delete Account': 'Delete Account',
-    'delete_account_confirm': 'Are you sure you want to delete your account? This action cannot be undone.',
+    'delete_account_confirm':
+        'Are you sure you want to delete your account? This action cannot be undone.',
     'Profile deleted successfully': 'Profile deleted successfully',
+
+    // ─── Admin Panel ───
 
     // ─── Admin Panel ───
     'admin_dashboard': 'Admin Dashboard',
     'Admin Panel': 'Admin Panel',
     'Confirm Delete': 'Confirm Delete',
-    'Are you sure you want to delete this item?': 'Are you sure you want to delete this item?',
+    'Are you sure you want to delete this item?':
+        'Are you sure you want to delete this item?',
     'No orders found': 'No orders found',
     'No users found': 'No users found',
     'manage_products': 'Manage Products',
@@ -376,14 +395,17 @@ class AppTranslations {
 
   /// Arabic Dictionary
   static const Map<String, String> ar = {
+
     // ─── App General & Common ───
     'app_name': 'لابيلا',
     'Labella': 'لابيلا',
     'app_tagline': 'سجل الدخول لمواصلة تجربة التسوق الفاخرة',
-    'Sign in to continue your luxury experience': 'سجل الدخول لمواصلة تجربة التسوق الفاخرة',
+    'Sign in to continue your luxury experience':
+        'سجل الدخول لمواصلة تجربة التسوق الفاخرة',
     'luxury_tagline': 'انضم إلى عالم الجمال والفخامة',
     'Join the world of luxury beauty': 'انضم إلى عالم الجمال والفخامة',
-    'Discover luxury beauty essentials': 'اكتشف أساسيات الجمال ومستحضرات العناية الفاخرة',
+    'Discover luxury beauty essentials':
+        'اكتشف أساسيات الجمال ومستحضرات العناية الفاخرة',
     'cancel': 'إلغاء',
     'Cancel': 'إلغاء',
     'save': 'حفظ',
@@ -474,13 +496,15 @@ class AppTranslations {
     'Forgot Password?': 'نسيت كلمة المرور؟',
     'forgot_password_title': 'استعادة كلمة المرور',
     'forgot_password_subtitle': 'أدخل بريدك الإلكتروني وسنرسل لك رمز التحقق.',
-    'Enter your email to receive a reset code': 'أدخل بريدك الإلكتروني لاستلام رمز إعادة التعيين',
+    'Enter your email to receive a reset code':
+        'أدخل بريدك الإلكتروني لاستلام رمز إعادة التعيين',
     'send_code': 'إرسال الرمز',
     'Send Code': 'إرسال الرمز',
     'verify_code': 'تأكيد الرمز',
     'Verify Code': 'تأكيد الرمز',
     'verify_code_subtitle': 'أدخل الرمز المكون من 6 أرقام المرسل إلى بريدك',
-    'We have sent a verification code to your email': 'لقد أرسلنا رمز التحقق إلى بريدك الإلكتروني',
+    'We have sent a verification code to your email':
+        'لقد أرسلنا رمز التحقق إلى بريدك الإلكتروني',
     'Reset Code': 'رمز التحقق',
     'Code verified successfully!': 'تم التحقق من الرمز بنجاح!',
     'enter_new_password': 'أدخل كلمة المرور الجديدة',
@@ -490,10 +514,13 @@ class AppTranslations {
     'Set New Password': 'تعيين كلمة المرور الجديدة',
     'reset_password': 'إعادة تعيين كلمة المرور',
     'Reset Password': 'إعادة تعيين كلمة المرور',
-    'password_reset_success': 'تمت إعادة تعيين كلمة المرور بنجاح! يرجى تسجيل الدخول.',
-    'Password reset successfully! Please log in.': 'تمت إعادة تعيين كلمة المرور بنجاح! يرجى تسجيل الدخول.',
+    'password_reset_success':
+        'تمت إعادة تعيين كلمة المرور بنجاح! يرجى تسجيل الدخول.',
+    'Password reset successfully! Please log in.':
+        'تمت إعادة تعيين كلمة المرور بنجاح! يرجى تسجيل الدخول.',
     'account_created': 'تم إنشاء الحساب بنجاح! يرجى تسجيل الدخول.',
-    'Account created! Please log in.': 'تم إنشاء الحساب بنجاح! يرجى تسجيل الدخول.',
+    'Account created! Please log in.':
+        'تم إنشاء الحساب بنجاح! يرجى تسجيل الدخول.',
     'login_success': 'مرحباً بعودتك!',
     'session_expired': 'انتهت صلاحية الجلسة، يرجى تسجيل الدخول مجدداً.',
     'please_enter_email': 'يرجى إدخال البريد الإلكتروني',
@@ -535,15 +562,18 @@ class AppTranslations {
     'Customer Reviews': 'تقييمات العملاء',
     'no_reviews': 'لا توجد تقييمات بعد',
     'No reviews yet': 'لا توجد تقييمات بعد',
-    'No reviews yet. Be the first to review!': 'لا توجد تقييمات بعد. كن أول من يقيّم هذا المنتج!',
+    'No reviews yet. Be the first to review!':
+        'لا توجد تقييمات بعد. كن أول من يقيّم هذا المنتج!',
     'write_review': 'أضف تقييماً',
     'Write a Review': 'كتابة تقييم',
     'Add Review': 'إضافة تقييم',
     'Delete Review': 'حذف التقييم',
-    'Are you sure you want to delete this review?': 'هل أنت متأكد من رغبتك في حذف هذا التقييم؟',
+    'Are you sure you want to delete this review?':
+        'هل أنت متأكد من رغبتك في حذف هذا التقييم؟',
     'Could not load reviews': 'تعذر تحميل التقييمات',
     'your_review': 'تقييمك',
-    'Share your experience with this product...': 'شاركنا تجربتك ورأيك الصادق حول هذا المنتج...',
+    'Share your experience with this product...':
+        'شاركنا تجربتك ورأيك الصادق حول هذا المنتج...',
     'submit_review': 'إرسال التقييم',
     'review_submitted': 'تم إرسال التقييم بنجاح!',
     'description': 'الوصف',
@@ -566,7 +596,8 @@ class AppTranslations {
     'Add some items to get started': 'أضف بعض المنتجات للبدء في التسوق',
     'Clear All': 'تفريغ الكل',
     'Clear Cart?': 'تفريغ السلة؟',
-    'Are you sure you want to remove all items?': 'هل أنت متأكد من رغبتك في تفريغ وحذف جميع منتجات السلة؟',
+    'Are you sure you want to remove all items?':
+        'هل أنت متأكد من رغبتك في تفريغ وحذف جميع منتجات السلة؟',
     'start_shopping': 'ابدأ التسوق',
     'subtotal': 'المجموع الفرعي',
     'Subtotal': 'المجموع الفرعي',
@@ -587,7 +618,8 @@ class AppTranslations {
     'thank_you_order': 'شكراً لطلبك من لابيلا.',
     'Order Confirmed!': 'تم تأكيد طلبك بنجاح!',
     'Continue Shopping': 'متابعة التسوق',
-    'Thank you for your purchase.\nYour order is being processed.': 'شكراً لتسوقك من لابيلا.\nطلبك قيد التجهيز الآن.',
+    'Thank you for your purchase.\nYour order is being processed.':
+        'شكراً لتسوقك من لابيلا.\nطلبك قيد التجهيز الآن.',
     'address': 'العنوان',
     'Street': 'الشارع',
     'Street Address': 'العنوان بالتفصيل / الشارع',
@@ -603,7 +635,8 @@ class AppTranslations {
     'Add First Address': 'إضافة العنوان الأول',
     'Save Address': 'حفظ العنوان',
     'Delete Address': 'حذف العنوان',
-    'Are you sure you want to remove this address?': 'هل أنت متأكد من رغبتك في حذف هذا العنوان؟',
+    'Are you sure you want to remove this address?':
+        'هل أنت متأكد من رغبتك في حذف هذا العنوان؟',
     'My Addresses': 'عناويني المحفوظة',
     'No addresses saved yet': 'لا توجد عناوين محفوظة بعد',
     'No addresses saved': 'لا توجد عناوين محفوظة',
@@ -620,7 +653,8 @@ class AppTranslations {
     'your_wishlist': 'قائمة أمنياتك',
     'Your wishlist is empty': 'قائمة أمنياتك فارغة',
     'wishlist_empty_subtitle': 'احفظ منتجاتك المفضلة لتعود إليها في أي وقت',
-    'Save items you love to your wishlist and they will appear here.': 'احفظ المنتجات التي تعجبك وستظهر لك هنا دائماً.',
+    'Save items you love to your wishlist and they will appear here.':
+        'احفظ المنتجات التي تعجبك وستظهر لك هنا دائماً.',
     'Explore Products': 'استكشف المنتجات',
     'added_to_wishlist': 'تمت الإضافة إلى المفضلة',
     'removed_from_wishlist': 'تمت الإزالة من المفضلة',
@@ -653,7 +687,8 @@ class AppTranslations {
     'current_password': 'كلمة المرور الحالية',
     'Current Password': 'كلمة المرور الحالية',
     'Confirm New Password': 'تأكيد كلمة المرور الجديدة',
-    'Password changed successfully! Please login again.': 'تم تغيير كلمة المرور بنجاح! يرجى تسجيل الدخول مجدداً.',
+    'Password changed successfully! Please login again.':
+        'تم تغيير كلمة المرور بنجاح! يرجى تسجيل الدخول مجدداً.',
     'Enter name': 'أدخل الاسم',
     'Not logged in': 'لم يتم تسجيل الدخول',
     'logout': 'تسجيل الخروج',
@@ -662,14 +697,18 @@ class AppTranslations {
     'logout_confirm_message': 'هل أنت متأكد من رغبتك في تسجيل الخروج؟',
     'delete_account': 'حذف الحساب',
     'Delete Account': 'حذف الحساب',
-    'delete_account_confirm': 'هل أنت متأكد من حذف حسابك؟ لا يمكن التراجع عن هذا الإجراء.',
+    'delete_account_confirm':
+        'هل أنت متأكد من حذف حسابك؟ لا يمكن التراجع عن هذا الإجراء.',
     'Profile deleted successfully': 'تم حذف الحساب بنجاح',
+
+    // ─── Admin Panel ───
 
     // ─── Admin Panel ───
     'admin_dashboard': 'لوحة تحكم المشرف',
     'Admin Panel': 'لوحة الإدارة',
     'Confirm Delete': 'تأكيد الحذف',
-    'Are you sure you want to delete this item?': 'هل أنت متأكد من رغبتك في حذف هذا العنصر نهائياً؟',
+    'Are you sure you want to delete this item?':
+        'هل أنت متأكد من رغبتك في حذف هذا العنصر نهائياً؟',
     'No orders found': 'لم يتم العثور على أي طلبات',
     'No users found': 'لم يتم العثور على مستخدمين',
     'manage_products': 'إدارة المنتجات',
