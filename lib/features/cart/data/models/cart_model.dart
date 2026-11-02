@@ -52,6 +52,15 @@ class CartModel {
 
   int get itemCount => items.fold(0, (sum, item) => sum + item.quantity);
 
+  /// Tax/delivery fee from backend (100 if subtotal < 1000, 0 if free delivery).
+  double get effectiveTaxPrice {
+    if (items.isEmpty) return 0.0;
+    return taxPrice ?? (totalPrice >= 1000 ? 0.0 : 100.0);
+  }
+
+  /// Final total including the backend delivery/tax fee.
+  double get finalTotal => totalPrice + effectiveTaxPrice;
+
   factory CartModel.fromJson(Map<String, dynamic> json) {
     // Backend field is 'items' (not 'cartItems').
     final cartItems = (json['items'] as List? ?? [])

@@ -173,9 +173,9 @@ class _CartScreenState extends State<CartScreen> {
     CartState state,
     Brightness brightness,
   ) {
-    const double tax = 25.0;
     final double subtotal = state.cart.totalPrice;
-    final double total = subtotal + tax;
+    final double tax = state.cart.effectiveTaxPrice;
+    final double total = state.cart.finalTotal;
 
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
@@ -228,10 +228,13 @@ class _CartScreenState extends State<CartScreen> {
                 ),
               ),
               Text(
-                '\$${tax.toStringAsFixed(2)}',
+                tax == 0 ? 'Free' : '\$${tax.toStringAsFixed(2)}',
                 style: Theme.of(
                   context,
-                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                ).textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: tax == 0 ? AppColors.success : null,
+                ),
               ),
             ],
           ),

@@ -79,12 +79,16 @@ class CartCubit extends Cubit<CartState> {
       return item;
     }).toList();
 
+    final newTotalPrice = updatedItems.fold(0.0, (s, i) => s + i.totalPrice);
     emit(
       state.copyWith(
         cart: CartModel(
           id: oldCart.id,
           items: updatedItems,
-          totalPrice: updatedItems.fold(0.0, (s, i) => s + i.totalPrice),
+          totalPrice: newTotalPrice,
+          taxPrice: updatedItems.isEmpty
+              ? 0.0
+              : (newTotalPrice >= 1000 ? 0.0 : 100.0),
         ),
       ),
     );
@@ -110,12 +114,16 @@ class CartCubit extends Cubit<CartState> {
     final updatedItems = oldCart.items
         .where((i) => i.productId != productId)
         .toList();
+    final newTotalPrice = updatedItems.fold(0.0, (s, i) => s + i.totalPrice);
     emit(
       state.copyWith(
         cart: CartModel(
           id: oldCart.id,
           items: updatedItems,
-          totalPrice: updatedItems.fold(0.0, (s, i) => s + i.totalPrice),
+          totalPrice: newTotalPrice,
+          taxPrice: updatedItems.isEmpty
+              ? 0.0
+              : (newTotalPrice >= 1000 ? 0.0 : 100.0),
         ),
         cartItemCount: updatedItems.fold<int>(0, (s, i) => s + i.quantity),
       ),
@@ -167,38 +175,6 @@ class CartCubit extends Cubit<CartState> {
       totalPriceAfterDiscount: newCart.totalPriceAfterDiscount,
     );
   }
-
-  /// Merge incoming cart items with existing populated product models if the
-  /// server response returned unpopulated ObjectId strings for products.
-  // CartModel _mergeWithOldCart(CartModel newCart, CartModel oldCart) {
-  //   if (oldCart.items.isEmpty) return newCart;
-  //   final oldProductMap = {
-  //     for (final item in oldCart.items)
-  //       if (item.product != null) item.productId: item.product!
-  //   };
-  //   if (oldProductMap.isEmpty) return newCart;
-
-  //   final mergedItems = newCart.items.map((item) {
-  //     if (item.product == null && oldProductMap.containsKey(item.productId)) {
-  //       return CartItemModel(
-  //         id: item.id,
-  //         product: oldProductMap[item.productId],
-  //         productId: item.productId,
-  //         quantity: item.quantity,
-  //         price: item.price,
-  //       );
-  //     }
-  //     return item;
-  //   }).toList();
-
-  //   return CartModel(
-  //     id: newCart.id ?? oldCart.id,
-  //     items: mergedItems,
-  //     totalPrice: newCart.totalPrice,
-  //     taxPrice: newCart.taxPrice,
-  //     totalPriceAfterDiscount: newCart.totalPriceAfterDiscount,
-  //   );
-  // }
 
   /// Clear entire cart.
   Future<void> clearCart() async {
