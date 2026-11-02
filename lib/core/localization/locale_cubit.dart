@@ -15,8 +15,17 @@ class LocaleState extends Equatable {
 /// Cubit managing application language (English/Arabic) with SharedPreferences persistence.
 /// On first launch, defaults to the device's system language.
 class LocaleCubit extends Cubit<LocaleState> {
+  static String currentLanguage = _initialDeviceLocale().languageCode;
+
   LocaleCubit() : super(LocaleState(locale: _initialDeviceLocale())) {
+    currentLanguage = state.locale.languageCode;
     _loadLocale();
+  }
+
+  @override
+  void onChange(Change<LocaleState> change) {
+    super.onChange(change);
+    currentLanguage = change.nextState.locale.languageCode;
   }
 
   static const _key = 'labella_language_code';

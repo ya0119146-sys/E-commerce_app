@@ -9,6 +9,13 @@ class AppTranslations {
 
   /// English Dictionary
   static const Map<String, String> en = {
+    'Start Shopping': 'Start Shopping',
+    'Status': 'Status',
+    'Change Password': 'Change Password',
+    'Password must be at least 6 characters':
+        'Password must be at least 6 characters',
+    'Passwords do not match': 'Passwords do not match',
+    'not_logged_in': 'Not logged in',
 
     // ─── App General & Common ───
     'app_name': 'Labella',
@@ -395,6 +402,13 @@ class AppTranslations {
 
   /// Arabic Dictionary
   static const Map<String, String> ar = {
+    'Start Shopping': 'ابدأ التسوق',
+    'Status': 'الحالة',
+    'Change Password': 'تغيير كلمة المرور',
+    'Password must be at least 6 characters':
+        'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل',
+    'Passwords do not match': 'كلمات المرور غير متطابقة',
+    'not_logged_in': 'لم يتم تسجيل الدخول',
 
     // ─── App General & Common ───
     'app_name': 'لابيلا',

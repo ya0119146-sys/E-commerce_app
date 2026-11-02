@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../localization/locale_cubit.dart';
 import 'api_constants.dart';
 import 'api_exception.dart';
 
@@ -35,6 +36,7 @@ class DioClient {
           if (token != null && token.isNotEmpty) {
             options.headers['Authorization'] = 'Bearer $token';
           }
+          options.headers['Accept-Language'] = LocaleCubit.currentLanguage;
           return handler.next(options);
         },
         onError: (error, handler) async {
@@ -98,15 +100,20 @@ class DioClient {
 
   /// Parse Dio errors into user-friendly ApiExceptions.
   ApiException _handleError(DioException error) {
+    final isAr = LocaleCubit.currentLanguage == 'ar';
     switch (error.type) {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
-        return const ApiException(
-          message: 'Connection timed out. Please check your internet.',
+        return ApiException(
+          message: isAr
+              ? 'انتهت مهلة الاتصال. يرجى التحقق من اتصالك بالإنترنت.'
+              : 'Connection timed out. Please check your internet.',
         );
       case DioExceptionType.connectionError:
-        return const ApiException(message: 'No internet connection.');
+        return ApiException(
+          message: isAr ? 'لا يوجد اتصال بالإنترنت.' : 'No internet connection.',
+        );
       case DioExceptionType.badResponse:
         final statusCode = error.response?.statusCode;
         final data = error.response?.data;
@@ -149,8 +156,10 @@ class DioClient {
           errors: data,
         );
       default:
-        return const ApiException(
-          message: 'Something went wrong. Please try again.',
+        return ApiException(
+          message: isAr
+              ? 'حدث خطأ ما. يرجى المحاولة مرة أخرى.'
+              : 'Something went wrong. Please try again.',
         );
     }
   }

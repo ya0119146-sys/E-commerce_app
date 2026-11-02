@@ -109,9 +109,9 @@ class _ProductCardState extends State<ProductCard>
 
                         // Sale / Out of Stock badge
                         if (product.onSale || !product.inStock)
-                          Positioned(
+                          PositionedDirectional(
                             top: 8,
-                            left: 8,
+                            start: 8,
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 8,
@@ -139,17 +139,17 @@ class _ProductCardState extends State<ProductCard>
                           ),
 
                         // Heart (Wishlist) button
-                        Positioned(
+                        PositionedDirectional(
                           top: 8,
-                          right: 8,
+                          end: 8,
                           child: _WishlistHeart(productId: product.id),
                         ),
 
                         // Shopping bag (Add to Cart) button
                         if (product.inStock && widget.role != 'admin')
-                          Positioned(
+                          PositionedDirectional(
                             bottom: 8,
-                            right: 8,
+                            end: 8,
                             child: _AddToCartButton(product: product),
                           ),
                       ],

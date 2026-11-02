@@ -112,7 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 return TextButton(
                   onPressed: _onSave,
                   child: Text(
-                    'Save',
+                    'save'.tr(context),
                     style: TextStyle(
                       color: AppColors.primary(brightness),
                       fontWeight: FontWeight.bold,
@@ -132,7 +132,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 });
               },
               child: Text(
-                'Cancel',
+                'cancel'.tr(context),
                 style: TextStyle(
                   color: AppColors.primary(brightness),
                   fontWeight: FontWeight.bold,
@@ -165,7 +165,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Not logged in',
+                    'not_logged_in'.tr(context),
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ],

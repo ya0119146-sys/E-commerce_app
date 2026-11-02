@@ -100,7 +100,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ),
                   ],
                 ),
-                child: const Icon(Icons.arrow_back_ios_new, size: 18),
+                child: Icon(
+                  context.isArabic
+                      ? Icons.arrow_forward_ios
+                      : Icons.arrow_back_ios_new,
+                  size: 18,
+                ),
               ),
             ),
             actions: [

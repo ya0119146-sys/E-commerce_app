@@ -1,3 +1,5 @@
+import '../localization/locale_cubit.dart';
+
 /// Custom API exception for user-friendly error messages.
 class ApiException implements Exception {
   final String message;
@@ -15,25 +17,44 @@ class ApiException implements Exception {
     if (serverMessage != null && serverMessage.trim().isNotEmpty) {
       return serverMessage.trim();
     }
+    final isAr = LocaleCubit.currentLanguage == 'ar';
     switch (statusCode) {
       case 400:
-        return 'Invalid request. Please check your input.';
+        return isAr
+            ? 'طلب غير صالح. يرجى التحقق من المدخلات.'
+            : 'Invalid request. Please check your input.';
       case 401:
-        return 'Session expired. Please log in again.';
+        return isAr
+            ? 'انتهت الجلسة. يرجى تسجيل الدخول مجدداً.'
+            : 'Session expired. Please log in again.';
       case 403:
-        return 'You don\'t have permission to perform this action.';
+        return isAr
+            ? 'ليس لديك الإذن للقيام بهذا الإجراء.'
+            : 'You don\'t have permission to perform this action.';
       case 404:
-        return 'The requested resource was not found.';
+        return isAr
+            ? 'لم يتم العثور على العنصر المطلوب.'
+            : 'The requested resource was not found.';
       case 409:
-        return 'A conflict occurred. Please try again.';
+        return isAr
+            ? 'حدث تعارض. يرجى المحاولة مرة أخرى.'
+            : 'A conflict occurred. Please try again.';
       case 422:
-        return 'Validation error. Please check your input.';
+        return isAr
+            ? 'خطأ في التحقق من البيانات. يرجى مراجعة المدخلات.'
+            : 'Validation error. Please check your input.';
       case 429:
-        return 'Too many requests. Please wait a moment.';
+        return isAr
+            ? 'طلبات كثيرة جداً. يرجى الانتظار قليلاً.'
+            : 'Too many requests. Please wait a moment.';
       case 500:
-        return 'Server error. Please try again later.';
+        return isAr
+            ? 'خطأ في الخادم. يرجى المحاولة لاحقاً.'
+            : 'Server error. Please try again later.';
       default:
-        return 'Something went wrong. Please try again.';
+        return isAr
+            ? 'حدث خطأ ما. يرجى المحاولة مرة أخرى.'
+            : 'Something went wrong. Please try again.';
     }
   }
 }

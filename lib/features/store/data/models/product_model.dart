@@ -1,3 +1,5 @@
+import '../../../../core/localization/locale_cubit.dart';
+
 /// Product model for the store catalog.
 class ProductModel {
   final String id;
@@ -41,6 +43,19 @@ class ProductModel {
   double get discountPercent =>
       onSale ? ((price - salePrice!) / price * 100) : 0;
 
+  static String _parseLocalized(dynamic value, [String defaultVal = '']) {
+    if (value == null) return defaultVal;
+    if (value is String) return value;
+    if (value is Map) {
+      final lang = LocaleCubit.currentLanguage;
+      if (value[lang] != null) return value[lang].toString();
+      if (value['en'] != null) return value['en'].toString();
+      if (value['ar'] != null) return value['ar'].toString();
+      if (value.isNotEmpty) return value.values.first.toString();
+    }
+    return value.toString();
+  }
+
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     final price = (json['price'] as num?)?.toDouble() ?? 0.0;
     final pad =
@@ -56,9 +71,11 @@ class ProductModel {
 
     return ProductModel(
       id: json['_id'] as String? ?? json['id'] as String? ?? '',
-      name: json['name'] as String? ?? json['title'] as String? ?? '',
-      size: json['size'] as String?,
-      description: json['description'] as String?,
+      name: _parseLocalized(json['name'] ?? json['title']),
+      size: json['size']?.toString(),
+      description: json['description'] != null
+          ? _parseLocalized(json['description'])
+          : null,
       price: price,
       salePrice: salePrice,
       cover: json['cover'] as String? ?? json['imageCover'] as String?,
@@ -76,11 +93,11 @@ class ProductModel {
           (json['ratingsQuantity'] as num?)?.toInt() ??
           0,
       category: json['category'] is Map
-          ? json['category']['name'] as String?
-          : json['category'] as String?,
+          ? _parseLocalized(json['category']['name'])
+          : json['category']?.toString(),
       subcategory: json['subcategory'] is Map
-          ? json['subcategory']['name'] as String?
-          : json['subcategory'] as String?,
+          ? _parseLocalized(json['subcategory']['name'])
+          : json['subcategory']?.toString(),
       quantity: quantity,
       sold: (json['sold'] as num?)?.toInt() ?? 0,
       inStock: (json['inStock'] as bool?) ?? quantity > 0,
