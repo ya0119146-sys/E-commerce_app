@@ -8,6 +8,7 @@ import '../features/wishlist/ui/wishlist_screen.dart';
 import '../features/profile/ui/profile_screen.dart';
 import '../features/admin/ui/admin_screen.dart';
 import '../features/cart/logic/cart_cubit.dart';
+import '../core/localization/app_translations.dart';
 
 /// Main shell with bottom navigation (5 tabs).
 class BottomNavShell extends StatefulWidget {
@@ -61,20 +62,20 @@ class _BottomNavShellState extends State<BottomNavShell> {
                 setState(() => _currentIndex = i);
               },
               items: [
-                const BottomNavigationBarItem(
-                  icon: Icon(Icons.home_outlined),
-                  activeIcon: Icon(Icons.home),
-                  label: 'Home',
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.home_outlined),
+                  activeIcon: const Icon(Icons.home),
+                  label: 'nav_home'.tr(context),
                 ),
-                const BottomNavigationBarItem(
-                  icon: Icon(Icons.search),
-                  activeIcon: Icon(Icons.search),
-                  label: 'Shop',
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.search),
+                  activeIcon: const Icon(Icons.search),
+                  label: 'nav_store'.tr(context),
                 ),
-                const BottomNavigationBarItem(
-                  icon: Icon(Icons.favorite_border),
-                  activeIcon: Icon(Icons.favorite),
-                  label: 'Wishlist',
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.favorite_border),
+                  activeIcon: const Icon(Icons.favorite),
+                  label: 'nav_wishlist'.tr(context),
                 ),
                 if (widget.role != 'admin')
                   BottomNavigationBarItem(
@@ -102,13 +103,13 @@ class _BottomNavShellState extends State<BottomNavShell> {
                       backgroundColor: AppColors.primary(brightness),
                       child: const Icon(Icons.shopping_bag),
                     ),
-                    label: 'Cart',
+                    label: 'nav_cart'.tr(context),
                   ),
 
-                const BottomNavigationBarItem(
-                  icon: Icon(Icons.person_outline),
-                  activeIcon: Icon(Icons.person),
-                  label: 'Profile',
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.person_outline),
+                  activeIcon: const Icon(Icons.person),
+                  label: 'nav_profile'.tr(context),
                 ),
                 if (widget.role == 'admin')
                   const BottomNavigationBarItem(

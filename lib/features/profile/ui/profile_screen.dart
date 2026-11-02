@@ -11,6 +11,8 @@ import 'package:image_picker/image_picker.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/theme/theme_cubit.dart';
+import '../../../core/localization/locale_cubit.dart';
+import '../../../core/localization/app_translations.dart';
 import '../../auth/logic/auth_cubit.dart';
 import '../../checkout/ui/order_history_screen.dart';
 import '../logic/profile_cubit.dart';
@@ -334,7 +336,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _profileTile(
                   context,
                   icon: Icons.receipt_long_outlined,
-                  title: 'Order History',
+                  title: 'my_orders'.tr(context),
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -346,7 +348,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _profileTile(
                   context,
                   icon: Icons.location_on_outlined,
-                  title: 'Shipping Addresses',
+                  title: 'shipping_address'.tr(context),
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -358,7 +360,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _profileTile(
                   context,
                   icon: Icons.lock_outline,
-                  title: 'Change Password',
+                  title: 'change_password'.tr(context),
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -393,7 +395,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               color: AppColors.secondary(brightness),
                             ),
                             title: Text(
-                              'Dark Mode',
+                              'dark_mode'.tr(context),
                               style: Theme.of(context).textTheme.titleSmall,
                             ),
                             trailing: Switch(
@@ -408,6 +410,91 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     )
                     .animate()
                     .fade(duration: 300.ms, delay: 400.ms)
+                    .moveY(begin: 15, end: 0),
+
+                // ─── Language Switch ───
+                BlocBuilder<LocaleCubit, LocaleState>(
+                      builder: (context, localeState) {
+                        final isAr = localeState.locale.languageCode == 'ar';
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          decoration: BoxDecoration(
+                            color: AppColors.card(brightness),
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.radiusDefault,
+                            ),
+                            border: Border.all(
+                              color: AppColors.border(
+                                brightness,
+                              ).withValues(alpha: 0.4),
+                            ),
+                          ),
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.language,
+                              color: AppColors.secondary(brightness),
+                            ),
+                            title: Text(
+                              'language'.tr(context),
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                            subtitle: Text(
+                              isAr ? 'العربية' : 'English',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: AppColors.primary(brightness),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            trailing: Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.background(brightness),
+                                borderRadius: BorderRadius.circular(
+                                  AppDimensions.radiusLg,
+                                ),
+                                border: Border.all(
+                                  color: AppColors.border(brightness)
+                                      .withValues(alpha: 0.5),
+                                ),
+                              ),
+                              child: InkWell(
+                                onTap: () =>
+                                    context.read<LocaleCubit>().toggleLocale(),
+                                borderRadius: BorderRadius.circular(
+                                  AppDimensions.radiusLg,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 6,
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        isAr ? 'EN' : 'عربي',
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.secondary(brightness),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Icon(
+                                        Icons.swap_horiz,
+                                        size: 16,
+                                        color: AppColors.secondary(brightness),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    )
+                    .animate()
+                    .fade(duration: 300.ms, delay: 450.ms)
                     .moveY(begin: 15, end: 0),
 
                 const SizedBox(height: 24),
@@ -428,7 +515,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       }
                     },
                     icon: const Icon(Icons.logout, size: 18),
-                    label: const Text('Log Out'),
+                    label: Text('logout'.tr(context)),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppColors.secondary(brightness),
                       side: BorderSide(
@@ -445,9 +532,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 // ─── Delete Account ───
                 TextButton(
                   onPressed: () => _confirmDelete(context),
-                  child: const Text(
-                    'Delete Account',
-                    style: TextStyle(color: AppColors.error),
+                  child: Text(
+                    'delete_account'.tr(context),
+                    style: const TextStyle(color: AppColors.error),
                   ),
                 ).animate().fade(duration: 300.ms, delay: 600.ms),
               ],
@@ -476,14 +563,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete Account'),
-        content: const Text(
-          'Are you sure you want to delete your account? This action cannot be undone.',
-        ),
+        title: Text('delete_account'.tr(context)),
+        content: Text('delete_account_confirm'.tr(context)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: Text('cancel'.tr(context)),
           ),
           TextButton(
             onPressed: () async {
@@ -500,9 +585,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 );
               }
             },
-            child: const Text(
-              'Delete',
-              style: TextStyle(color: AppColors.error),
+            child: Text(
+              'delete'.tr(context),
+              style: const TextStyle(color: AppColors.error),
             ),
           ),
         ],

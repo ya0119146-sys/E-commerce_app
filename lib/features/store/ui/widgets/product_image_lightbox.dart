@@ -5,6 +5,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_dimensions.dart';
+import '../../../../core/localization/app_translations.dart';
 
 /// Full-screen luxury image gallery with pinch-to-zoom, pan, double-tap zoom,
 /// horizontal swipe navigation, and bottom thumbnail selector.
@@ -240,7 +241,7 @@ class _ProductImageLightboxState extends State<ProductImageLightbox> {
               ),
               const SizedBox(width: 6),
               Text(
-                'Pinch or double tap to zoom',
+                'pinch_to_zoom'.tr(context),
                 style: GoogleFonts.poppins(
                   color: Colors.white.withValues(alpha: 0.5),
                   fontSize: 12,

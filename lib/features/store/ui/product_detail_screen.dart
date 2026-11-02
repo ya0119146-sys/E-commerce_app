@@ -14,6 +14,7 @@ import '../../reviews/logic/review_cubit.dart';
 import '../../reviews/ui/widgets/review_list_widget.dart';
 import '../data/models/product_model.dart';
 import 'widgets/product_image_lightbox.dart';
+import '../../../core/localization/app_translations.dart';
 
 /// Full-screen product detail with image, info, and Add to Cart.
 class ProductDetailScreen extends StatefulWidget {
@@ -76,7 +77,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         slivers: [
           // ─── Image Header ───
           SliverAppBar(
-            expandedHeight: MediaQuery.of(context).size.height * 0.48,
+            expandedHeight: (MediaQuery.of(context).size.height * 0.36).clamp(280.0, 360.0) +
+                MediaQuery.of(context).padding.top,
             pinned: true,
             backgroundColor: AppColors.background(brightness),
             leading: GestureDetector(
@@ -135,43 +137,73 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
-              background: Stack(
-                fit: StackFit.expand,
-                children: [
-                  allImages.isNotEmpty
-                      ? PageView.builder(
-                          controller: _pageController,
-                          onPageChanged: (i) =>
-                              setState(() => _selectedImageIndex = i),
-                          itemCount: allImages.length,
-                          itemBuilder: (_, i) => InteractiveViewer(
-                            minScale: 1.0,
-                            maxScale: 3.5,
-                            clipBehavior: Clip.hardEdge,
-                            child: GestureDetector(
-                              onTap: () => _openLightbox(allImages),
-                              child: Container(
-                                color: AppColors.card(brightness),
-                                alignment: Alignment.center,
-                                child: Hero(
-                                  tag: 'product_${product.id}_$i',
-                                  child: CachedNetworkImage(
-                                    imageUrl: allImages[i],
-                                    fit: BoxFit.contain,
-                                    placeholder: (_, __) => const ShimmerLoading(
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                      borderRadius: 0,
+              background: Padding(
+                padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).padding.top + 8,
+                  bottom: 6,
+                  left: 16,
+                  right: 16,
+                ),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    allImages.isNotEmpty
+                        ? PageView.builder(
+                            controller: _pageController,
+                            onPageChanged: (i) =>
+                                setState(() => _selectedImageIndex = i),
+                            itemCount: allImages.length,
+                            itemBuilder: (_, i) => InteractiveViewer(
+                              minScale: 1.0,
+                              maxScale: 3.5,
+                              clipBehavior: Clip.hardEdge,
+                              child: GestureDetector(
+                                onTap: () => _openLightbox(allImages),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: AppColors.card(brightness),
+                                    borderRadius: BorderRadius.circular(
+                                      AppDimensions.radiusLg,
                                     ),
-                                    errorWidget: (_, __, ___) => Container(
-                                      color: AppColors.muted(brightness),
-                                      child: Center(
-                                        child: Icon(
-                                          Icons.image_outlined,
-                                          size: 60,
-                                          color: AppColors.foreground(
-                                            brightness,
-                                          ).withValues(alpha: 0.15),
+                                    border: Border.all(
+                                      color: AppColors.border(brightness)
+                                          .withValues(alpha: 0.35),
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black
+                                            .withValues(alpha: 0.04),
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ],
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                      AppDimensions.radiusLg - 1,
+                                    ),
+                                    child: Hero(
+                                      tag: 'product_${product.id}_$i',
+                                      child: CachedNetworkImage(
+                                        imageUrl: allImages[i],
+                                        fit: BoxFit.contain,
+                                        placeholder: (_, __) =>
+                                            const ShimmerLoading(
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                          borderRadius: 0,
+                                        ),
+                                        errorWidget: (_, __, ___) => Container(
+                                          color: AppColors.muted(brightness),
+                                          child: Center(
+                                            child: Icon(
+                                              Icons.image_outlined,
+                                              size: 60,
+                                              color: AppColors.foreground(
+                                                brightness,
+                                              ).withValues(alpha: 0.15),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -179,110 +211,115 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ),
                               ),
                             ),
+                          )
+                        : Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.muted(brightness),
+                              borderRadius: BorderRadius.circular(
+                                AppDimensions.radiusLg,
+                              ),
+                            ),
+                            child: Center(
+                              child: Icon(
+                                Icons.shopping_bag_outlined,
+                                size: 80,
+                                color: AppColors.foreground(
+                                  brightness,
+                                ).withValues(alpha: 0.15),
+                              ),
+                            ),
                           ),
-                        )
-                      : Container(
-                          color: AppColors.muted(brightness),
-                          child: Center(
-                            child: Icon(
-                              Icons.shopping_bag_outlined,
-                              size: 80,
-                              color: AppColors.foreground(
-                                brightness,
-                              ).withValues(alpha: 0.15),
+
+                    // Floating Counter & Fullscreen Zoom Pill
+                    if (allImages.isNotEmpty)
+                      Positioned(
+                        bottom: 12,
+                        right: 12,
+                        child: GestureDetector(
+                          onTap: () => _openLightbox(allImages),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 5,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.card(brightness)
+                                  .withValues(alpha: 0.9),
+                              borderRadius: BorderRadius.circular(
+                                AppDimensions.radiusXl,
+                              ),
+                              border: Border.all(
+                                color: AppColors.border(brightness)
+                                    .withValues(alpha: 0.6),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.1),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.fullscreen,
+                                  size: 15,
+                                  color: AppColors.secondary(brightness),
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  '${_selectedImageIndex + 1} / ${allImages.length}',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.foreground(brightness),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
+                      ),
 
-                  // Floating Counter & Fullscreen Zoom Pill
-                  if (allImages.isNotEmpty)
-                    Positioned(
-                      bottom: 14,
-                      right: 16,
-                      child: GestureDetector(
-                        onTap: () => _openLightbox(allImages),
+                    // Sale badge if product is on sale
+                    if (product.onSale)
+                      Positioned(
+                        bottom: 12,
+                        left: 12,
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
+                            horizontal: 10,
+                            vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.card(brightness)
-                                .withValues(alpha: 0.9),
+                            color: AppColors.primary(brightness),
                             borderRadius: BorderRadius.circular(
-                              AppDimensions.radiusXl,
-                            ),
-                            border: Border.all(
-                              color: AppColors.border(brightness)
-                                  .withValues(alpha: 0.6),
+                              AppDimensions.radiusSm,
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.1),
-                                blurRadius: 10,
-                                offset: const Offset(0, 3),
+                                color: AppColors.primary(brightness)
+                                    .withValues(alpha: 0.4),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
                               ),
                             ],
                           ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.fullscreen,
-                                size: 16,
-                                color: AppColors.secondary(brightness),
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                '${_selectedImageIndex + 1} / ${allImages.length}',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.foreground(brightness),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-
-                  // Sale badge if product is on sale
-                  if (product.onSale)
-                    Positioned(
-                      bottom: 14,
-                      left: 16,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary(brightness),
-                          borderRadius: BorderRadius.circular(
-                            AppDimensions.radiusSm,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.primary(brightness)
-                                  .withValues(alpha: 0.4),
-                              blurRadius: 8,
-                              offset: const Offset(0, 2),
+                          child: Text(
+                            'sale'.tr(context),
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1,
                             ),
-                          ],
-                        ),
-                        child: Text(
-                          'SALE',
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 1,
                           ),
                         ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -388,18 +425,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Category
-                  if (product.category != null) ...[
-                    Text(
-                      product.category!.toUpperCase(),
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        letterSpacing: 1.5,
-                        color: AppColors.accent(brightness),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                  ],
-
                   // Title
                   Text(
                         product.name,
@@ -491,8 +516,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       const SizedBox(width: 8),
                       Text(
                         product.inStock
-                            ? 'In Stock (${product.quantity})'
-                            : 'Out of Stock',
+                            ? '${'in_stock'.tr(context)} (${product.quantity})'
+                            : 'out_of_stock'.tr(context),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: product.inStock
                               ? AppColors.success
@@ -502,21 +527,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ],
                   ),
 
-                  if (product.description != null) ...[
+                  if (product.description != null &&
+                      product.description!.trim().isNotEmpty) ...[
                     const SizedBox(height: 24),
                     const Divider(),
                     const SizedBox(height: 16),
                     Text(
-                      'Description',
+                      'description'.tr(context),
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 8),
-                    Text(
-                      product.description!,
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodyMedium?.copyWith(height: 1.6),
-                    ).animate().fade(duration: 400.ms, delay: 350.ms),
+                    _ExpandableDescription(description: product.description!),
                   ],
 
                   const SizedBox(height: 32),
@@ -544,15 +565,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
               ),
               child: HeroButton(
-                text: product.inStock ? 'Add to Cart' : 'Out of Stock',
+                text: product.inStock
+                    ? 'add_to_cart'.tr(context)
+                    : 'out_of_stock'.tr(context),
                 icon: Icons.shopping_bag_outlined,
                 onPressed: product.inStock
                     ? () {
                         context.read<CartCubit>().addToCart(product.id);
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Added to cart ✨'),
-                            duration: Duration(seconds: 1),
+                          SnackBar(
+                            content: Text('${'added_to_cart'.tr(context)} ✨'),
+                            duration: const Duration(seconds: 1),
                             behavior: SnackBarBehavior.floating,
                           ),
                         );
@@ -571,11 +594,83 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
               ),
               child: HeroButton(
-                text: product.inStock ? 'In Stock' : 'Out of Stock',
+                text: product.inStock
+                    ? 'in_stock'.tr(context)
+                    : 'out_of_stock'.tr(context),
                 icon: Icons.shopping_bag_outlined,
                 onPressed: null,
               ),
             ),
+    );
+  }
+}
+
+/// Expandable Description with luxury Show more / Show less toggle
+class _ExpandableDescription extends StatefulWidget {
+  final String description;
+  const _ExpandableDescription({required this.description});
+
+  @override
+  State<_ExpandableDescription> createState() => _ExpandableDescriptionState();
+}
+
+class _ExpandableDescriptionState extends State<_ExpandableDescription> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    final isLong = widget.description.length > 120;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AnimatedSize(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeInOut,
+          alignment: Alignment.topCenter,
+          child: Text(
+            widget.description,
+            maxLines: _isExpanded || !isLong ? null : 3,
+            overflow: _isExpanded || !isLong
+                ? TextOverflow.visible
+                : TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  height: 1.6,
+                  color: AppColors.foreground(brightness).withValues(alpha: 0.85),
+                ),
+          ),
+        ),
+        if (isLong) ...[
+          const SizedBox(height: 6),
+          GestureDetector(
+            onTap: () => setState(() => _isExpanded = !_isExpanded),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  _isExpanded
+                      ? 'show_less'.tr(context)
+                      : 'show_more'.tr(context),
+                  style: GoogleFonts.poppins(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.secondary(brightness),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Icon(
+                  _isExpanded
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_down,
+                  size: 18,
+                  color: AppColors.secondary(brightness),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ],
     );
   }
 }

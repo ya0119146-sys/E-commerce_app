@@ -3,7 +3,9 @@ import 'package:e_commerce/features/profile/data/repos/profile_repo.dart';
 import 'package:e_commerce/features/profile/logic/cubit/cubit/get_profile_cubit.dart';
 import 'package:e_commerce/features/profile/logic/cubit/delete_profile_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../core/localization/locale_cubit.dart';
 import '../core/di/service_locator.dart';
 import '../core/theme/app_theme.dart';
 import '../core/theme/theme_cubit.dart';
@@ -38,6 +40,7 @@ class ECommerceApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => ThemeCubit()),
+        BlocProvider(create: (_) => LocaleCubit()),
         BlocProvider(
           create: (_) => AuthCubit(getIt<AuthRepository>())..checkAuthStatus(),
         ),
@@ -65,30 +68,44 @@ class ECommerceApp extends StatelessWidget {
 
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, themeState) {
-          return MaterialApp(
-            title: 'Labella',
-            debugShowCheckedModeBanner: false,
-            theme: AppTheme.light,
-            darkTheme: AppTheme.dark,
-            themeMode: themeState.themeMode,
-            builder: (context, child) {
-              return GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-                child: child,
+          return BlocBuilder<LocaleCubit, LocaleState>(
+            builder: (context, localeState) {
+              return MaterialApp(
+                title: 'Labella',
+                debugShowCheckedModeBanner: false,
+                locale: localeState.locale,
+                supportedLocales: const [
+                  Locale('en'),
+                  Locale('ar'),
+                ],
+                localizationsDelegates: const [
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                theme: AppTheme.light,
+                darkTheme: AppTheme.dark,
+                themeMode: themeState.themeMode,
+                builder: (context, child) {
+                  return GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+                    child: child,
+                  );
+                },
+                home: BlocBuilder<AuthCubit, AuthState>(
+                  builder: (context, authState) {
+                    if (authState is AuthInitial) {
+                      return const _SplashView();
+                    }
+                    if (authState is AuthAuthenticated) {
+                      return BottomNavShell(role: authState.user.role);
+                    }
+                    return const LoginScreen();
+                  },
+                ),
               );
             },
-            home: BlocBuilder<AuthCubit, AuthState>(
-              builder: (context, authState) {
-                if (authState is AuthInitial) {
-                  return const _SplashView();
-                }
-                if (authState is AuthAuthenticated) {
-                  return BottomNavShell(role: authState.user.role);
-                }
-                return const LoginScreen();
-              },
-            ),
           );
         },
       ),
