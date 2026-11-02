@@ -140,7 +140,8 @@ class DioClient {
             final errMap = data['errors'] as Map;
             final firstVal = errMap.values.firstOrNull;
             if (firstVal is Map) {
-              serverMessage = (firstVal['msg'] ?? firstVal['message'])?.toString();
+              serverMessage = (firstVal['msg'] ?? firstVal['message'])
+                  ?.toString();
             } else if (firstVal is String) {
               serverMessage = firstVal;
             }
@@ -171,7 +172,8 @@ class DioClient {
               lower == 'error' ||
               lower.startsWith('cannot read properties of undefined')) {
             serverMessage = null;
-          } else if (lower.contains('e11000') || lower.contains('duplicate key')) {
+          } else if (lower.contains('e11000') ||
+              lower.contains('duplicate key')) {
             if (lower.contains('username')) {
               serverMessage = 'UserName already exist';
             } else {
