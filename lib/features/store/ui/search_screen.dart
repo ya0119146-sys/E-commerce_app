@@ -21,15 +21,33 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final _searchController = TextEditingController();
   final _searchFocus = FocusNode();
+  final _scrollController = ScrollController();
   Timer? _searchDebounce;
   String _lastSearchQuery = '';
 
   @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
   void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
     _searchDebounce?.cancel();
     _searchController.dispose();
     _searchFocus.dispose();
     super.dispose();
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    if (maxScroll - currentScroll <= 250) {
+      context.read<ProductsCubit>().loadMore();
+    }
   }
 
   void _onSearch(String query) {
@@ -149,22 +167,44 @@ class _SearchScreenState extends State<SearchScreen> {
             );
           }
 
-          return Padding(
-            padding: const EdgeInsets.all(AppDimensions.screenPadding),
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 14,
-                mainAxisSpacing: 14,
-                childAspectRatio: 0.58,
+          return Column(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(AppDimensions.screenPadding),
+                  child: GridView.builder(
+                    controller: _scrollController,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 14,
+                          mainAxisSpacing: 14,
+                          childAspectRatio: 0.58,
+                        ),
+                    itemCount: state.products.length,
+                    itemBuilder: (_, index) => ProductCard(
+                      role: widget.role,
+                      product: state.products[index],
+                      index: index,
+                    ),
+                  ),
+                ),
               ),
-              itemCount: state.products.length,
-              itemBuilder: (_, index) => ProductCard(
-                role: widget.role,
-                product: state.products[index],
-                index: index,
-              ),
-            ),
+              if (state.status == ProductsStatus.loadingMore)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Center(
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        color: AppColors.primary(brightness),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           );
         },
       ),

@@ -23,11 +23,31 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(_onScroll);
     context.read<ProductsCubit>().fetchProducts(refresh: true);
     context.read<CategoriesCubit>().fetchCategories();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    // Trigger loadMore when approaching 250px from the bottom
+    if (maxScroll - currentScroll <= 250) {
+      context.read<ProductsCubit>().loadMore();
+    }
   }
 
   @override
@@ -36,8 +56,18 @@ class _HomeScreenState extends State<HomeScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
+      body: RefreshIndicator(
+        color: AppColors.primary(brightness),
+        onRefresh: () async {
+          await Future.wait([
+            context.read<ProductsCubit>().fetchProducts(refresh: true),
+            context.read<CategoriesCubit>().fetchCategories(),
+          ]);
+        },
+        child: CustomScrollView(
+          controller: _scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
           // ─── App Bar ───
           SliverAppBar(
             floating: true,
@@ -358,10 +388,35 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
 
+          // ─── Loading More Indicator (Pagination) ───
+          BlocBuilder<ProductsCubit, ProductsState>(
+            builder: (context, state) {
+              if (state.status == ProductsStatus.loadingMore) {
+                return SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Center(
+                      child: SizedBox(
+                        width: 26,
+                        height: 26,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.5,
+                          color: AppColors.primary(brightness),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }
+              return const SliverToBoxAdapter(child: SizedBox.shrink());
+            },
+          ),
+
           // Bottom spacing
           const SliverToBoxAdapter(child: SizedBox(height: 100)),
         ],
       ),
-    );
+    ),
+  );
   }
 }

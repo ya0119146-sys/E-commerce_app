@@ -112,7 +112,9 @@ class DioClient {
         );
       case DioExceptionType.connectionError:
         return ApiException(
-          message: isAr ? 'لا يوجد اتصال بالإنترنت.' : 'No internet connection.',
+          message: isAr
+              ? 'لا يوجد اتصال بالإنترنت.'
+              : 'No internet connection.',
         );
       case DioExceptionType.badResponse:
         final statusCode = error.response?.statusCode;
