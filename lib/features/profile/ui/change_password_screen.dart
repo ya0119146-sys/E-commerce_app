@@ -18,6 +18,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final _currentPasswordController = TextEditingController();
   final _newPasswordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
   @override
   void dispose() {
@@ -28,6 +29,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   void _onChangePassword() {
+    if (_autovalidateMode != AutovalidateMode.onUserInteraction) {
+      setState(() {
+        _autovalidateMode = AutovalidateMode.onUserInteraction;
+      });
+    }
     if (_formKey.currentState!.validate()) {
       context.read<AuthCubit>().changePassword(
         currentPassword: _currentPasswordController.text,
@@ -70,7 +76,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             onDisposeAction: AutofillContextAction.commit,
             child: Form(
               key: _formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
+              autovalidateMode: _autovalidateMode,
               child: Column(
                 children: [
                   if (widget.userEmail != null && widget.userEmail!.isNotEmpty)

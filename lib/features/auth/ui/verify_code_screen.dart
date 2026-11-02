@@ -21,6 +21,7 @@ class VerifyCodeScreen extends StatefulWidget {
 class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
   final _formKey = GlobalKey<FormState>();
   final _codeController = TextEditingController();
+  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
   @override
   void dispose() {
@@ -29,6 +30,11 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
   }
 
   void _onVerify() {
+    if (_autovalidateMode != AutovalidateMode.onUserInteraction) {
+      setState(() {
+        _autovalidateMode = AutovalidateMode.onUserInteraction;
+      });
+    }
     if (_formKey.currentState!.validate()) {
       context.read<AuthCubit>().verifyCode(_codeController.text.trim());
     }
@@ -112,7 +118,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                     ),
                     child: Form(
                       key: _formKey,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      autovalidateMode: _autovalidateMode,
                       child: Column(
                         children: [
                           TextFormField(

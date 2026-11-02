@@ -22,6 +22,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
   @override
   void dispose() {
@@ -31,6 +32,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   void _onResetPassword() {
+    if (_autovalidateMode != AutovalidateMode.onUserInteraction) {
+      setState(() {
+        _autovalidateMode = AutovalidateMode.onUserInteraction;
+      });
+    }
     if (_formKey.currentState!.validate()) {
       context.read<AuthCubit>().resetPassword(
             password: _passwordController.text,
@@ -122,7 +128,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       onDisposeAction: AutofillContextAction.commit,
                       child: Form(
                         key: _formKey,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        autovalidateMode: _autovalidateMode,
                         child: Column(
                           children: [
                             if (widget.email != null && widget.email!.isNotEmpty)

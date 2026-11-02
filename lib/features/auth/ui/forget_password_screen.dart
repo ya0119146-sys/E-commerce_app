@@ -20,6 +20,7 @@ class ForgetPasswordScreen extends StatefulWidget {
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
+  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
   @override
   void dispose() {
@@ -28,6 +29,11 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   }
 
   void _onSendCode() {
+    if (_autovalidateMode != AutovalidateMode.onUserInteraction) {
+      setState(() {
+        _autovalidateMode = AutovalidateMode.onUserInteraction;
+      });
+    }
     if (_formKey.currentState!.validate()) {
       context.read<AuthCubit>().forgetPassword(_emailController.text.trim());
     }
@@ -113,7 +119,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     ),
                     child: Form(
                       key: _formKey,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      autovalidateMode: _autovalidateMode,
                       child: Column(
                         children: [
                           TextFormField(

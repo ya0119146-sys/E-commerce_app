@@ -27,6 +27,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final _phoneController = TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirm = true;
+  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
   @override
   void dispose() {
@@ -40,6 +41,11 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   void _onSignup() {
+    if (_autovalidateMode != AutovalidateMode.onUserInteraction) {
+      setState(() {
+        _autovalidateMode = AutovalidateMode.onUserInteraction;
+      });
+    }
     if (_formKey.currentState!.validate()) {
       context.read<AuthCubit>().signup(
         name: _nameController.text.trim(),
@@ -156,7 +162,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           onDisposeAction: AutofillContextAction.commit,
                           child: Form(
                             key: _formKey,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            autovalidateMode: _autovalidateMode,
                             child: Column(
                             children: [
                               TextFormField(

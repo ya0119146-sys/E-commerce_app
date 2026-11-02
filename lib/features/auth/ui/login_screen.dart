@@ -25,6 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
+  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
   @override
   void dispose() {
@@ -34,6 +35,11 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _onLogin() {
+    if (_autovalidateMode != AutovalidateMode.onUserInteraction) {
+      setState(() {
+        _autovalidateMode = AutovalidateMode.onUserInteraction;
+      });
+    }
     if (_formKey.currentState!.validate()) {
       context.read<AuthCubit>().login(
         email: _emailController.text.trim(),
@@ -151,12 +157,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             children: [
                               Form(
                                 key: _formKey,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
+                                autovalidateMode: _autovalidateMode,
                                 child: Column(
                                   children: [
                                     TextFormField(
                                       controller: _emailController,
+                                      cursorColor:
+                                          AppColors.secondary(brightness),
+                                      cursorWidth: 2.0,
+                                      showCursor: true,
                                       keyboardType: TextInputType.emailAddress,
                                       textInputAction: TextInputAction.next,
                                       autofillHints: const [
@@ -182,6 +191,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                     TextFormField(
                                       controller: _passwordController,
+                                      cursorColor:
+                                          AppColors.secondary(brightness),
+                                      cursorWidth: 2.0,
+                                      showCursor: true,
                                       obscureText: _obscurePassword,
                                       keyboardType:
                                           TextInputType.visiblePassword,

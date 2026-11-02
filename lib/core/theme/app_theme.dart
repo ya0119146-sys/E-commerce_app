@@ -34,6 +34,11 @@ class AppTheme {
       colorScheme: colorScheme,
       scaffoldBackgroundColor: AppColors.background(brightness),
       textTheme: _textTheme(brightness),
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: AppColors.secondary(brightness),
+        selectionColor: AppColors.primary(brightness).withValues(alpha: 0.35),
+        selectionHandleColor: AppColors.secondary(brightness),
+      ),
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.background(brightness).withValues(alpha: 0.85),
         foregroundColor: AppColors.foreground(brightness),
