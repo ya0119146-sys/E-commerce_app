@@ -64,10 +64,7 @@ class WishlistCubit extends Cubit<WishlistState> {
         isInWishlist: wasInWishlist,
       );
       final newIds = updatedProducts.map((p) => p.id).toSet();
-      emit(state.copyWith(
-        products: updatedProducts,
-        wishlistIds: newIds,
-      ));
+      emit(state.copyWith(products: updatedProducts, wishlistIds: newIds));
     } catch (_) {
       // Revert on error
       if (wasInWishlist) {

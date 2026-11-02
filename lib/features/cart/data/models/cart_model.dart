@@ -26,8 +26,8 @@ class CartItemModel {
           ? ProductModel.fromJson(productData)
           : null,
       productId: productData is Map<String, dynamic>
-          ? (productData['_id'] as String? ?? '')
-          : (productData as String? ?? ''),
+          ? (productData['_id'] as String? ?? productData['id'] as String? ?? '')
+          : (productData?.toString() ?? ''),
       quantity: (json['quantity'] as num?)?.toInt() ?? 1,
       price: (json['price'] as num?)?.toDouble() ?? 0.0,
     );

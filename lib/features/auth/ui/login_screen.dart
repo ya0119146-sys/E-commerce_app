@@ -10,6 +10,7 @@ import '../../../core/widgets/hero_button.dart';
 import '../logic/auth_cubit.dart';
 import 'signup_screen.dart';
 import 'forget_password_screen.dart';
+import '../../../app/bottom_nav_shell.dart';
 
 /// Login screen with luxury glassmorphism design.
 class LoginScreen extends StatefulWidget {
@@ -33,6 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _onLogin() {
+    FocusScope.of(context).unfocus();
     if (_formKey.currentState!.validate()) {
       context.read<AuthCubit>().login(
         email: _emailController.text.trim(),
@@ -50,7 +52,14 @@ class _LoginScreenState extends State<LoginScreen> {
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthAuthenticated) {
+            FocusScope.of(context).unfocus();
             TextInput.finishAutofillContext(shouldSave: true);
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (_) => BottomNavShell(role: state.user.role),
+              ),
+              (route) => false,
+            );
           }
 
           if (state is AuthError) {

@@ -24,12 +24,6 @@ class _SearchScreenState extends State<SearchScreen> {
   String _lastSearchQuery = '';
 
   @override
-  void initState() {
-    super.initState();
-    _searchFocus.requestFocus();
-  }
-
-  @override
   void dispose() {
     _searchDebounce?.cancel();
     _searchController.dispose();
@@ -38,6 +32,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void _onSearch(String query) {
+    _searchFocus.unfocus();
     final trimmedQuery = query.trim();
     if (trimmedQuery == _lastSearchQuery) return;
 

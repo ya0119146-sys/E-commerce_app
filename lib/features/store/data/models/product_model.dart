@@ -43,9 +43,16 @@ class ProductModel {
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     final price = (json['price'] as num?)?.toDouble() ?? 0.0;
-    final pad = (json['priceAfterDiscount'] as num?)?.toDouble() ??
+    final pad =
+        (json['priceAfterDiscount'] as num?)?.toDouble() ??
         (json['salePrice'] as num?)?.toDouble();
     final salePrice = (pad != null && pad > 0 && pad < price) ? pad : null;
+
+    final quantity =
+        (json['quantity'] as num?)?.toInt() ??
+        (json['stock'] as num?)?.toInt() ??
+        (json['countInStock'] as num?)?.toInt() ??
+        0;
 
     return ProductModel(
       id: json['_id'] as String? ?? json['id'] as String? ?? '',
@@ -55,14 +62,17 @@ class ProductModel {
       price: price,
       salePrice: salePrice,
       cover: json['cover'] as String? ?? json['imageCover'] as String?,
-      images: (json['images'] as List<dynamic>?)
+      images:
+          (json['images'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           [],
-      ratingAvg: (json['rateAvg'] as num?)?.toDouble() ??
+      ratingAvg:
+          (json['rateAvg'] as num?)?.toDouble() ??
           (json['ratingsAverage'] as num?)?.toDouble() ??
           0.0,
-      ratingCount: (json['rating'] as num?)?.toInt() ??
+      ratingCount:
+          (json['rating'] as num?)?.toInt() ??
           (json['ratingsQuantity'] as num?)?.toInt() ??
           0,
       category: json['category'] is Map
@@ -71,9 +81,9 @@ class ProductModel {
       subcategory: json['subcategory'] is Map
           ? json['subcategory']['name'] as String?
           : json['subcategory'] as String?,
-      quantity: (json['quantity'] as num?)?.toInt() ?? 0,
+      quantity: quantity,
       sold: (json['sold'] as num?)?.toInt() ?? 0,
-      inStock: ((json['quantity'] as num?)?.toInt() ?? 0) > 0,
+      inStock: (json['inStock'] as bool?) ?? quantity > 0,
     );
   }
 }

@@ -39,11 +39,17 @@ class CartRepository {
         ApiConstants.addToCart,
         data: {'productId': productId},
       );
-      final data = response.data['data'] ?? response.data;
-      if (data is Map<String, dynamic>) {
-        return CartModel.fromJson(data);
+      // Backend POST /cart/add returns unpopulated product ids.
+      // Re-fetch using getCart() to get fully populated products.
+      try {
+        return await getCart();
+      } catch (_) {
+        final data = response.data['data'] ?? response.data;
+        if (data is Map<String, dynamic>) {
+          return CartModel.fromJson(data);
+        }
+        return CartModel.empty;
       }
-      return CartModel.empty;
     } on DioException catch (e) {
       throw e.error as ApiException? ??
           const ApiException(message: 'Failed to add to cart');
@@ -57,11 +63,17 @@ class CartRepository {
         ApiConstants.updateCart,
         data: {'productId': productId, 'quantity': quantity},
       );
-      final data = response.data['data'] ?? response.data;
-      if (data is Map<String, dynamic>) {
-        return CartModel.fromJson(data);
+      // Backend PATCH /cart/update returns unpopulated product ids.
+      // Re-fetch using getCart() to get fully populated products.
+      try {
+        return await getCart();
+      } catch (_) {
+        final data = response.data['data'] ?? response.data;
+        if (data is Map<String, dynamic>) {
+          return CartModel.fromJson(data);
+        }
+        return CartModel.empty;
       }
-      return CartModel.empty;
     } on DioException catch (e) {
       throw e.error as ApiException? ??
           const ApiException(message: 'Failed to update cart');
@@ -75,11 +87,15 @@ class CartRepository {
         ApiConstants.removeFromCart,
         data: {"productId": productId},
       );
-      final data = response.data['data'] ?? response.data;
-      if (data is Map<String, dynamic>) {
-        return CartModel.fromJson(data);
+      try {
+        return await getCart();
+      } catch (_) {
+        final data = response.data['data'] ?? response.data;
+        if (data is Map<String, dynamic>) {
+          return CartModel.fromJson(data);
+        }
+        return CartModel.empty;
       }
-      return CartModel.empty;
     } on DioException catch (e) {
       throw e.error as ApiException? ??
           const ApiException(message: 'Failed to remove from cart');

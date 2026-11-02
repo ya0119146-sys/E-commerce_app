@@ -39,11 +39,12 @@ class CartCubit extends Cubit<CartState> {
 
     try {
       final cart = await _repository.addToCart(productId);
+      final mergedCart = _mergeWithOldCart(cart, state.cart);
       emit(
         state.copyWith(
           status: CartStatus.loaded,
-          cart: cart,
-          cartItemCount: cart.itemCount,
+          cart: mergedCart,
+          cartItemCount: mergedCart.itemCount,
           cartPulse: false,
         ),
       );
@@ -90,11 +91,12 @@ class CartCubit extends Cubit<CartState> {
 
     try {
       final cart = await _repository.updateQuantity(productId, quantity);
+      final mergedCart = _mergeWithOldCart(cart, oldCart);
       emit(
         state.copyWith(
           status: CartStatus.loaded,
-          cart: cart,
-          cartItemCount: cart.itemCount,
+          cart: mergedCart,
+          cartItemCount: mergedCart.itemCount,
         ),
       );
     } on ApiException catch (e) {
@@ -105,7 +107,9 @@ class CartCubit extends Cubit<CartState> {
   /// Remove item from cart.
   Future<void> removeFromCart(String productId) async {
     final oldCart = state.cart;
-    final updatedItems = oldCart.items.where((i) => i.productId != productId).toList();
+    final updatedItems = oldCart.items
+        .where((i) => i.productId != productId)
+        .toList();
     emit(
       state.copyWith(
         cart: CartModel(
@@ -119,11 +123,12 @@ class CartCubit extends Cubit<CartState> {
 
     try {
       final cart = await _repository.removeFromCart(productId);
+      final mergedCart = _mergeWithOldCart(cart, oldCart);
       emit(
         state.copyWith(
           status: CartStatus.loaded,
-          cart: cart,
-          cartItemCount: cart.itemCount,
+          cart: mergedCart,
+          cartItemCount: mergedCart.itemCount,
         ),
       );
     } on ApiException catch (e) {
@@ -131,15 +136,74 @@ class CartCubit extends Cubit<CartState> {
     }
   }
 
+  /// Merge incoming cart items with existing populated product models if the
+  /// server response returned unpopulated ObjectId strings for products.
+  CartModel _mergeWithOldCart(CartModel newCart, CartModel oldCart) {
+    if (oldCart.items.isEmpty) return newCart;
+    final oldProductMap = {
+      for (final item in oldCart.items)
+        if (item.product != null) item.productId: item.product!,
+    };
+    if (oldProductMap.isEmpty) return newCart;
+
+    final mergedItems = newCart.items.map((item) {
+      if (item.product == null && oldProductMap.containsKey(item.productId)) {
+        return CartItemModel(
+          id: item.id,
+          product: oldProductMap[item.productId],
+          productId: item.productId,
+          quantity: item.quantity,
+          price: item.price,
+        );
+      }
+      return item;
+    }).toList();
+
+    return CartModel(
+      id: newCart.id ?? oldCart.id,
+      items: mergedItems,
+      totalPrice: newCart.totalPrice,
+      taxPrice: newCart.taxPrice,
+      totalPriceAfterDiscount: newCart.totalPriceAfterDiscount,
+    );
+  }
+
+  /// Merge incoming cart items with existing populated product models if the
+  /// server response returned unpopulated ObjectId strings for products.
+  // CartModel _mergeWithOldCart(CartModel newCart, CartModel oldCart) {
+  //   if (oldCart.items.isEmpty) return newCart;
+  //   final oldProductMap = {
+  //     for (final item in oldCart.items)
+  //       if (item.product != null) item.productId: item.product!
+  //   };
+  //   if (oldProductMap.isEmpty) return newCart;
+
+  //   final mergedItems = newCart.items.map((item) {
+  //     if (item.product == null && oldProductMap.containsKey(item.productId)) {
+  //       return CartItemModel(
+  //         id: item.id,
+  //         product: oldProductMap[item.productId],
+  //         productId: item.productId,
+  //         quantity: item.quantity,
+  //         price: item.price,
+  //       );
+  //     }
+  //     return item;
+  //   }).toList();
+
+  //   return CartModel(
+  //     id: newCart.id ?? oldCart.id,
+  //     items: mergedItems,
+  //     totalPrice: newCart.totalPrice,
+  //     taxPrice: newCart.taxPrice,
+  //     totalPriceAfterDiscount: newCart.totalPriceAfterDiscount,
+  //   );
+  // }
+
   /// Clear entire cart.
   Future<void> clearCart() async {
     final oldCart = state.cart;
-    emit(
-      state.copyWith(
-        cart: CartModel.empty,
-        cartItemCount: 0,
-      ),
-    );
+    emit(state.copyWith(cart: CartModel.empty, cartItemCount: 0));
 
     try {
       await _repository.clearCart();

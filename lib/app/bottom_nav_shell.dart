@@ -57,7 +57,12 @@ class _BottomNavShellState extends State<BottomNavShell> {
           builder: (context, cartState) {
             return BottomNavigationBar(
               currentIndex: _currentIndex,
-              onTap: (i) => setState(() => _currentIndex = i),
+              onTap: (i) {
+                setState(() => _currentIndex = i);
+                if (widget.role != 'admin' && i == 3) {
+                  context.read<CartCubit>().fetchCart();
+                }
+              },
               items: [
                 const BottomNavigationBarItem(
                   icon: Icon(Icons.home_outlined),

@@ -13,7 +13,8 @@ class DioClient {
 
   DioClient({FlutterSecureStorage? storage, Dio? customDio})
     : _storage = storage ?? const FlutterSecureStorage() {
-    dio = customDio ??
+    dio =
+        customDio ??
         Dio(
           BaseOptions(
             baseUrl: ApiConstants.baseUrl,

@@ -71,6 +71,13 @@ class ECommerceApp extends StatelessWidget {
             theme: AppTheme.light,
             darkTheme: AppTheme.dark,
             themeMode: themeState.themeMode,
+            builder: (context, child) {
+              return GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+                child: child,
+              );
+            },
             home: BlocBuilder<AuthCubit, AuthState>(
               builder: (context, authState) {
                 if (authState is AuthInitial) {

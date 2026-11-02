@@ -414,7 +414,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton.icon(
-                    onPressed: () => context.read<AuthCubit>().logout(),
+                    onPressed: () async {
+                      await context.read<AuthCubit>().logout();
+                      if (context.mounted) {
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (_) => const LoginScreen(),
+                          ),
+                          (route) => false,
+                        );
+                      }
+                    },
                     icon: const Icon(Icons.logout, size: 18),
                     label: const Text('Log Out'),
                     style: OutlinedButton.styleFrom(
@@ -474,16 +484,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               context.read<DeleteProfileCubit>().deleteProfile();
-              Navigator.pop(ctx);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Profile deleted successfully')),
-              );
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const LoginScreen()),
-              );
+              await context.read<AuthCubit>().logout();
+              if (context.mounted) {
+                Navigator.pop(ctx);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Profile deleted successfully')),
+                );
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  (route) => false,
+                );
+              }
             },
             child: const Text(
               'Delete',

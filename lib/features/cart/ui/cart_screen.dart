@@ -469,26 +469,29 @@ class _CartItemCard extends StatelessWidget {
                                       context,
                                       icon: Icons.add,
                                       onTap: () {
-                                        if (product != null &&
-                                            item.quantity < product.quantity) {
-                                          context
-                                              .read<CartCubit>()
-                                              .updateQuantity(
-                                                item.productId,
-                                                item.quantity + 1,
-                                              );
-                                        } else {
+                                        final maxStock = product?.quantity ?? 0;
+                                        if (maxStock > 0 &&
+                                            item.quantity >= maxStock) {
                                           ScaffoldMessenger.of(
                                             context,
                                           ).showSnackBar(
-                                            const SnackBar(
+                                            SnackBar(
                                               content: Text(
-                                                'Reached maximum stock',
+                                                'Reached maximum stock ($maxStock)',
                                               ),
-                                              duration: Duration(seconds: 1),
+                                              duration: const Duration(
+                                                seconds: 1,
+                                              ),
                                             ),
                                           );
+                                          return;
                                         }
+                                        context
+                                            .read<CartCubit>()
+                                            .updateQuantity(
+                                              item.productId,
+                                              item.quantity + 1,
+                                            );
                                       },
                                     ),
                                   ],
