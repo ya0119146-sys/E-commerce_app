@@ -26,6 +26,10 @@ class AuthUnauthenticated extends AuthState {}
 /// UI should navigate to the login screen.
 class AuthSignupSuccess extends AuthState {}
 
+/// Emitted after a successful password reset.
+/// UI should navigate to the login screen.
+class AuthResetPasswordSuccess extends AuthState {}
+
 class AuthResetCodeSent extends AuthState {
   final String message;
   const AuthResetCodeSent(this.message);

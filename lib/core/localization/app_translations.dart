@@ -91,7 +91,14 @@ class AppTranslations {
     'validation_length_long': 'Length must be between 10 and 500 characters',
     'Length must be between 10 and 500 characters': 'Length must be between 10 and 500 characters',
     'length is between 10, 500': 'length is between 10, 500',
-    'validation_length_password': 'Password must be between 6 and 20 characters',
+    'validation_length_password': 'Password must be between 6 and 20 characters',
+    'Reset code sent to your email': 'Reset code sent to your email',
+    'Code verified': 'Code verified',
+    'Invalid reset code': 'Invalid reset code',
+    'Reset session expired. Please request a new reset code.': 'Reset session expired. Please request a new reset code.',
+    'Failed to reset password': 'Failed to reset password',
+    'Failed to send reset code': 'Failed to send reset code',
+    'Failed to verify reset code': 'Failed to verify reset code',
     'Password must be between 6 and 20 characters': 'Password must be between 6 and 20 characters',
     'Password is between 6, 20': 'Password is between 6, 20',
     'validation_password_match': 'Passwords do not match',
@@ -654,7 +661,14 @@ class AppTranslations {
     'validation_length_long': 'يجب أن يكون الطول بين 10 و 500 حرفاً',
     'Length must be between 10 and 500 characters': 'يجب أن يكون الطول بين 10 و 500 حرفاً',
     'length is between 10, 500': 'يجب أن يكون الطول بين 10 و 500 حرفاً',
-    'validation_length_password': 'كلمة المرور يجب أن تكون بين 6 و 20 حرفاً أو رقماً',
+    'validation_length_password': 'يجب أن تكون كلمة المرور بين 6 و 20 حرفاً',
+    'Reset code sent to your email': 'تم إرسال رمز إعادة التعيين إلى بريدك الإلكتروني',
+    'Code verified': 'تم التحقق من الرمز بنجاح',
+    'Invalid reset code': 'رمز إعادة التعيين غير صالح',
+    'Reset session expired. Please request a new reset code.': 'انتهت صلاحية جلسة إعادة التعيين. يرجى طلب رمز جديد.',
+    'Failed to reset password': 'فشل إعادة تعيين كلمة المرور',
+    'Failed to send reset code': 'فشل إرسال رمز التحقق',
+    'Failed to verify reset code': 'فشل التحقق من الرمز',
     'Password must be between 6 and 20 characters': 'كلمة المرور يجب أن تكون بين 6 و 20 حرفاً أو رقماً',
     'Password is between 6, 20': 'كلمة المرور يجب أن تكون بين 6 و 20 حرفاً أو رقماً',
     'validation_password_match': 'كلمات المرور غير متطابقة',
@@ -1166,43 +1180,58 @@ class AppTranslations {
 }
 
 /// Extension on String for translating keys: `'sign_in'.tr(context)` or `'Welcome back'.tr(context)`
-extension StringTranslationExtension on String {
-  String tr(BuildContext context) {
-    try {
-      final localeState = context.watch<LocaleCubit>().state;
-      return AppTranslations.translate(this, localeState.locale.languageCode);
-    } catch (_) {
-      return this;
-    }
-  }
-
-  /// Read without watch (e.g. in callbacks / initState / SnackBar)
-  String trOnce(BuildContext context) {
-    try {
-      final localeState = context.read<LocaleCubit>().state;
-      return AppTranslations.translate(this, localeState.locale.languageCode);
-    } catch (_) {
-      return this;
-    }
-  }
-}
-
-/// Extension on BuildContext: `context.tr('sign_in')`
-extension ContextTranslationExtension on BuildContext {
-  String tr(String key) {
-    try {
-      final localeState = watch<LocaleCubit>().state;
-      return AppTranslations.translate(key, localeState.locale.languageCode);
-    } catch (_) {
-      return key;
-    }
-  }
-
-  bool get isArabic {
-    try {
-      return watch<LocaleCubit>().isArabic;
-    } catch (_) {
-      return false;
-    }
-  }
-}
+extension StringTranslationExtension on String {
+  String tr(BuildContext context) {
+    String? lang;
+    try {
+      lang = context.read<LocaleCubit>().state.locale.languageCode;
+    } catch (_) {
+      try {
+        lang = context.watch<LocaleCubit>().state.locale.languageCode;
+      } catch (_) {
+        lang = LocaleCubit.currentLanguage;
+      }
+    }
+    return AppTranslations.translate(this, lang);
+  }
+
+  /// Read without watch (e.g. in callbacks / initState / SnackBar)
+  String trOnce(BuildContext context) {
+    String? lang;
+    try {
+      lang = context.read<LocaleCubit>().state.locale.languageCode;
+    } catch (_) {
+      lang = LocaleCubit.currentLanguage;
+    }
+    return AppTranslations.translate(this, lang);
+  }
+}
+
+/// Extension on BuildContext: `context.tr('sign_in')`
+extension ContextTranslationExtension on BuildContext {
+  String tr(String key) {
+    String? lang;
+    try {
+      lang = read<LocaleCubit>().state.locale.languageCode;
+    } catch (_) {
+      try {
+        lang = watch<LocaleCubit>().state.locale.languageCode;
+      } catch (_) {
+        lang = LocaleCubit.currentLanguage;
+      }
+    }
+    return AppTranslations.translate(key, lang);
+  }
+
+  bool get isArabic {
+    try {
+      return read<LocaleCubit>().isArabic;
+    } catch (_) {
+      try {
+        return watch<LocaleCubit>().isArabic;
+      } catch (_) {
+        return LocaleCubit.currentLanguage == 'ar';
+      }
+    }
+  }
+}

@@ -114,7 +114,7 @@ class AuthCubit extends Cubit<AuthState> {
         confirmPassword: confirmPassword,
       );
       // After password reset, direct to login.
-      emit(AuthUnauthenticated());
+      emit(AuthResetPasswordSuccess());
     } on ApiException catch (e) {
       emit(AuthError(e.message));
     } catch (e) {

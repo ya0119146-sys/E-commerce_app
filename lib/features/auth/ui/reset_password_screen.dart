@@ -1,3 +1,4 @@
+import 'login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -65,7 +66,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message.tr(context))),
             );
-          } else if (state is AuthUnauthenticated) {
+          } else if (state is AuthResetPasswordSuccess || state is AuthUnauthenticated) {
             TextInput.finishAutofillContext(shouldSave: true);
             FocusScope.of(context).unfocus();
             ScaffoldMessenger.of(context).showSnackBar(
@@ -75,7 +76,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             );
             Future.delayed(const Duration(milliseconds: 300), () {
               if (!context.mounted) return;
-              Navigator.of(context).popUntil((route) => route.isFirst);
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const LoginScreen()), (route) => false);
             });
           }
         },
