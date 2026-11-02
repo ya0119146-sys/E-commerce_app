@@ -167,6 +167,9 @@ class _SignupScreenState extends State<SignupScreen> {
                             children: [
                               TextFormField(
                                 controller: _nameController,
+                                cursorColor: AppColors.secondary(brightness),
+                                cursorWidth: 2.0,
+                                showCursor: true,
                                 textInputAction: TextInputAction.next,
                                 autofillHints: const [AutofillHints.name],
                                 decoration: const InputDecoration(
@@ -185,8 +188,10 @@ class _SignupScreenState extends State<SignupScreen> {
                               ),
                               TextFormField(
                                 controller: _userNameController,
+                                cursorColor: AppColors.secondary(brightness),
+                                cursorWidth: 2.0,
+                                showCursor: true,
                                 textInputAction: TextInputAction.next,
-                                autofillHints: const [AutofillHints.username],
                                 decoration: const InputDecoration(
                                   labelText: 'Username',
                                   prefixIcon: Icon(Icons.person_outline),
@@ -203,11 +208,14 @@ class _SignupScreenState extends State<SignupScreen> {
                               ),
                               TextFormField(
                                 controller: _emailController,
+                                cursorColor: AppColors.secondary(brightness),
+                                cursorWidth: 2.0,
+                                showCursor: true,
                                 keyboardType: TextInputType.emailAddress,
                                 textInputAction: TextInputAction.next,
                                 autofillHints: const [
                                   AutofillHints.email,
-                                  AutofillHints.newUsername,
+                                  AutofillHints.username,
                                 ],
                                 decoration: const InputDecoration(
                                   labelText: 'Email',
@@ -228,6 +236,9 @@ class _SignupScreenState extends State<SignupScreen> {
                               ),
                               TextFormField(
                                 controller: _phoneController,
+                                cursorColor: AppColors.secondary(brightness),
+                                cursorWidth: 2.0,
+                                showCursor: true,
                                 keyboardType: TextInputType.phone,
                                 textInputAction: TextInputAction.next,
                                 autofillHints: const [
@@ -254,6 +265,9 @@ class _SignupScreenState extends State<SignupScreen> {
                               ),
                               TextFormField(
                                 controller: _passwordController,
+                                cursorColor: AppColors.secondary(brightness),
+                                cursorWidth: 2.0,
+                                showCursor: true,
                                 obscureText: _obscurePassword,
                                 keyboardType: TextInputType.visiblePassword,
                                 textInputAction: TextInputAction.next,
@@ -290,6 +304,9 @@ class _SignupScreenState extends State<SignupScreen> {
                               ),
                               TextFormField(
                                 controller: _confirmPasswordController,
+                                cursorColor: AppColors.secondary(brightness),
+                                cursorWidth: 2.0,
+                                showCursor: true,
                                 obscureText: _obscureConfirm,
                                 keyboardType: TextInputType.visiblePassword,
                                 textInputAction: TextInputAction.done,
