@@ -36,6 +36,10 @@ class CategoriesCubit extends Cubit<CategoriesState> {
 
   /// Select a category.
   void selectCategory(String? categoryId) {
-    emit(state.copyWith(selectedCategoryId: categoryId ?? ''));
+    final shouldClear = categoryId == null || categoryId.trim().isEmpty;
+    emit(state.copyWith(
+      selectedCategoryId: shouldClear ? null : categoryId.trim(),
+      clearSelectedCategory: shouldClear,
+    ));
   }
 }

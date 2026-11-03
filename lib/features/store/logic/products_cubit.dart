@@ -15,10 +15,31 @@ class ProductsCubit extends Cubit<ProductsState> {
   /// Fetch products (initial load or refresh).
   Future<void> fetchProducts({
     String? keyword,
+    bool clearKeyword = false,
     String? category,
+    bool clearCategory = false,
     String? sort,
+    bool clearSort = false,
     bool refresh = false,
   }) async {
+    final shouldClearCat =
+        clearCategory || (category != null && category.trim().isEmpty);
+    final effectiveCategory = shouldClearCat
+        ? null
+        : (category != null ? category.trim() : state.category);
+
+    final shouldClearKw =
+        clearKeyword || (keyword != null && keyword.trim().isEmpty);
+    final effectiveKeyword = shouldClearKw
+        ? null
+        : (keyword != null ? keyword.trim() : state.keyword);
+
+    final shouldClearSort =
+        clearSort || (sort != null && sort.trim().isEmpty);
+    final effectiveSort = shouldClearSort
+        ? null
+        : (sort != null ? sort.trim() : state.sort);
+
     if (refresh) {
       emit(
         state.copyWith(
@@ -26,17 +47,17 @@ class ProductsCubit extends Cubit<ProductsState> {
           products: [],
           page: 1,
           hasMore: true,
+          category: effectiveCategory,
+          clearCategory: shouldClearCat,
+          keyword: effectiveKeyword,
+          clearKeyword: shouldClearKw,
+          sort: effectiveSort,
+          clearSort: shouldClearSort,
         ),
       );
     } else {
       emit(state.copyWith(status: ProductsStatus.loading));
     }
-
-    final effectiveCategory = (category != null)
-        ? (category.trim().isEmpty ? null : category.trim())
-        : state.category;
-    final effectiveKeyword = keyword?.trim() ?? state.keyword;
-    final effectiveSort = sort?.trim() ?? state.sort;
 
     try {
       final products = await _repository.getProducts(
@@ -52,8 +73,11 @@ class ProductsCubit extends Cubit<ProductsState> {
           page: 1,
           hasMore: products.length >= 8,
           keyword: effectiveKeyword,
+          clearKeyword: shouldClearKw,
           category: effectiveCategory,
+          clearCategory: shouldClearCat,
           sort: effectiveSort,
+          clearSort: shouldClearSort,
         ),
       );
     } on ApiException catch (e) {

@@ -172,6 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       context.read<CategoriesCubit>().selectCategory(id);
                       context.read<ProductsCubit>().fetchProducts(
                         category: id,
+                        clearCategory: id == null || id.isEmpty,
                         refresh: true,
                       );
                     },

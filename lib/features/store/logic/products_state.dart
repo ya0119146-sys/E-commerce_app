@@ -29,8 +29,11 @@ class ProductsState extends Equatable {
     int? page,
     bool? hasMore,
     String? keyword,
+    bool clearKeyword = false,
     String? category,
+    bool clearCategory = false,
     String? sort,
+    bool clearSort = false,
     String? errorMessage,
   }) {
     return ProductsState(
@@ -38,9 +41,9 @@ class ProductsState extends Equatable {
       products: products ?? this.products,
       page: page ?? this.page,
       hasMore: hasMore ?? this.hasMore,
-      keyword: keyword ?? this.keyword,
-      category: category ?? this.category,
-      sort: sort ?? this.sort,
+      keyword: clearKeyword ? null : (keyword ?? this.keyword),
+      category: clearCategory ? null : (category ?? this.category),
+      sort: clearSort ? null : (sort ?? this.sort),
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
