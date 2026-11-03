@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -77,34 +78,43 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         slivers: [
           // ─── Image Header ───
           SliverAppBar(
-            expandedHeight:
-                (MediaQuery.of(context).size.height * 0.36).clamp(
-                  280.0,
-                  360.0,
-                ) +
-                MediaQuery.of(context).padding.top,
+            expandedHeight: 310.0 + MediaQuery.of(context).padding.top,
             pinned: true,
             backgroundColor: AppColors.background(brightness),
-            leading: GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: Container(
-                margin: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: AppColors.card(brightness).withValues(alpha: 0.9),
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.08),
-                      blurRadius: 10,
-                      offset: const Offset(0, 2),
+            leading: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.card(brightness).withValues(alpha: 0.85),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: AppColors.border(brightness).withValues(alpha: 0.3),
+                        width: 0.5,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: Icon(
-                  context.isArabic
-                      ? Icons.arrow_forward_ios
-                      : Icons.arrow_back_ios_new,
-                  size: 18,
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      icon: Icon(
+                        context.isArabic
+                            ? Icons.arrow_forward_ios
+                            : Icons.arrow_back_ios_new,
+                        size: 16,
+                        color: AppColors.foreground(brightness),
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -112,33 +122,42 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               BlocBuilder<WishlistCubit, WishlistState>(
                 builder: (context, state) {
                   final isFav = state.isInWishlist(product.id);
-                  return GestureDetector(
-                    onTap: () => context.read<WishlistCubit>().toggleWishlist(
-                      product.id,
-                    ),
-                    child: Container(
-                      margin: const EdgeInsets.all(8),
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: AppColors.card(
-                          brightness,
-                        ).withValues(alpha: 0.9),
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.08),
-                            blurRadius: 10,
-                            offset: const Offset(0, 2),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: AppColors.card(brightness).withValues(alpha: 0.85),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.border(brightness).withValues(alpha: 0.3),
+                              width: 0.5,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.1),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      child: Icon(
-                        isFav ? Icons.favorite : Icons.favorite_border,
-                        size: 20,
-                        color: isFav
-                            ? AppColors.primary(brightness)
-                            : AppColors.foreground(brightness),
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            icon: Icon(
+                              isFav ? Icons.favorite : Icons.favorite_border,
+                              size: 20,
+                              color: isFav
+                                  ? AppColors.primary(brightness)
+                                  : AppColors.foreground(brightness),
+                            ),
+                            onPressed: () => context.read<WishlistCubit>().toggleWishlist(product.id),
+                          ),
+                        ),
                       ),
                     ),
                   );
@@ -146,289 +165,257 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
-              background: Padding(
-                padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).padding.top + 8,
-                  bottom: 6,
-                  left: 16,
-                  right: 16,
-                ),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    allImages.isNotEmpty
-                        ? PageView.builder(
-                            controller: _pageController,
-                            onPageChanged: (i) =>
-                                setState(() => _selectedImageIndex = i),
-                            itemCount: allImages.length,
-                            itemBuilder: (_, i) => InteractiveViewer(
-                              minScale: 1.0,
-                              maxScale: 3.5,
-                              clipBehavior: Clip.hardEdge,
-                              child: GestureDetector(
-                                onTap: () => _openLightbox(allImages),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: AppColors.card(brightness),
-                                    borderRadius: BorderRadius.circular(
-                                      AppDimensions.radiusLg,
-                                    ),
-                                    border: Border.all(
-                                      color: AppColors.border(
-                                        brightness,
-                                      ).withValues(alpha: 0.35),
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withValues(
-                                          alpha: 0.04,
-                                        ),
-                                        blurRadius: 8,
-                                        offset: const Offset(0, 2),
-                                      ),
-                                    ],
+              background: Stack(
+                fit: StackFit.expand,
+                children: [
+                  // Full-width Edge-to-Edge Image PageView
+                  allImages.isNotEmpty
+                      ? PageView.builder(
+                          controller: _pageController,
+                          onPageChanged: (i) => setState(() => _selectedImageIndex = i),
+                          itemCount: allImages.length,
+                          itemBuilder: (_, i) => GestureDetector(
+                            onTap: () => _openLightbox(allImages),
+                            child: Container(
+                              width: double.infinity,
+                              color: AppColors.card(brightness),
+                              child: Hero(
+                                tag: 'product_${product.id}_$i',
+                                child: CachedNetworkImage(
+                                  imageUrl: allImages[i],
+                                  fit: BoxFit.cover,
+                                  alignment: Alignment.center,
+                                  placeholder: (_, __) => const ShimmerLoading(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    borderRadius: 0,
                                   ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                      AppDimensions.radiusLg - 1,
-                                    ),
-                                    child: Hero(
-                                      tag: 'product_${product.id}_$i',
-                                      child: CachedNetworkImage(
-                                        imageUrl: allImages[i],
-                                        fit: BoxFit.contain,
-                                        placeholder: (_, __) =>
-                                            const ShimmerLoading(
-                                              width: double.infinity,
-                                              height: double.infinity,
-                                              borderRadius: 0,
-                                            ),
-                                        errorWidget: (_, __, ___) => Container(
-                                          color: AppColors.muted(brightness),
-                                          child: Center(
-                                            child: Icon(
-                                              Icons.image_outlined,
-                                              size: 60,
-                                              color: AppColors.foreground(
-                                                brightness,
-                                              ).withValues(alpha: 0.15),
-                                            ),
-                                          ),
-                                        ),
+                                  errorWidget: (_, __, ___) => Container(
+                                    color: AppColors.muted(brightness),
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.image_outlined,
+                                        size: 60,
+                                        color: AppColors.foreground(brightness).withValues(alpha: 0.15),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          )
-                        : Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.muted(brightness),
-                              borderRadius: BorderRadius.circular(
-                                AppDimensions.radiusLg,
-                              ),
+                          ),
+                        )
+                      : Container(
+                          width: double.infinity,
+                          color: AppColors.muted(brightness),
+                          child: Center(
+                            child: Icon(
+                              Icons.shopping_bag_outlined,
+                              size: 80,
+                              color: AppColors.foreground(brightness).withValues(alpha: 0.15),
                             ),
-                            child: Center(
-                              child: Icon(
-                                Icons.shopping_bag_outlined,
-                                size: 80,
-                                color: AppColors.foreground(
-                                  brightness,
-                                ).withValues(alpha: 0.15),
+                          ),
+                        ),
+
+                  // Floating Counter & Fullscreen Zoom Pill (with RTL fix)
+                  if (allImages.isNotEmpty)
+                    Positioned(
+                      bottom: 14,
+                      right: 14,
+                      child: GestureDetector(
+                        onTap: () => _openLightbox(allImages),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(AppDimensions.radiusXl),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 5,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.card(brightness).withValues(alpha: 0.8),
+                                borderRadius: BorderRadius.circular(AppDimensions.radiusXl),
+                                border: Border.all(
+                                  color: AppColors.border(brightness).withValues(alpha: 0.4),
+                                  width: 0.5,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.1),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.fullscreen,
+                                    size: 15,
+                                    color: AppColors.secondary(brightness),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Directionality(
+                                    textDirection: TextDirection.ltr,
+                                    child: Text(
+                                      '${_selectedImageIndex + 1} / ${allImages.length}',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.foreground(brightness),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
+                        ),
+                      ),
+                    ),
 
-                    // Floating Counter & Fullscreen Zoom Pill
-                    if (allImages.isNotEmpty)
-                      Positioned(
-                        bottom: 12,
-                        right: 12,
-                        child: GestureDetector(
-                          onTap: () => _openLightbox(allImages),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 5,
-                            ),
+                  // Floating Modern Dots Indicator (Centered at bottom of image)
+                  if (allImages.length > 1)
+                    Positioned(
+                      bottom: 16,
+                      left: 0,
+                      right: 0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                          allImages.length,
+                          (i) => AnimatedContainer(
+                            duration: const Duration(milliseconds: 250),
+                            margin: const EdgeInsets.symmetric(horizontal: 3),
+                            width: _selectedImageIndex == i ? 18 : 6,
+                            height: 5,
                             decoration: BoxDecoration(
-                              color: AppColors.card(
-                                brightness,
-                              ).withValues(alpha: 0.9),
-                              borderRadius: BorderRadius.circular(
-                                AppDimensions.radiusXl,
-                              ),
-                              border: Border.all(
-                                color: AppColors.border(
-                                  brightness,
-                                ).withValues(alpha: 0.6),
-                              ),
+                              color: _selectedImageIndex == i
+                                  ? AppColors.secondary(brightness)
+                                  : (brightness == Brightness.dark
+                                      ? Colors.white.withValues(alpha: 0.45)
+                                      : Colors.black.withValues(alpha: 0.35)),
+                              borderRadius: BorderRadius.circular(3),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.1),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.fullscreen,
-                                  size: 15,
-                                  color: AppColors.secondary(brightness),
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  '${_selectedImageIndex + 1} / ${allImages.length}',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.foreground(brightness),
-                                  ),
+                                  color: Colors.black.withValues(alpha: 0.15),
+                                  blurRadius: 3,
+                                  offset: const Offset(0, 1),
                                 ),
                               ],
                             ),
                           ),
                         ),
                       ),
+                    ),
 
-                    // Sale badge if product is on sale
-                    if (product.onSale)
-                      Positioned(
-                        bottom: 12,
-                        left: 12,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
+                  // Sale badge if product is on sale
+                  if (product.onSale)
+                    Positioned(
+                      bottom: 14,
+                      left: 14,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary(brightness),
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.radiusSm,
                           ),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary(brightness),
-                            borderRadius: BorderRadius.circular(
-                              AppDimensions.radiusSm,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary(brightness).withValues(alpha: 0.4),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
                             ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.primary(
-                                  brightness,
-                                ).withValues(alpha: 0.4),
-                                blurRadius: 8,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: Text(
-                            'sale'.tr(context),
-                            style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 1,
-                            ),
+                          ],
+                        ),
+                        child: Text(
+                          'sale'.tr(context),
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1,
                           ),
                         ),
                       ),
-                  ],
-                ),
+                    ),
+                ],
               ),
             ),
           ),
 
-          // ─── Thumbnail Carousel & Indicators ───
+          // ─── Compact Thumbnail Carousel ───
           if (allImages.length > 1)
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.only(top: 14, bottom: 4),
-                child: Column(
-                  children: [
-                    // Thumbnails Strip
-                    SizedBox(
-                      height: 58,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppDimensions.screenPadding,
-                        ),
-                        itemCount: allImages.length,
-                        separatorBuilder: (_, __) => const SizedBox(width: 10),
-                        itemBuilder: (context, i) {
-                          final isSelected = _selectedImageIndex == i;
-                          return GestureDetector(
-                            onTap: () {
-                              _pageController.animateToPage(
-                                i,
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.easeInOutCubic,
-                              );
-                            },
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 200),
-                              width: 54,
-                              height: 54,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                  AppDimensions.radiusMd,
-                                ),
-                                border: Border.all(
-                                  color: isSelected
-                                      ? AppColors.secondary(brightness)
-                                      : AppColors.border(brightness),
-                                  width: isSelected ? 2.5 : 1.0,
-                                ),
-                                boxShadow: isSelected
-                                    ? [
-                                        BoxShadow(
-                                          color: AppColors.secondary(
-                                            brightness,
-                                          ).withValues(alpha: 0.25),
-                                          blurRadius: 8,
-                                          offset: const Offset(0, 3),
-                                        ),
-                                      ]
-                                    : null,
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(
-                                  AppDimensions.radiusMd - 2,
-                                ),
-                                child: Opacity(
-                                  opacity: isSelected ? 1.0 : 0.55,
-                                  child: CachedNetworkImage(
-                                    imageUrl: allImages[i],
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                            ),
+                padding: const EdgeInsets.only(top: 10, bottom: 2),
+                child: SizedBox(
+                  height: 48,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppDimensions.screenPadding,
+                    ),
+                    itemCount: allImages.length,
+                    separatorBuilder: (_, __) => const SizedBox(width: 8),
+                    itemBuilder: (context, i) {
+                      final isSelected = _selectedImageIndex == i;
+                      return GestureDetector(
+                        onTap: () {
+                          _pageController.animateToPage(
+                            i,
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOutCubic,
                           );
                         },
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    // Indicator Dots
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(
-                        allImages.length,
-                        (i) => AnimatedContainer(
-                          duration: const Duration(milliseconds: 250),
-                          margin: const EdgeInsets.symmetric(horizontal: 3),
-                          width: _selectedImageIndex == i ? 22 : 6,
-                          height: 6,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          width: 48,
+                          height: 48,
                           decoration: BoxDecoration(
-                            color: _selectedImageIndex == i
-                                ? AppColors.secondary(brightness)
-                                : AppColors.border(brightness),
-                            borderRadius: BorderRadius.circular(3),
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.radiusSm + 2,
+                            ),
+                            border: Border.all(
+                              color: isSelected
+                                  ? AppColors.secondary(brightness)
+                                  : AppColors.border(brightness),
+                              width: isSelected ? 2.0 : 1.0,
+                            ),
+                            boxShadow: isSelected
+                                ? [
+                                    BoxShadow(
+                                      color: AppColors.secondary(
+                                        brightness,
+                                      ).withValues(alpha: 0.2),
+                                      blurRadius: 6,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ]
+                                : null,
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.radiusSm,
+                            ),
+                            child: Opacity(
+                              opacity: isSelected ? 1.0 : 0.6,
+                              child: CachedNetworkImage(
+                                imageUrl: allImages[i],
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ],
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
