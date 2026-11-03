@@ -32,6 +32,7 @@ class _ProductFormState extends State<ProductForm> {
   late TextEditingController _nameController;
   late TextEditingController _descController;
   late TextEditingController _priceController;
+  late TextEditingController _discountController;
   late TextEditingController _qtyController;
   late TextEditingController _sizeController;
   String? _selectedCategoryId;
@@ -48,6 +49,10 @@ class _ProductFormState extends State<ProductForm> {
     _priceController = TextEditingController(
       text: widget.product?.price.toString(),
     );
+    final initialDiscount = widget.product?.discountPercentage ?? 0;
+    _discountController = TextEditingController(
+      text: initialDiscount > 0 ? initialDiscount.toString() : '',
+    );
     _qtyController = TextEditingController(
       text: widget.product?.quantity.toString(),
     );
@@ -59,6 +64,7 @@ class _ProductFormState extends State<ProductForm> {
     _descController.dispose();
     _sizeController.dispose();
     _priceController.dispose();
+    _discountController.dispose();
     _qtyController.dispose();
     super.dispose();
   }
@@ -83,8 +89,21 @@ class _ProductFormState extends State<ProductForm> {
     }
   }
 
+  String? _calcDiscountPreview() {
+    final p = double.tryParse(_priceController.text.trim());
+    final d = double.tryParse(_discountController.text.trim());
+    if (p != null && d != null && d > 0 && d < 100) {
+      final after = p * (1 - d / 100);
+      return '${'Price after discount'.tr(context)}: \$${after.toStringAsFixed(2)}';
+    }
+    return null;
+  }
+
   void _submit() async {
     if (_formKey.currentState!.validate()) {
+      final discountText = _discountController.text.trim();
+      final discountVal =
+          discountText.isNotEmpty ? (double.tryParse(discountText) ?? 0.0) : 0.0;
       final Map<String, dynamic> data = {
         'name': _nameController.text.trim(),
         'description': _descController.text.trim(),
@@ -92,6 +111,7 @@ class _ProductFormState extends State<ProductForm> {
             ? _sizeController.text.trim()
             : 'M',
         'price': double.parse(_priceController.text),
+        'discount': discountVal,
         'quantity': int.parse(_qtyController.text),
         if (_selectedCategoryId != null) 'category': _selectedCategoryId,
         if (_selectedSubcategoryId != null)
@@ -315,21 +335,71 @@ class _ProductFormState extends State<ProductForm> {
                         controller: _priceController,
                         decoration: InputDecoration(labelText: 'Price'.tr(context)),
                         keyboardType: TextInputType.number,
+                        onChanged: (_) => setState(() {}),
                         validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
                       ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: TextFormField(
-                        controller: _qtyController,
+                        controller: _discountController,
                         decoration: InputDecoration(
-                          labelText: 'Quantity'.tr(context),
+                          labelText: 'Discount (%)'.tr(context),
+                          hintText: '0 - 99',
                         ),
                         keyboardType: TextInputType.number,
-                        validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
+                        onChanged: (_) => setState(() {}),
+                        validator: (v) {
+                          if (v != null && v.trim().isNotEmpty) {
+                            final n = double.tryParse(v.trim());
+                            if (n == null || n < 0 || n >= 100) {
+                              return '0-99'.tr(context);
+                            }
+                          }
+                          return null;
+                        },
                       ),
                     ),
                   ],
+                ),
+                if (_calcDiscountPreview() != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6, bottom: 2),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: AppColors.accent(brightness).withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.local_offer_outlined,
+                            size: 16,
+                            color: AppColors.accent(brightness),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            _calcDiscountPreview()!,
+                            style: TextStyle(
+                              color: AppColors.accent(brightness),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: _qtyController,
+                  decoration: InputDecoration(
+                    labelText: 'Quantity'.tr(context),
+                  ),
+                  keyboardType: TextInputType.number,
+                  validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<String>(

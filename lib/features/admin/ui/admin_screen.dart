@@ -220,7 +220,11 @@ class _AdminScreenState extends State<AdminScreen>
                       : const Icon(Icons.image_not_supported),
                 ),
                 title: Text(product.name),
-                subtitle: Text('\$${product.price} • ${'Quantity'.tr(context)}: ${product.quantity}'),
+                subtitle: Text(
+                  product.onSale
+                      ? '\$${product.displayPrice.toStringAsFixed(2)} (-${product.discountPercentage}%) • ${'Quantity'.tr(context)}: ${product.quantity}'
+                      : '\$${product.price.toStringAsFixed(2)} • ${'Quantity'.tr(context)}: ${product.quantity}',
+                ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

@@ -8,6 +8,7 @@ class ProductModel {
   final String? description;
   final double price;
   final double? salePrice;
+  final double? discount;
   final String? cover;
   final List<String> images;
   final double ratingAvg;
@@ -25,6 +26,7 @@ class ProductModel {
     this.description,
     required this.price,
     this.salePrice,
+    this.discount,
     this.cover,
     this.images = const [],
     this.ratingAvg = 0.0,
@@ -41,7 +43,11 @@ class ProductModel {
   double get displayPrice => onSale ? salePrice! : price;
 
   double get discountPercent =>
-      onSale ? ((price - salePrice!) / price * 100) : 0;
+      onSale ? ((price - salePrice!) / price * 100) : (discount ?? 0);
+
+  int get discountPercentage => discount?.round() ?? discountPercent.round();
+
+  double get savingsAmount => onSale ? (price - salePrice!) : 0.0;
 
   static String _parseLocalized(dynamic value, [String defaultVal = '']) {
     if (value == null) return defaultVal;
@@ -58,10 +64,14 @@ class ProductModel {
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     final price = (json['price'] as num?)?.toDouble() ?? 0.0;
+    final parsedDiscount = (json['discount'] as num?)?.toDouble();
     final pad =
         (json['priceAfterDiscount'] as num?)?.toDouble() ??
         (json['salePrice'] as num?)?.toDouble();
-    final salePrice = (pad != null && pad > 0 && pad < price) ? pad : null;
+    double? salePrice = (pad != null && pad > 0 && pad < price) ? pad : null;
+    if (salePrice == null && parsedDiscount != null && parsedDiscount > 0 && parsedDiscount < 100) {
+      salePrice = price * (1 - parsedDiscount / 100);
+    }
 
     final quantity =
         (json['quantity'] as num?)?.toInt() ??
@@ -78,6 +88,7 @@ class ProductModel {
           : null,
       price: price,
       salePrice: salePrice,
+      discount: parsedDiscount,
       cover: json['cover'] as String? ?? json['imageCover'] as String?,
       images:
           (json['images'] as List<dynamic>?)

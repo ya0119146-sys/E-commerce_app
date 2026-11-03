@@ -120,6 +120,20 @@ void main() {
       expect(regularProduct.salePrice, isNull);
       expect(regularProduct.onSale, isFalse);
       expect(regularProduct.displayPrice, equals(500.0));
+
+      // Case 3: Product created with discount percentage
+      final discountProductJson = {
+        '_id': 'prod_3',
+        'name': 'Luxury Cream',
+        'price': 200,
+        'discount': 25,
+        'priceAfterDiscount': 150,
+      };
+      final discountProduct = ProductModel.fromJson(discountProductJson);
+      expect(discountProduct.onSale, isTrue);
+      expect(discountProduct.displayPrice, equals(150.0));
+      expect(discountProduct.discountPercentage, equals(25));
+      expect(discountProduct.savingsAmount, equals(50.0));
     });
 
     test('CartModel deserializes backend typos totelPrice and items accurately', () {
