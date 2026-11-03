@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/widgets/shimmer_loading.dart';
@@ -126,13 +127,10 @@ class _SearchScreenState extends State<SearchScreen> {
           if (state.status == ProductsStatus.loading) {
             return Padding(
               padding: const EdgeInsets.all(AppDimensions.screenPadding),
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 14,
-                  mainAxisSpacing: 14,
-                  childAspectRatio: 0.58,
-                ),
+              child: MasonryGridView.count(
+                crossAxisCount: 2,
+                crossAxisSpacing: 14,
+                mainAxisSpacing: 14,
                 itemCount: 6,
                 itemBuilder: (_, __) => const ShimmerProductCard(),
               ),
@@ -172,15 +170,11 @@ class _SearchScreenState extends State<SearchScreen> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(AppDimensions.screenPadding),
-                  child: GridView.builder(
+                  child: MasonryGridView.count(
                     controller: _scrollController,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 14,
-                          mainAxisSpacing: 14,
-                          childAspectRatio: 0.58,
-                        ),
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 14,
+                    mainAxisSpacing: 14,
                     itemCount: state.products.length,
                     itemBuilder: (_, index) => ProductCard(
                       role: widget.role,

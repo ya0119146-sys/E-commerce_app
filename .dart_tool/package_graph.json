@@ -17,6 +17,7 @@
         "flutter_dotenv",
         "flutter_localizations",
         "flutter_secure_storage",
+        "flutter_staggered_grid_view",
         "get_it",
         "google_fonts",
         "image_picker",
@@ -78,6 +79,13 @@
         "test_api",
         "vector_math",
         "vm_service"
+      ]
+    },
+    {
+      "name": "flutter_staggered_grid_view",
+      "version": "0.7.0",
+      "dependencies": [
+        "flutter"
       ]
     },
     {

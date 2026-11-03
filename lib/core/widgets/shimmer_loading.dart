@@ -43,21 +43,46 @@ class ShimmerProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ShimmerLoading(
-          width: double.infinity,
-          height: 200,
-          borderRadius: AppDimensions.radiusDefault,
+    final brightness = Theme.of(context).brightness;
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.card(brightness),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: AppColors.border(brightness).withValues(alpha: 0.5),
+          width: 1.0,
         ),
-        const SizedBox(height: 8),
-        const ShimmerLoading(width: 120, height: 14),
-        const SizedBox(height: 6),
-        const ShimmerLoading(width: 80, height: 12),
-        const SizedBox(height: 6),
-        const ShimmerLoading(width: 60, height: 16),
-      ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const AspectRatio(
+            aspectRatio: 1.0,
+            child: ShimmerLoading(
+              width: double.infinity,
+              height: double.infinity,
+              borderRadius: 15,
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(10, 8, 10, 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ShimmerLoading(width: 110, height: 13),
+                SizedBox(height: 6),
+                ShimmerLoading(width: 55, height: 11),
+                SizedBox(height: 6),
+                ShimmerLoading(width: 70, height: 15),
+                SizedBox(height: 8),
+                ShimmerLoading(width: double.infinity, height: 26, borderRadius: 8),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

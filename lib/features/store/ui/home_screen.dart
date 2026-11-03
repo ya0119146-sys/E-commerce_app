@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
@@ -79,9 +80,10 @@ class _HomeScreenState extends State<HomeScreen> {
             SliverAppBar(
               floating: true,
               snap: true,
-              backgroundColor: AppColors.background(
-                brightness,
-              ).withValues(alpha: 0.9),
+              pinned: true,
+              elevation: 0,
+              surfaceTintColor: Colors.transparent,
+              backgroundColor: AppColors.background(brightness),
               title: Text(
                 'Labella',
                 style: GoogleFonts.greatVibes(
@@ -189,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            // ─── Product Grid (Concept 2: Minimalist High-Fashion 4:5 Cards) ───
+            // ─── Product Grid (Dynamic-Height Content-Driven Cards) ───
             BlocBuilder<ProductsCubit, ProductsState>(
               builder: (context, state) {
                 if (state.status == ProductsStatus.loading) {
@@ -197,18 +199,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppDimensions.screenPadding,
                     ),
-                    sliver: SliverGrid(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 14,
-                            mainAxisSpacing: 14,
-                            childAspectRatio: 0.50,
-                          ),
-                      delegate: SliverChildBuilderDelegate(
-                        (_, __) => const ShimmerProductCard(),
-                        childCount: 6,
-                      ),
+                    sliver: SliverMasonryGrid.count(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 14,
+                      mainAxisSpacing: 14,
+                      itemBuilder: (_, __) => const ShimmerProductCard(),
+                      childCount: 6,
                     ),
                   );
                 }
@@ -272,22 +268,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppDimensions.screenPadding,
                   ),
-                  sliver: SliverGrid(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 14,
-                          mainAxisSpacing: 14,
-                          childAspectRatio: 0.50,
-                        ),
-                    delegate: SliverChildBuilderDelegate(
-                      (_, index) => ProductCard(
-                        role: widget.role,
-                        product: state.products[index],
-                        index: index,
-                      ),
-                      childCount: state.products.length,
+                  sliver: SliverMasonryGrid.count(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 14,
+                    mainAxisSpacing: 14,
+                    itemBuilder: (_, index) => ProductCard(
+                      role: widget.role,
+                      product: state.products[index],
+                      index: index,
                     ),
+                    childCount: state.products.length,
                   ),
                 );
               },
@@ -423,12 +413,16 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
       ),
     ];
 
+    final textScale = MediaQuery.textScalerOf(context).scale(1.0);
+    final bannerHeight =
+        (238.0 * (textScale > 1.0 ? textScale : 1.0)).clamp(230.0, 280.0);
+
     return Container(
       margin: const EdgeInsets.symmetric(
         horizontal: AppDimensions.screenPadding,
         vertical: 10,
       ),
-      height: 226,
+      height: bannerHeight,
       child: Stack(
         children: [
           PageView.builder(
@@ -492,78 +486,76 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
 
                       // Content
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 14),
+                        padding: const EdgeInsets.fromLTRB(18, 16, 18, 14),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Capsule Tag
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 4,
+                            // Capsule Tag
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 9,
+                                vertical: 3.5,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.16),
+                                borderRadius: BorderRadius.circular(
+                                  AppDimensions.radiusRound,
+                                ),
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.25),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.auto_awesome,
+                                    size: 11,
+                                    color: Color(0xFFFFD194),
                                   ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha: 0.16),
-                                    borderRadius: BorderRadius.circular(
-                                      AppDimensions.radiusRound,
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    slide.tag,
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w600,
+                                      letterSpacing: 0.6,
+                                      color: Colors.white,
                                     ),
-                                    border: Border.all(
-                                      color: Colors.white.withValues(alpha: 0.25),
-                                    ),
                                   ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Icon(
-                                        Icons.auto_awesome,
-                                        size: 12,
-                                        color: Color(0xFFFFD194),
-                                      ),
-                                      const SizedBox(width: 5),
-                                      Text(
-                                        slide.tag,
-                                        style: const TextStyle(
-                                          fontSize: 10.5,
-                                          fontWeight: FontWeight.w600,
-                                          letterSpacing: 0.8,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-
-                                // Heading
-                                Text(
-                                  slide.title,
-                                  style: GoogleFonts.playfairDisplay(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w800,
-                                    color: Colors.white,
-                                    letterSpacing: 0.3,
-                                  ),
-                                ),
-                                const SizedBox(height: 3),
-
-                                // Subtitle
-                                Text(
-                                  slide.subtitle,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.cairo(
-                                    fontSize: 11.5,
-                                    fontWeight: FontWeight.w500,
-                                    height: 1.25,
-                                    color: Colors.white.withValues(alpha: 0.88),
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
+                            const SizedBox(height: 8),
+
+                            // Heading
+                            Text(
+                              slide.title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.playfairDisplay(
+                                fontSize: 21,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                                letterSpacing: 0.3,
+                              ),
+                            ),
+                            const SizedBox(height: 3),
+
+                            // Subtitle
+                            Text(
+                              slide.subtitle,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.cairo(
+                                fontSize: 11.5,
+                                fontWeight: FontWeight.w500,
+                                height: 1.25,
+                                color: Colors.white.withValues(alpha: 0.88),
+                              ),
+                            ),
+
+                            const Spacer(),
 
                             // Action Row (Shop Now Button + Carousel Dots)
                             Row(
@@ -578,8 +570,8 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 16,
-                                      vertical: 7.5,
+                                      horizontal: 14,
+                                      vertical: 7,
                                     ),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
@@ -600,12 +592,12 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
                                         Text(
                                           slide.ctaText,
                                           style: TextStyle(
-                                            fontSize: 12,
+                                            fontSize: 11.5,
                                             fontWeight: FontWeight.w700,
                                             color: slide.gradientColors[0],
                                           ),
                                         ),
-                                        const SizedBox(width: 5),
+                                        const SizedBox(width: 4),
                                         Icon(
                                           Directionality.of(context) == TextDirection.rtl
                                               ? Icons.arrow_back_rounded

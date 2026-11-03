@@ -423,6 +423,10 @@ class AppTranslations {
 
     'Edit': 'Edit',
 
+    'New': 'New',
+
+    'Edit Product': 'Edit Product',
+
     'done': 'Done',
 
     'Done': 'Done',
@@ -1566,6 +1570,10 @@ class AppTranslations {
     'edit': 'تعديل',
 
     'Edit': 'تعديل',
+
+    'New': 'جديد',
+
+    'Edit Product': 'تعديل المنتج',
 
     'done': 'تم',
 

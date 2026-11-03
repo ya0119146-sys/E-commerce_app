@@ -15,6 +15,10 @@ import '../../reviews/logic/review_cubit.dart';
 import '../../reviews/ui/widgets/review_list_widget.dart';
 import '../data/models/product_model.dart';
 import 'widgets/product_image_lightbox.dart';
+import '../../admin/logic/admin_cubit.dart';
+import '../../admin/ui/widgets/product_form.dart';
+import '../logic/categories_cubit.dart';
+import '../logic/products_cubit.dart';
 import '../../../core/localization/app_translations.dart';
 
 /// Full-screen product detail with image, info, and Add to Cart.
@@ -670,11 +674,30 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
               ),
               child: HeroButton(
-                text: product.inStock
-                    ? 'in_stock'.tr(context)
-                    : 'out_of_stock'.tr(context),
-                icon: Icons.shopping_bag_outlined,
-                onPressed: null,
+                text: 'Edit Product'.tr(context),
+                icon: Icons.edit_outlined,
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Theme.of(context).cardColor,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                    ),
+                    builder: (_) => ProductForm(
+                      product: product,
+                      categories: context.read<CategoriesCubit>().state.categories,
+                      subcategories: const [],
+                      onSubmit: (data) async {
+                        await context.read<AdminCubit>().updateProduct(product.id, data);
+                        if (context.mounted) {
+                          context.read<ProductsCubit>().fetchProducts(refresh: true);
+                          Navigator.pop(context);
+                        }
+                      },
+                    ),
+                  );
+                },
               ),
             ),
     );

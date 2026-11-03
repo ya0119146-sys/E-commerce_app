@@ -11,6 +11,7 @@ class HeroButton extends StatelessWidget {
   final bool isLoading;
   final IconData? icon;
   final double? width;
+  final double? height;
 
   const HeroButton({
     super.key,
@@ -19,6 +20,7 @@ class HeroButton extends StatelessWidget {
     this.isLoading = false,
     this.icon,
     this.width,
+    this.height,
   });
 
   @override
@@ -26,7 +28,8 @@ class HeroButton extends StatelessWidget {
     final brightness = Theme.of(context).brightness;
     return Container(
       width: width ?? double.infinity,
-      height: 52,
+      height: height,
+      constraints: BoxConstraints(minHeight: height ?? 50),
       decoration: BoxDecoration(
         gradient: AppGradients.plum(brightness),
         borderRadius: BorderRadius.circular(AppDimensions.radiusDefault),
@@ -43,34 +46,41 @@ class HeroButton extends StatelessWidget {
         child: InkWell(
           onTap: isLoading ? null : onPressed,
           borderRadius: BorderRadius.circular(AppDimensions.radiusDefault),
-          child: Center(
-            child: isLoading
-                ? const SizedBox(
-                    width: 22,
-                    height: 22,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.5,
-                      valueColor: AlwaysStoppedAnimation(Colors.white),
-                    ),
-                  )
-                : Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (icon != null) ...[
-                        Icon(icon, color: Colors.white, size: 20),
-                        const SizedBox(width: 8),
-                      ],
-                      Text(
-                        text,
-                        style: GoogleFonts.poppins(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.5,
-                        ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Center(
+              child: isLoading
+                  ? const SizedBox(
+                      width: 22,
+                      height: 22,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        valueColor: AlwaysStoppedAnimation(Colors.white),
                       ),
-                    ],
-                  ),
+                    )
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (icon != null) ...[
+                          Icon(icon, color: Colors.white, size: 20),
+                          const SizedBox(width: 8),
+                        ],
+                        Flexible(
+                          child: Text(
+                            text,
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
           ),
         ),
       ),
@@ -97,7 +107,8 @@ class GlassButton extends StatelessWidget {
     final isDark = brightness == Brightness.dark;
 
     return Container(
-      height: 48,
+      constraints: const BoxConstraints(minHeight: 48),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
         color: isDark
             ? Colors.white.withValues(alpha: 0.08)
