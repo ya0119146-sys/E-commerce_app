@@ -3,10 +3,12 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
+import '../../../core/constants/egypt_governorates.dart';
 import '../../../core/localization/app_translations.dart';
 import '../../../core/widgets/hero_button.dart';
 import '../../../core/widgets/shimmer_loading.dart';
 import '../../cart/logic/cart_cubit.dart';
+import '../data/models/address_model.dart';
 import '../logic/checkout_cubit.dart';
 import 'order_success_screen.dart';
 
@@ -28,8 +30,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   void _showAddAddressSheet() {
     final streetC = TextEditingController();
     final cityC = TextEditingController();
-    final stateC = TextEditingController();
     final zipC = TextEditingController();
+    String selectedGov = EgyptGovernorates.sharqia;
     final formKey = GlobalKey<FormState>();
 
     showModalBottomSheet(
@@ -40,71 +42,115 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           top: Radius.circular(AppDimensions.radiusXl),
         ),
       ),
-      builder: (ctx) => Padding(
-        padding: EdgeInsets.fromLTRB(
-          20,
-          24,
-          20,
-          MediaQuery.of(ctx).viewInsets.bottom + 24,
-        ),
-        child: Form(
-          key: formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Add Address'.tr(ctx), style: Theme.of(ctx).textTheme.headlineSmall),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: streetC,
-                decoration: InputDecoration(labelText: 'Street'.tr(ctx)),
-                validator: (v) => v == null || v.isEmpty ? 'Required'.tr(ctx) : null,
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: cityC,
-                      decoration: InputDecoration(labelText: 'City'.tr(ctx)),
-                      validator: (v) =>
-                          v == null || v.isEmpty ? 'Required'.tr(ctx) : null,
-                    ),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setSheetState) => Padding(
+          padding: EdgeInsets.fromLTRB(
+            20,
+            24,
+            20,
+            MediaQuery.of(ctx).viewInsets.bottom + 24,
+          ),
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Add Address'.tr(ctx), style: Theme.of(ctx).textTheme.headlineSmall),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<String>(
+                  value: selectedGov,
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                    labelText: 'Governorate'.tr(ctx),
+                    prefixIcon: const Icon(Icons.location_city_outlined, size: 20),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: TextFormField(
-                      controller: stateC,
-                      decoration: InputDecoration(labelText: 'State'.tr(ctx)),
-                      validator: (v) =>
-                          v == null || v.isEmpty ? 'Required'.tr(ctx) : null,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: zipC,
-                decoration: InputDecoration(labelText: 'ZIP Code'.tr(ctx)),
-                keyboardType: TextInputType.number,
-                validator: (v) => v == null || v.isEmpty ? 'Required'.tr(ctx) : null,
-              ),
-              const SizedBox(height: 20),
-              HeroButton(
-                text: 'Save Address'.tr(ctx),
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    context.read<CheckoutCubit>().addAddress(
-                      streetC.text.trim(),
-                      cityC.text.trim(),
-                      stateC.text.trim(),
-                      zipC.text.trim(),
+                  items: EgyptGovernorates.governorates.map((gov) {
+                    final isFree = EgyptGovernorates.isSharqia(gov);
+                    return DropdownMenuItem<String>(
+                      value: gov,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              gov,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                          ),
+                          if (isFree)
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: Colors.green.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                'Free Delivery'.tr(ctx),
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
                     );
-                    Navigator.pop(ctx);
-                  }
-                },
-              ),
-            ],
+                  }).toList(),
+                  onChanged: (val) {
+                    if (val != null) {
+                      setSheetState(() => selectedGov = val);
+                    }
+                  },
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: cityC,
+                  decoration: InputDecoration(
+                    labelText: 'City'.tr(ctx),
+                    prefixIcon: const Icon(Icons.apartment_outlined, size: 20),
+                  ),
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Required'.tr(ctx) : null,
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: streetC,
+                  decoration: InputDecoration(
+                    labelText: 'Street'.tr(ctx),
+                    prefixIcon: const Icon(Icons.signpost_outlined, size: 20),
+                  ),
+                  validator: (v) => v == null || v.isEmpty ? 'Required'.tr(ctx) : null,
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: zipC,
+                  decoration: InputDecoration(
+                    labelText: 'ZIP Code'.tr(ctx),
+                    prefixIcon: const Icon(Icons.pin_outlined, size: 20),
+                  ),
+                  keyboardType: TextInputType.number,
+                  validator: (v) => v == null || v.isEmpty ? 'Required'.tr(ctx) : null,
+                ),
+                const SizedBox(height: 20),
+                HeroButton(
+                  text: 'Save Address'.tr(ctx),
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      context.read<CheckoutCubit>().addAddress(
+                        streetC.text.trim(),
+                        cityC.text.trim(),
+                        selectedGov,
+                        zipC.text.trim(),
+                      );
+                      Navigator.pop(ctx);
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -137,6 +183,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           }
         },
         builder: (context, state) {
+          final selectedAddress = state.addresses
+              .cast<AddressModel?>()
+              .firstWhere(
+                (a) => a?.id == state.selectedAddressId,
+                orElse: () => null,
+              );
+          final cart = context.watch<CartCubit>().state.cart;
+          final double subtotal = cart.totalPrice;
+          final bool hasAddress = selectedAddress != null;
+          final bool isSharqia = hasAddress && EgyptGovernorates.isSharqia(selectedAddress.state);
+          final double shippingFee = hasAddress ? EgyptGovernorates.getShippingFee(selectedAddress.state) : 0.0;
+          final double finalTotal = subtotal + (hasAddress ? shippingFee : 0.0);
+
           if (state.status == CheckoutStatus.loading &&
               state.addresses.isEmpty) {
             return Padding(
@@ -274,9 +333,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                 ),
               ),
-              // Bottom confirm
+              // Bottom Order Summary and Confirm
               Container(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
+                padding: const EdgeInsets.fromLTRB(20, 14, 20, 24),
                 decoration: BoxDecoration(
                   color: AppColors.card(brightness),
                   border: Border(
@@ -287,13 +346,72 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     ),
                   ),
                 ),
-                child: HeroButton(
-                  text: 'Confirm Order'.tr(context),
-                  icon: Icons.check_circle_outline,
-                  isLoading: state.status == CheckoutStatus.placingOrder,
-                  onPressed: state.selectedAddressId != null
-                      ? () => context.read<CheckoutCubit>().placeOrder()
-                      : null,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Subtotal'.tr(context), style: Theme.of(context).textTheme.bodyMedium),
+                        Text('\$${subtotal.toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.w600)),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('delivery_fee'.tr(context), style: Theme.of(context).textTheme.bodyMedium),
+                        if (!hasAddress)
+                          Text(
+                            context.isArabic ? 'اختر عنواناً لحساب الشحن' : 'Select address',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: AppColors.foreground(brightness).withValues(alpha: 0.5),
+                            ),
+                          )
+                        else if (isSharqia)
+                          Row(
+                            children: [
+                              Text(
+                                context.isArabic ? 'مجاني (محافظة الشرقية)' : 'Free (Sharqia)',
+                                style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 13),
+                              ),
+                              const SizedBox(width: 4),
+                              const Icon(Icons.check_circle, color: Colors.green, size: 16),
+                            ],
+                          )
+                        else
+                          Text(
+                            '\$${shippingFee.toStringAsFixed(2)}',
+                            style: const TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                      ],
+                    ),
+                    const Divider(height: 18),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Total'.tr(context), style: Theme.of(context).textTheme.titleLarge),
+                        Text(
+                          '\$${finalTotal.toStringAsFixed(2)}',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.secondary(brightness),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    HeroButton(
+                      text: 'Confirm Order'.tr(context),
+                      icon: Icons.check_circle_outline,
+                      isLoading: state.status == CheckoutStatus.placingOrder,
+                      onPressed: state.selectedAddressId != null
+                          ? () => context.read<CheckoutCubit>().placeOrder()
+                          : null,
+                    ),
+                  ],
                 ),
               ),
             ],

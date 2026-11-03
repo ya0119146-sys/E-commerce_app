@@ -23,7 +23,9 @@ void main() async {
   try {
     await dotenv.load(fileName: ".env");
   } catch (e) {
-    debugPrint('Warning: .env failed to load, falling back to ApiConstants defaults: $e');
+    debugPrint(
+      'Warning: .env failed to load, falling back to ApiConstants defaults: $e',
+    );
   }
 
   // Pre-load saved language synchronously so all interceptors & errors have it immediately

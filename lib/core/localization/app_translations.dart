@@ -833,6 +833,20 @@ class AppTranslations {
 
     'delivery_fee': 'Delivery Fee',
 
+    'Contact Us': 'Contact Us',
+
+    'Contact on WhatsApp': 'Contact on WhatsApp',
+
+    'Contact Us on WhatsApp': 'Contact Us on WhatsApp',
+
+    'Governorate': 'Governorate',
+
+    'Free Delivery': 'Free Delivery',
+
+    'Calculated at checkout': 'Calculated at checkout',
+
+    'Shipping Policy Note': 'Free delivery to Al Sharqia • 100 EGP for other governorates',
+
     'Shipping & Tax': 'Shipping & Tax',
 
     'total': 'Total',
@@ -2019,6 +2033,20 @@ class AppTranslations {
     'Subtotal': 'المجموع الفرعي',
 
     'delivery_fee': 'قيمة التوصيل',
+
+    'Contact Us': 'تواصل معنا',
+
+    'Contact on WhatsApp': 'تواصل عبر واتساب',
+
+    'Contact Us on WhatsApp': 'تواصل معنا عبر واتساب',
+
+    'Governorate': 'المحافظة',
+
+    'Free Delivery': 'توصيل مجاني',
+
+    'Calculated at checkout': 'يُحسب عند إتمام الطلب',
+
+    'Shipping Policy Note': 'التوصيل لمحافظة الشرقية مجاناً • باقي المحافظات 100 ج.م',
 
     'Shipping & Tax': 'الشحن والضريبة',
 

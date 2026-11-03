@@ -175,8 +175,7 @@ class _CartScreenState extends State<CartScreen> {
     Brightness brightness,
   ) {
     final double subtotal = state.cart.totalPrice;
-    final double tax = state.cart.effectiveTaxPrice;
-    final double total = state.cart.finalTotal;
+    final double total = subtotal;
 
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
@@ -229,15 +228,43 @@ class _CartScreenState extends State<CartScreen> {
                 ),
               ),
               Text(
-                tax == 0 ? (context.isArabic ? 'مجاني' : 'Free') : '\$${tax.toStringAsFixed(2)}',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                'Calculated at checkout'.tr(context),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: tax == 0 ? AppColors.success : null,
+                  color: AppColors.primary(brightness),
                 ),
               ),
             ],
           ),
-          const Divider(height: 24),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: AppColors.primary(brightness).withValues(alpha: 0.06),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.local_shipping_outlined,
+                  size: 16,
+                  color: AppColors.primary(brightness),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'Shipping Policy Note'.tr(context),
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: AppColors.primary(brightness),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Divider(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

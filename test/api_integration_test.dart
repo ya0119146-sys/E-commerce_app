@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:e_commerce/core/constants/egypt_governorates.dart';
 import 'package:e_commerce/core/network/api_constants.dart';
 import 'package:e_commerce/core/network/api_exception.dart';
 import 'package:e_commerce/core/network/dio_client.dart';
@@ -298,6 +299,31 @@ void main() {
       final addresses = await checkoutRepo.getAddresses();
 
       expect(addresses, isEmpty);
+    });
+  });
+
+  group('Egyptian Governorates & Shipping Policy', () {
+    test('Contains all 27 Egyptian governorates', () {
+      expect(EgyptGovernorates.governorates.length, equals(27));
+      expect(EgyptGovernorates.governorates, contains('محافظة الشرقية'));
+      expect(EgyptGovernorates.governorates, contains('محافظة القاهرة'));
+      expect(EgyptGovernorates.governorates, contains('محافظة الإسكندرية'));
+    });
+
+    test('Correctly identifies Sharqia and applies free shipping', () {
+      expect(EgyptGovernorates.isSharqia('محافظة الشرقية'), isTrue);
+      expect(EgyptGovernorates.isSharqia('الشرقية'), isTrue);
+      expect(EgyptGovernorates.isSharqia('Sharqia'), isTrue);
+      expect(EgyptGovernorates.getShippingFee('محافظة الشرقية'), equals(0.0));
+      expect(EgyptGovernorates.getShippingFee('الشرقية'), equals(0.0));
+    });
+
+    test('Applies 100 EGP shipping to other governorates', () {
+      expect(EgyptGovernorates.isSharqia('محافظة القاهرة'), isFalse);
+      expect(EgyptGovernorates.isSharqia('محافظة الجيزة'), isFalse);
+      expect(EgyptGovernorates.getShippingFee('محافظة القاهرة'), equals(100.0));
+      expect(EgyptGovernorates.getShippingFee('محافظة الإسكندرية'), equals(100.0));
+      expect(EgyptGovernorates.getShippingFee(null), equals(100.0));
     });
   });
 }

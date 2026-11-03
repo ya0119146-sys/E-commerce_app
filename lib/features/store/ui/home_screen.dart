@@ -13,6 +13,7 @@ import 'widgets/product_card.dart';
 import 'widgets/category_grid.dart';
 import 'search_screen.dart';
 import '../../../core/localization/app_translations.dart';
+import '../../../core/utils/whatsapp_helper.dart';
 
 /// Home screen with Concept 1 auto-scrolling hero banner,
 /// Concept 1 story categories, and Concept 2 trending products.
@@ -94,6 +95,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               actions: [
+                IconButton(
+                  tooltip: 'Contact on WhatsApp'.tr(context),
+                  icon: Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF25D366).withValues(alpha: 0.15),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.chat_bubble_outline_rounded,
+                      color: Color(0xFF25D366),
+                      size: 19,
+                    ),
+                  ),
+                  onPressed: () => WhatsAppHelper.launchWhatsApp(
+                    text: 'مرحباً، أود التواصل مع متجر لابيلا',
+                  ),
+                ),
                 IconButton(
                   icon: const Icon(Icons.search),
                   onPressed: () {

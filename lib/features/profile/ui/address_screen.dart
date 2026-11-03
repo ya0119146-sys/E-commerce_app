@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
+import '../../../core/constants/egypt_governorates.dart';
 import '../../../core/localization/app_translations.dart';
 import '../../checkout/logic/checkout_cubit.dart';
 import '../../checkout/data/models/address_model.dart';
@@ -23,8 +24,8 @@ class _AddressScreenState extends State<AddressScreen> {
   void _showAddAddressDialog() {
     final streetController = TextEditingController();
     final cityController = TextEditingController();
-    final stateController = TextEditingController();
     final zipController = TextEditingController();
+    String selectedGovernorate = EgyptGovernorates.sharqia;
     final formKey = GlobalKey<FormState>();
 
     showModalBottomSheet(
@@ -34,74 +35,119 @@ class _AddressScreenState extends State<AddressScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) => Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-          left: 20,
-          right: 20,
-          top: 20,
-        ),
-        child: Form(
-          key: formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'Add New Address'.tr(context),
-                style: Theme.of(context).textTheme.titleLarge,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: streetController,
-                decoration: InputDecoration(labelText: 'Street Address'.tr(context)),
-                validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: cityController,
-                      decoration: InputDecoration(labelText: 'City'.tr(context)),
-                      validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
-                    ),
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            left: 20,
+            right: 20,
+            top: 20,
+          ),
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Add New Address'.tr(context),
+                  style: Theme.of(context).textTheme.titleLarge,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<String>(
+                  value: selectedGovernorate,
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                    labelText: 'Governorate'.tr(context),
+                    prefixIcon: const Icon(Icons.location_city_outlined, size: 20),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: TextFormField(
-                      controller: stateController,
-                      decoration: InputDecoration(labelText: 'State'.tr(context)),
-                      validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
-                    ),
+                  items: EgyptGovernorates.governorates.map((gov) {
+                    final isFree = EgyptGovernorates.isSharqia(gov);
+                    return DropdownMenuItem<String>(
+                      value: gov,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              gov,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                          ),
+                          if (isFree)
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: Colors.green.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                'Free Delivery'.tr(context),
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (val) {
+                    if (val != null) {
+                      setDialogState(() => selectedGovernorate = val);
+                    }
+                  },
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: cityController,
+                  decoration: InputDecoration(
+                    labelText: 'City'.tr(context),
+                    prefixIcon: const Icon(Icons.apartment_outlined, size: 20),
                   ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: zipController,
-                decoration: InputDecoration(labelText: 'Zip Code'.tr(context)),
-                keyboardType: TextInputType.number,
-                validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    context.read<CheckoutCubit>().addAddress(
-                          streetController.text,
-                          cityController.text,
-                          stateController.text,
-                          zipController.text,
-                        );
-                    Navigator.pop(context);
-                  }
-                },
-                child: Text('Save Address'.tr(context)),
-              ),
-              const SizedBox(height: 20),
-            ],
+                  validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: streetController,
+                  decoration: InputDecoration(
+                    labelText: 'Street Address'.tr(context),
+                    prefixIcon: const Icon(Icons.signpost_outlined, size: 20),
+                  ),
+                  validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: zipController,
+                  decoration: InputDecoration(
+                    labelText: 'Zip Code'.tr(context),
+                    prefixIcon: const Icon(Icons.pin_outlined, size: 20),
+                  ),
+                  keyboardType: TextInputType.number,
+                  validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      context.read<CheckoutCubit>().addAddress(
+                            streetController.text.trim(),
+                            cityController.text.trim(),
+                            selectedGovernorate,
+                            zipController.text.trim(),
+                          );
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Text('Save Address'.tr(context)),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),

@@ -27,6 +27,7 @@ import '../../../core/theme/theme_cubit.dart';
 import '../../../core/localization/locale_cubit.dart';
 
 import '../../../core/localization/app_translations.dart';
+import '../../../core/utils/whatsapp_helper.dart';
 
 import '../../auth/logic/auth_cubit.dart';
 
@@ -504,6 +505,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   index: 2,
                 ),
 
+                _profileTile(
+                  context,
+                  icon: Icons.chat_bubble_outline_rounded,
+                  iconColor: const Color(0xFF25D366),
+                  title: 'Contact Us on WhatsApp'.tr(context),
+                  subtitle: WhatsAppHelper.displayPhone,
+                  onTap: () => WhatsAppHelper.launchWhatsApp(
+                    text: 'مرحباً، أود التواصل مع متجر لابيلا',
+                  ),
+                  index: 3,
+                ),
+
                 // ─── Dark Mode Toggle ───
                 BlocBuilder<ThemeCubit, ThemeState>(
                       builder: (context, themeState) {
@@ -798,40 +811,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _profileTile(
     BuildContext context, {
-
     required IconData icon,
-
     required String title,
-
+    String? subtitle,
+    Color? iconColor,
     required VoidCallback onTap,
-
     required int index,
   }) {
     final brightness = Theme.of(context).brightness;
 
     return Container(
           margin: const EdgeInsets.only(bottom: 10),
-
           decoration: BoxDecoration(
             color: AppColors.card(brightness),
-
             borderRadius: BorderRadius.circular(AppDimensions.radiusDefault),
-
             border: Border.all(
               color: AppColors.border(brightness).withValues(alpha: 0.4),
             ),
           ),
-
           child: ListTile(
             onTap: onTap,
-
-            leading: Icon(icon, color: AppColors.secondary(brightness)),
-
+            leading: Icon(icon, color: iconColor ?? AppColors.secondary(brightness)),
             title: Text(title, style: Theme.of(context).textTheme.titleSmall),
-
+            subtitle: subtitle != null
+                ? Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.foreground(brightness).withValues(alpha: 0.6),
+                    ),
+                  )
+                : null,
             trailing: Icon(
               Icons.chevron_right,
-
               color: AppColors.foreground(brightness).withValues(alpha: 0.3),
             ),
           ),

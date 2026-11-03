@@ -51,8 +51,7 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-  void _onSearch(String query) {
-    _searchFocus.unfocus();
+  void _executeSearch(String query) {
     final trimmedQuery = query.trim();
     if (trimmedQuery == _lastSearchQuery) return;
 
@@ -66,12 +65,19 @@ class _SearchScreenState extends State<SearchScreen> {
     context.read<ProductsCubit>().search(trimmedQuery);
   }
 
+  void _onSubmitted(String query) {
+    _searchDebounce?.cancel();
+    _searchFocus.unfocus();
+    _executeSearch(query);
+  }
+
   void _onSearchChanged(String query) {
     _searchDebounce?.cancel();
-    _searchDebounce = Timer(const Duration(milliseconds: 450), () {
+    _searchDebounce = Timer(const Duration(milliseconds: 500), () {
       if (!mounted) return;
-      _onSearch(query);
+      _executeSearch(query);
     });
+    setState(() {});
   }
 
   @override
@@ -88,7 +94,7 @@ class _SearchScreenState extends State<SearchScreen> {
             controller: _searchController,
             focusNode: _searchFocus,
             onChanged: _onSearchChanged,
-            onSubmitted: _onSearch,
+            onSubmitted: _onSubmitted,
             textInputAction: TextInputAction.search,
             style: Theme.of(context).textTheme.bodyMedium,
             decoration: InputDecoration(
@@ -109,12 +115,26 @@ class _SearchScreenState extends State<SearchScreen> {
                   width: 1.5,
                 ),
               ),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.search, size: 20),
-                onPressed: () {
-                  _searchDebounce?.cancel();
-                  _onSearch(_searchController.text);
-                },
+              suffixIcon: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (_searchController.text.isNotEmpty)
+                    IconButton(
+                      icon: const Icon(Icons.clear, size: 18),
+                      onPressed: () {
+                        _searchController.clear();
+                        _executeSearch('');
+                        setState(() {});
+                      },
+                    ),
+                  IconButton(
+                    icon: const Icon(Icons.search, size: 20),
+                    onPressed: () {
+                      _searchDebounce?.cancel();
+                      _onSubmitted(_searchController.text);
+                    },
+                  ),
+                ],
               ),
               filled: true,
               fillColor: AppColors.muted(brightness).withValues(alpha: 0.5),
@@ -172,6 +192,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   padding: const EdgeInsets.all(AppDimensions.screenPadding),
                   child: MasonryGridView.count(
                     controller: _scrollController,
+                    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                     crossAxisCount: 2,
                     crossAxisSpacing: 14,
                     mainAxisSpacing: 14,
