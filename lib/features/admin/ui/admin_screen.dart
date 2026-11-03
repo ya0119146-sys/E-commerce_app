@@ -145,7 +145,9 @@ class _AdminScreenState extends State<AdminScreen>
 
         floatingActionButton: _tabController.index == 1
             ? null
-            : FloatingActionButton(
+            : Padding(
+                padding: const EdgeInsets.only(bottom: 84),
+                child: FloatingActionButton(
                 onPressed: () {
                   final index = _tabController.index;
                   if (index == 0) {
@@ -189,6 +191,7 @@ class _AdminScreenState extends State<AdminScreen>
                 },
                 child: const Icon(Icons.add),
               ),
+            ),
       ),
     );
   }
@@ -200,7 +203,7 @@ class _AdminScreenState extends State<AdminScreen>
           return const Center(child: CircularProgressIndicator());
         }
         return ListView.builder(
-          padding: const EdgeInsets.all(AppDimensions.screenPadding),
+          padding: const EdgeInsets.fromLTRB(AppDimensions.screenPadding, AppDimensions.screenPadding, AppDimensions.screenPadding, 100),
           itemCount: state.products.length,
           itemBuilder: (context, index) {
             final product = state.products[index];
@@ -277,7 +280,7 @@ class _AdminScreenState extends State<AdminScreen>
           return const Center(child: CircularProgressIndicator());
         }
         return ListView.builder(
-          padding: const EdgeInsets.all(AppDimensions.screenPadding),
+          padding: const EdgeInsets.fromLTRB(AppDimensions.screenPadding, AppDimensions.screenPadding, AppDimensions.screenPadding, 100),
           itemCount: state.categories.length,
           itemBuilder: (context, index) {
             final category = state.categories[index];
@@ -342,7 +345,7 @@ class _AdminScreenState extends State<AdminScreen>
       return const Center(child: CircularProgressIndicator());
     }
     return ListView.builder(
-      padding: const EdgeInsets.all(AppDimensions.screenPadding),
+      padding: const EdgeInsets.fromLTRB(AppDimensions.screenPadding, AppDimensions.screenPadding, AppDimensions.screenPadding, 100),
       itemCount: _allSubcategories.length,
       itemBuilder: (context, index) {
         final subcat = _allSubcategories[index];
@@ -414,7 +417,7 @@ class _AdminScreenState extends State<AdminScreen>
           return Center(child: Text('No orders found'.tr(context)));
         }
         return ListView.separated(
-          padding: const EdgeInsets.all(AppDimensions.screenPadding),
+          padding: const EdgeInsets.fromLTRB(AppDimensions.screenPadding, AppDimensions.screenPadding, AppDimensions.screenPadding, 100),
           itemCount: state.orders.length,
           separatorBuilder: (_, __) => const SizedBox(height: 12),
           itemBuilder: (context, index) {
@@ -502,7 +505,7 @@ class _AdminScreenState extends State<AdminScreen>
           return Center(child: Text('No users found'.tr(context)));
         }
         return ListView.builder(
-          padding: const EdgeInsets.all(AppDimensions.screenPadding),
+          padding: const EdgeInsets.fromLTRB(AppDimensions.screenPadding, AppDimensions.screenPadding, AppDimensions.screenPadding, 100),
           itemCount: state.users.length,
           itemBuilder: (context, index) {
             final user = state.users[index];

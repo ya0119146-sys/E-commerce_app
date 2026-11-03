@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/network/api_exception.dart';
 import '../data/repos/admin_repository.dart';
 import 'admin_state.dart';
 
@@ -21,7 +22,7 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
+      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
     }
   }
 
@@ -36,7 +37,7 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
+      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
     }
   }
 
@@ -51,7 +52,7 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
+      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
     }
   }
 
@@ -68,7 +69,7 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
+      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
     }
   }
 
@@ -83,7 +84,7 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
+      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
     }
   }
 
@@ -98,7 +99,7 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
+      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
     }
   }
 
@@ -115,7 +116,7 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
+      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
     }
   }
 
@@ -130,7 +131,7 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
+      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
     }
   }
 
@@ -145,7 +146,7 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
+      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
     }
   }
 
@@ -162,7 +163,7 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
+      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
     }
   }
 
@@ -177,7 +178,7 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
+      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
     }
   }
 
@@ -192,8 +193,16 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: e.toString()));
+      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
     }
+  }
+
+
+  String _extractErrorMessage(dynamic e) {
+    if (e is ApiException) {
+      return e.message;
+    }
+    return e.toString();
   }
 
   void reset() {

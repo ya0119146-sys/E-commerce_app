@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../core/constants/app_colors.dart';
@@ -13,6 +14,11 @@ import '../features/cart/logic/cart_cubit.dart';
 import '../core/localization/app_translations.dart';
 
 /// Concept 1: Ultra-luxury Floating Glassmorphism Bottom Navigation Bar Shell.
+/// Features:
+/// - Custom hand-crafted Flutter UI (not a restrictive package — fully customizable!)
+/// - Auto-hide on scroll down, reveal on scroll up
+/// - Enlarged comfortable touch targets and icons
+/// - Frosted glass backdrop blur with illuminated active pill
 class BottomNavShell extends StatefulWidget {
   const BottomNavShell({super.key, required this.role});
 
@@ -23,6 +29,7 @@ class BottomNavShell extends StatefulWidget {
 
 class _BottomNavShellState extends State<BottomNavShell> {
   int _currentIndex = 0;
+  bool _isNavVisible = true;
 
   List<Widget> get _screens => [
     HomeScreen(role: widget.role),
@@ -41,7 +48,23 @@ class _BottomNavShellState extends State<BottomNavShell> {
 
     return Scaffold(
       extendBody: true,
-      body: IndexedStack(index: _currentIndex, children: _screens),
+      body: NotificationListener<UserScrollNotification>(
+        onNotification: (notification) {
+          if (notification.direction == ScrollDirection.reverse) {
+            // User scrolled down -> hide navbar
+            if (_isNavVisible) {
+              setState(() => _isNavVisible = false);
+            }
+          } else if (notification.direction == ScrollDirection.forward) {
+            // User scrolled up -> reveal navbar
+            if (!_isNavVisible) {
+              setState(() => _isNavVisible = true);
+            }
+          }
+          return false;
+        },
+        child: IndexedStack(index: _currentIndex, children: _screens),
+      ),
       bottomNavigationBar: BlocBuilder<CartCubit, CartState>(
         builder: (context, cartState) {
           final items = <_NavItemData>[
@@ -80,109 +103,137 @@ class _BottomNavShellState extends State<BottomNavShell> {
               ),
           ];
 
-          return Container(
-            margin: EdgeInsets.fromLTRB(
-              16,
-              0,
-              16,
-              bottomPadding > 0 ? bottomPadding + 4 : 14,
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
-                child: Container(
-                  height: 62,
-                  decoration: BoxDecoration(
-                    color: isDark
-                        ? const Color(0xFF241020).withValues(alpha: 0.85)
-                        : Colors.white.withValues(alpha: 0.88),
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      color: AppColors.secondary(brightness).withValues(alpha: 0.22),
-                      width: 1.0,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.secondary(brightness).withValues(alpha: 0.16),
-                        blurRadius: 24,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: List.generate(items.length, (index) {
-                      final item = items[index];
-                      final isSelected = _currentIndex == index;
-
-                      Widget iconWidget = Icon(
-                        isSelected ? item.activeIcon : item.icon,
-                        size: isSelected ? 20 : 22,
-                        color: isSelected
-                            ? AppColors.secondary(brightness)
-                            : AppColors.foreground(brightness).withValues(alpha: 0.5),
-                      );
-
-                      if (item.badgeCount != null && item.badgeCount! > 0) {
-                        iconWidget = Badge(
-                          label: Text(
-                            '${item.badgeCount}',
-                            style: const TextStyle(
-                              fontSize: 10,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          backgroundColor: AppColors.accent(brightness),
-                          child: iconWidget,
-                        );
-                      }
-
-                      return GestureDetector(
-                        onTap: () {
-                          HapticFeedback.selectionClick();
-                          setState(() => _currentIndex = index);
-                        },
-                        behavior: HitTestBehavior.opaque,
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 260),
-                          curve: Curves.easeOutCubic,
-                          padding: isSelected
-                              ? const EdgeInsets.symmetric(horizontal: 14, vertical: 7)
-                              : const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: isSelected
-                                ? AppColors.secondary(brightness).withValues(alpha: 0.12)
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(22),
-                            border: isSelected
-                                ? Border.all(
-                                    color: AppColors.secondary(brightness).withValues(alpha: 0.2),
-                                    width: 1.0,
-                                  )
-                                : null,
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              iconWidget,
-                              if (isSelected) ...[
-                                const SizedBox(width: 5),
-                                Text(
-                                  item.label,
-                                  style: TextStyle(
-                                    fontSize: 11.5,
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColors.secondary(brightness),
-                                  ),
-                                ),
-                              ],
-                            ],
-                          ),
+          return AnimatedSlide(
+            offset: _isNavVisible ? Offset.zero : const Offset(0, 1.8),
+            duration: const Duration(milliseconds: 280),
+            curve: Curves.easeInOutCubic,
+            child: AnimatedOpacity(
+              opacity: _isNavVisible ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 220),
+              child: Container(
+                margin: EdgeInsets.fromLTRB(
+                  16,
+                  0,
+                  16,
+                  bottomPadding > 0 ? bottomPadding + 6 : 16,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(32),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+                    child: Container(
+                      height: 70,
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? const Color(0xFF241020).withValues(alpha: 0.88)
+                            : Colors.white.withValues(alpha: 0.90),
+                        borderRadius: BorderRadius.circular(32),
+                        border: Border.all(
+                          color: AppColors.secondary(
+                            brightness,
+                          ).withValues(alpha: 0.22),
+                          width: 1.0,
                         ),
-                      );
-                    }),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.secondary(
+                              brightness,
+                            ).withValues(alpha: 0.16),
+                            blurRadius: 24,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: List.generate(items.length, (index) {
+                          final item = items[index];
+                          final isSelected = _currentIndex == index;
+
+                          Widget iconWidget = Icon(
+                            isSelected ? item.activeIcon : item.icon,
+                            size: isSelected ? 22 : 24,
+                            color: isSelected
+                                ? AppColors.secondary(brightness)
+                                : AppColors.foreground(
+                                    brightness,
+                                  ).withValues(alpha: 0.5),
+                          );
+
+                          if (item.badgeCount != null && item.badgeCount! > 0) {
+                            iconWidget = Badge(
+                              label: Text(
+                                '${item.badgeCount}',
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              backgroundColor: AppColors.accent(brightness),
+                              child: iconWidget,
+                            );
+                          }
+
+                          return GestureDetector(
+                            onTap: () {
+                              HapticFeedback.selectionClick();
+                              setState(() {
+                                _currentIndex = index;
+                                _isNavVisible = true;
+                              });
+                            },
+                            behavior: HitTestBehavior.opaque,
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 260),
+                              curve: Curves.easeOutCubic,
+                              padding: isSelected
+                                  ? const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 9,
+                                    )
+                                  : const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 10,
+                                    ),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? AppColors.secondary(
+                                        brightness,
+                                      ).withValues(alpha: 0.12)
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(24),
+                                border: isSelected
+                                    ? Border.all(
+                                        color: AppColors.secondary(
+                                          brightness,
+                                        ).withValues(alpha: 0.2),
+                                        width: 1.0,
+                                      )
+                                    : null,
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  iconWidget,
+                                  if (isSelected) ...[
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      item.label,
+                                      style: TextStyle(
+                                        fontSize: 12.5,
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.secondary(brightness),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
                   ),
                 ),
               ),
