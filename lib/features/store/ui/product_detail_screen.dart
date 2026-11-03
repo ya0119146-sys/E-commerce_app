@@ -92,7 +92,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       color: AppColors.card(brightness).withValues(alpha: 0.85),
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: AppColors.border(brightness).withValues(alpha: 0.3),
+                        color: AppColors.border(
+                          brightness,
+                        ).withValues(alpha: 0.3),
                         width: 0.5,
                       ),
                       boxShadow: [
@@ -123,19 +125,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 builder: (context, state) {
                   final isFav = state.isInWishlist(product.id);
                   return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0,
+                      vertical: 8.0,
+                    ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.radiusRound,
+                      ),
                       child: BackdropFilter(
                         filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
                         child: Container(
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            color: AppColors.card(brightness).withValues(alpha: 0.85),
+                            color: AppColors.card(
+                              brightness,
+                            ).withValues(alpha: 0.85),
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: AppColors.border(brightness).withValues(alpha: 0.3),
+                              color: AppColors.border(
+                                brightness,
+                              ).withValues(alpha: 0.3),
                               width: 0.5,
                             ),
                             boxShadow: [
@@ -155,7 +166,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   ? AppColors.primary(brightness)
                                   : AppColors.foreground(brightness),
                             ),
-                            onPressed: () => context.read<WishlistCubit>().toggleWishlist(product.id),
+                            onPressed: () => context
+                                .read<WishlistCubit>()
+                                .toggleWishlist(product.id),
                           ),
                         ),
                       ),
@@ -172,7 +185,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   allImages.isNotEmpty
                       ? PageView.builder(
                           controller: _pageController,
-                          onPageChanged: (i) => setState(() => _selectedImageIndex = i),
+                          onPageChanged: (i) =>
+                              setState(() => _selectedImageIndex = i),
                           itemCount: allImages.length,
                           itemBuilder: (_, i) => GestureDetector(
                             onTap: () => _openLightbox(allImages),
@@ -196,7 +210,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       child: Icon(
                                         Icons.image_outlined,
                                         size: 60,
-                                        color: AppColors.foreground(brightness).withValues(alpha: 0.15),
+                                        color: AppColors.foreground(
+                                          brightness,
+                                        ).withValues(alpha: 0.15),
                                       ),
                                     ),
                                   ),
@@ -212,7 +228,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             child: Icon(
                               Icons.shopping_bag_outlined,
                               size: 80,
-                              color: AppColors.foreground(brightness).withValues(alpha: 0.15),
+                              color: AppColors.foreground(
+                                brightness,
+                              ).withValues(alpha: 0.15),
                             ),
                           ),
                         ),
@@ -225,7 +243,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       child: GestureDetector(
                         onTap: () => _openLightbox(allImages),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(AppDimensions.radiusXl),
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.radiusXl,
+                          ),
                           child: BackdropFilter(
                             filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
                             child: Container(
@@ -234,10 +254,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 vertical: 5,
                               ),
                               decoration: BoxDecoration(
-                                color: AppColors.card(brightness).withValues(alpha: 0.8),
-                                borderRadius: BorderRadius.circular(AppDimensions.radiusXl),
+                                color: AppColors.card(
+                                  brightness,
+                                ).withValues(alpha: 0.8),
+                                borderRadius: BorderRadius.circular(
+                                  AppDimensions.radiusXl,
+                                ),
                                 border: Border.all(
-                                  color: AppColors.border(brightness).withValues(alpha: 0.4),
+                                  color: AppColors.border(
+                                    brightness,
+                                  ).withValues(alpha: 0.4),
                                   width: 0.5,
                                 ),
                                 boxShadow: [
@@ -295,8 +321,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               color: _selectedImageIndex == i
                                   ? AppColors.secondary(brightness)
                                   : (brightness == Brightness.dark
-                                      ? Colors.white.withValues(alpha: 0.45)
-                                      : Colors.black.withValues(alpha: 0.35)),
+                                        ? Colors.white.withValues(alpha: 0.45)
+                                        : Colors.black.withValues(alpha: 0.35)),
                               borderRadius: BorderRadius.circular(3),
                               boxShadow: [
                                 BoxShadow(
@@ -328,7 +354,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.primary(brightness).withValues(alpha: 0.4),
+                              color: AppColors.primary(
+                                brightness,
+                              ).withValues(alpha: 0.4),
                               blurRadius: 8,
                               offset: const Offset(0, 2),
                             ),
