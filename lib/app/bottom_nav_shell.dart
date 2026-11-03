@@ -47,9 +47,11 @@ class _BottomNavShellState extends State<BottomNavShell> {
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
     return Scaffold(
+      backgroundColor: AppColors.background(brightness),
       extendBody: true,
       body: NotificationListener<UserScrollNotification>(
         onNotification: (notification) {
+          if (notification.metrics.axis != Axis.vertical) return false;
           if (notification.direction == ScrollDirection.reverse) {
             // User scrolled down -> hide navbar
             if (_isNavVisible) {

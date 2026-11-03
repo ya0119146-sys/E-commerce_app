@@ -1,6 +1,4 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -382,17 +380,6 @@ class _ProductCardState extends State<ProductCard>
               ),
             ),
           ),
-        )
-        .animate()
-        .fade(
-          duration: 350.ms,
-          delay: Duration(milliseconds: 60 * widget.index),
-        )
-        .moveY(
-          begin: 16,
-          end: 0,
-          duration: 350.ms,
-          delay: Duration(milliseconds: 60 * widget.index),
         );
   }
 
@@ -460,38 +447,32 @@ class _FrostedWishlistHeartState extends State<_FrostedWishlistHeart>
               _controller.forward(from: 0);
               context.read<WishlistCubit>().toggleWishlist(widget.productId);
             },
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                child: Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: widget.isDark
-                        ? Colors.black.withValues(alpha: 0.45)
-                        : Colors.white.withValues(alpha: 0.8),
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.35),
-                      width: 0.8,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.08),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Icon(
-                    isFav ? Icons.favorite : Icons.favorite_border,
-                    size: 16,
-                    color: isFav
-                        ? AppColors.primary(brightness)
-                        : (widget.isDark ? Colors.white70 : Colors.black87),
-                  ),
+            child: Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: widget.isDark
+                    ? Colors.black.withValues(alpha: 0.55)
+                    : Colors.white.withValues(alpha: 0.9),
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.35),
+                  width: 0.8,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.08),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Icon(
+                isFav ? Icons.favorite : Icons.favorite_border,
+                size: 16,
+                color: isFav
+                    ? AppColors.primary(brightness)
+                    : (widget.isDark ? Colors.white70 : Colors.black87),
               ),
             ),
           ),

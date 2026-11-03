@@ -64,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final brightness = Theme.of(context).brightness;
 
     return Scaffold(
+      backgroundColor: AppColors.background(brightness),
       body: RefreshIndicator(
         color: AppColors.primary(brightness),
         onRefresh: () async {
@@ -108,8 +109,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // ─── Hero Banner (Concept 1: Auto-Scrolling Editorial Carousel) ───
             SliverToBoxAdapter(
-              child: _EditorialHeroCarousel(
-                onShopNow: _scrollToProducts,
+              child: RepaintBoundary(
+                child: _EditorialHeroCarousel(
+                  onShopNow: _scrollToProducts,
+                ),
               ),
             ),
 
@@ -129,7 +132,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             SliverToBoxAdapter(
-              child: BlocBuilder<CategoriesCubit, CategoriesState>(
+              child: RepaintBoundary(
+                child: BlocBuilder<CategoriesCubit, CategoriesState>(
                 builder: (context, state) {
                   if (state.status == CategoriesStatus.loading) {
                     return SizedBox(
@@ -172,6 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   );
                 },
+              ),
               ),
             ),
 
@@ -415,7 +420,7 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
 
     final textScale = MediaQuery.textScalerOf(context).scale(1.0);
     final bannerHeight =
-        (175.0 * (textScale > 1.0 ? textScale : 1.0)).clamp(170.0, 205.0);
+        (152.0 * (textScale > 1.0 ? textScale : 1.0)).clamp(148.0, 180.0);
 
     return Container(
       margin: const EdgeInsets.symmetric(
@@ -486,7 +491,7 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
 
                       // Content
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 12, 16, 10),
+                        padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -534,7 +539,7 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.playfairDisplay(
-                                fontSize: 19,
+                                fontSize: 18,
                                 fontWeight: FontWeight.w800,
                                 color: Colors.white,
                                 letterSpacing: 0.3,

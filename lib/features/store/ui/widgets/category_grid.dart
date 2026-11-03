@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_dimensions.dart';
@@ -57,18 +56,7 @@ class CategoryGrid extends StatelessWidget {
             icon: _getCategoryIcon(cat.name),
             imageUrl: cat.image,
             onTap: () => onSelected(cat.id),
-          )
-              .animate()
-              .fade(
-                duration: 300.ms,
-                delay: Duration(milliseconds: 40 * index),
-              )
-              .scale(
-                begin: const Offset(0.85, 0.85),
-                end: const Offset(1.0, 1.0),
-                duration: 300.ms,
-                delay: Duration(milliseconds: 40 * index),
-              );
+          );
         },
       ),
     );
