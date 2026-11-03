@@ -171,9 +171,14 @@ class _ProductFormState extends State<ProductForm> {
         'price': double.parse(_priceController.text),
         'discount': discountVal,
         'quantity': int.parse(_qtyController.text),
-        if (_selectedCategoryId != null) 'category': _selectedCategoryId,
-        if (_selectedSubcategoryId != null)
-          'subcategory': _selectedSubcategoryId,
+        if (_selectedCategoryId != null && _selectedCategoryId!.isNotEmpty)
+          'category': _selectedCategoryId
+        else if (widget.product != null)
+          'category': '',
+        if (_selectedSubcategoryId != null && _selectedSubcategoryId!.isNotEmpty)
+          'subcategory': _selectedSubcategoryId
+        else if (widget.product != null)
+          'subcategory': '',
       };
 
       final formData = FormData.fromMap(data);
@@ -553,8 +558,8 @@ class _ProductFormState extends State<ProductForm> {
                 ),
                 const SizedBox(height: 12),
 
-                // Category Dropdown with Luxury Styling & Selection Checkmark
-                DropdownButtonFormField<String>(
+                // Category Dropdown with Luxury Styling & Selection Checkmark (Optional)
+                DropdownButtonFormField<String?>(
                   value: _selectedCategoryId,
                   dropdownColor: AppColors.card(brightness),
                   borderRadius: BorderRadius.circular(16),
@@ -563,43 +568,75 @@ class _ProductFormState extends State<ProductForm> {
                     color: AppColors.secondary(brightness),
                   ),
                   decoration: InputDecoration(
-                    labelText: 'Category'.tr(context),
+                    labelText: 'Category (Optional)'.tr(context),
                     prefixIcon: const Icon(Icons.category_outlined),
                   ),
-                  items: widget.categories.map((c) {
-                    final isSelected = c.id == _selectedCategoryId;
-                    return DropdownMenuItem(
-                      value: c.id,
+                  items: [
+                    DropdownMenuItem<String?>(
+                      value: null,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Expanded(
-                            child: Text(
-                              c.name,
-                              style: TextStyle(
-                                fontWeight:
-                                    isSelected ? FontWeight.w700 : FontWeight.w500,
-                                color: isSelected
-                                    ? AppColors.secondary(brightness)
-                                    : AppColors.foreground(brightness),
-                              ),
-                              overflow: TextOverflow.ellipsis,
+                          Text(
+                            'None (Optional)'.tr(context),
+                            style: TextStyle(
+                              fontWeight: _selectedCategoryId == null
+                                  ? FontWeight.w700
+                                  : FontWeight.w500,
+                              color: _selectedCategoryId == null
+                                  ? AppColors.secondary(brightness)
+                                  : AppColors.foreground(brightness)
+                                      .withValues(alpha: 0.6),
                             ),
                           ),
-                          if (isSelected)
+                          if (_selectedCategoryId == null) ...[
+                            const SizedBox(width: 12),
                             Icon(
                               Icons.check_circle_rounded,
                               size: 18,
                               color: AppColors.secondary(brightness),
                             ),
+                          ],
                         ],
                       ),
-                    );
-                  }).toList(),
+                    ),
+                    ...widget.categories.map((c) {
+                      final isSelected = c.id == _selectedCategoryId;
+                      return DropdownMenuItem<String?>(
+                        value: c.id,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              c.name,
+                              style: TextStyle(
+                                fontWeight: isSelected
+                                    ? FontWeight.w700
+                                    : FontWeight.w500,
+                                color: isSelected
+                                    ? AppColors.secondary(brightness)
+                                    : AppColors.foreground(brightness),
+                              ),
+                            ),
+                            if (isSelected) ...[
+                              const SizedBox(width: 12),
+                              Icon(
+                                Icons.check_circle_rounded,
+                                size: 18,
+                                color: AppColors.secondary(brightness),
+                              ),
+                            ],
+                          ],
+                        ),
+                      );
+                    }),
+                  ],
                   onChanged: (v) {
                     setState(() {
                       _selectedCategoryId = v;
-                      if (_selectedSubcategoryId != null && v != null) {
+                      if (v == null) {
+                        _selectedSubcategoryId = null;
+                      } else if (_selectedSubcategoryId != null) {
                         final sub = _subcategoriesList.firstWhere(
                           (s) => s.id == _selectedSubcategoryId,
                           orElse: () => const SubCategoryModel(
@@ -618,7 +655,7 @@ class _ProductFormState extends State<ProductForm> {
                 ),
                 const SizedBox(height: 12),
 
-                // Subcategory Dropdown with Luxury Styling & Selection Checkmark
+                // Subcategory Dropdown with Luxury Styling & Selection Checkmark (Optional)
                 Builder(
                   builder: (context) {
                     final filteredSubcats = _selectedCategoryId == null
@@ -637,7 +674,7 @@ class _ProductFormState extends State<ProductForm> {
                         ? _selectedSubcategoryId
                         : null;
 
-                    return DropdownButtonFormField<String>(
+                    return DropdownButtonFormField<String?>(
                       value: currentValue,
                       dropdownColor: AppColors.card(brightness),
                       borderRadius: BorderRadius.circular(16),
@@ -646,18 +683,46 @@ class _ProductFormState extends State<ProductForm> {
                         color: AppColors.secondary(brightness),
                       ),
                       decoration: InputDecoration(
-                        labelText: 'Subcategory'.tr(context),
+                        labelText: 'Subcategory (Optional)'.tr(context),
                         prefixIcon: const Icon(Icons.account_tree_outlined),
                       ),
-                      items: subcatsToShow.map((s) {
-                        final isSelected = s.id == currentValue;
-                        return DropdownMenuItem(
-                          value: s.id,
+                      items: [
+                        DropdownMenuItem<String?>(
+                          value: null,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Expanded(
-                                child: Text(
+                              Text(
+                                'None (Optional)'.tr(context),
+                                style: TextStyle(
+                                  fontWeight: currentValue == null
+                                      ? FontWeight.w700
+                                      : FontWeight.w500,
+                                  color: currentValue == null
+                                      ? AppColors.secondary(brightness)
+                                      : AppColors.foreground(brightness)
+                                          .withValues(alpha: 0.6),
+                                ),
+                              ),
+                              if (currentValue == null) ...[
+                                const SizedBox(width: 12),
+                                Icon(
+                                  Icons.check_circle_rounded,
+                                  size: 18,
+                                  color: AppColors.secondary(brightness),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                        ...subcatsToShow.map((s) {
+                          final isSelected = s.id == currentValue;
+                          return DropdownMenuItem<String?>(
+                            value: s.id,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
                                   s.name,
                                   style: TextStyle(
                                     fontWeight: isSelected
@@ -667,19 +732,20 @@ class _ProductFormState extends State<ProductForm> {
                                         ? AppColors.secondary(brightness)
                                         : AppColors.foreground(brightness),
                                   ),
-                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
-                              if (isSelected)
-                                Icon(
-                                  Icons.check_circle_rounded,
-                                  size: 18,
-                                  color: AppColors.secondary(brightness),
-                                ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
+                                if (isSelected) ...[
+                                  const SizedBox(width: 12),
+                                  Icon(
+                                    Icons.check_circle_rounded,
+                                    size: 18,
+                                    color: AppColors.secondary(brightness),
+                                  ),
+                                ],
+                              ],
+                            ),
+                          );
+                        }),
+                      ],
                       onChanged: (v) =>
                           setState(() => _selectedSubcategoryId = v),
                     );

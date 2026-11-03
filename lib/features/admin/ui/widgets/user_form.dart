@@ -11,11 +11,7 @@ class UserForm extends StatefulWidget {
   final UserModel? user;
   final Function(FormData data) onSubmit;
 
-  const UserForm({
-    super.key,
-    this.user,
-    required this.onSubmit,
-  });
+  const UserForm({super.key, this.user, required this.onSubmit});
 
   @override
   State<UserForm> createState() => _UserFormState();
@@ -113,7 +109,9 @@ class _UserFormState extends State<UserForm> {
               children: [
                 Center(
                   child: Text(
-                    widget.user == null ? 'Create User'.tr(context) : 'Update User'.tr(context),
+                    widget.user == null
+                        ? 'Create User'.tr(context)
+                        : 'Update User'.tr(context),
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ),
@@ -130,10 +128,11 @@ class _UserFormState extends State<UserForm> {
                           backgroundImage: _imageFile != null
                               ? FileImage(_imageFile!)
                               : (widget.user?.image != null
-                                  ? NetworkImage(widget.user!.image!)
-                                      as ImageProvider
-                                  : null),
-                          child: _imageFile == null && widget.user?.image == null
+                                    ? NetworkImage(widget.user!.image!)
+                                          as ImageProvider
+                                    : null),
+                          child:
+                              _imageFile == null && widget.user?.image == null
                               ? const Icon(Icons.person_outline, size: 50)
                               : null,
                         ),
@@ -185,8 +184,9 @@ class _UserFormState extends State<UserForm> {
                   keyboardType: TextInputType.emailAddress,
                   validator: (v) {
                     if (v!.isEmpty) return 'Required'.tr(context);
-                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                        .hasMatch(v)) {
+                    if (!RegExp(
+                      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                    ).hasMatch(v)) {
                       return 'Invalid email'.tr(context);
                     }
                     return null;
@@ -201,7 +201,9 @@ class _UserFormState extends State<UserForm> {
                   ),
                   keyboardType: TextInputType.phone,
                   validator: (v) {
-                    if (v == null || v.isEmpty) return 'Phone is required'.tr(context);
+                    if (v == null || v.isEmpty) {
+                      return 'Phone is required'.tr(context);
+                    }
                     if (!RegExp(r'^[0-9]{11,15}$').hasMatch(v)) {
                       return 'Must be 11-15 digits'.tr(context);
                     }
@@ -267,12 +269,14 @@ class _UserFormState extends State<UserForm> {
                                   : AppColors.foreground(brightness),
                             ),
                           ),
-                          if (_selectedRole == 'user')
+                          if (_selectedRole == 'user') ...[
+                            const SizedBox(width: 12),
                             Icon(
                               Icons.check_circle_rounded,
                               size: 18,
                               color: AppColors.secondary(brightness),
                             ),
+                          ],
                         ],
                       ),
                     ),
@@ -292,12 +296,14 @@ class _UserFormState extends State<UserForm> {
                                   : AppColors.foreground(brightness),
                             ),
                           ),
-                          if (_selectedRole == 'admin')
+                          if (_selectedRole == 'admin') ...[
+                            const SizedBox(width: 12),
                             Icon(
                               Icons.check_circle_rounded,
                               size: 18,
                               color: AppColors.secondary(brightness),
                             ),
+                          ],
                         ],
                       ),
                     ),
@@ -317,7 +323,11 @@ class _UserFormState extends State<UserForm> {
                         ),
                       ),
                     ),
-                    child: Text(widget.user == null ? 'Create User'.tr(context) : 'Update User'.tr(context)),
+                    child: Text(
+                      widget.user == null
+                          ? 'Create User'.tr(context)
+                          : 'Update User'.tr(context),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),

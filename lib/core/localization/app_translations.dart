@@ -1150,6 +1150,14 @@ class AppTranslations {
 
     'Update User': 'Update User',
 
+    'Category (Optional)': 'Category (Optional)',
+
+    'Subcategory (Optional)': 'Subcategory (Optional)',
+
+    'None (Optional)': 'None (Optional)',
+
+    'None': 'None',
+
     'Create': 'Create',
 
     'Update': 'Update',
@@ -2324,6 +2332,14 @@ class AppTranslations {
     'Create User': 'إضافة مستخدم جديد',
 
     'Update User': 'تعديل المستخدم',
+
+    'Category (Optional)': 'التصنيف (اختياري)',
+
+    'Subcategory (Optional)': 'التصنيف الفرعي (اختياري)',
+
+    'None (Optional)': 'بدون (اختياري)',
+
+    'None': 'بدون',
 
     'Create': 'إنشاء',
 

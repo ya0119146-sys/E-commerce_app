@@ -163,26 +163,25 @@ class _SubcategoryFormState extends State<SubcategoryForm> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Expanded(
-                            child: Text(
-                              c.name,
-                              style: TextStyle(
-                                fontWeight: isSelected
-                                    ? FontWeight.w700
-                                    : FontWeight.w500,
-                                color: isSelected
-                                    ? AppColors.secondary(brightness)
-                                    : AppColors.foreground(brightness),
-                              ),
-                              overflow: TextOverflow.ellipsis,
+                          Text(
+                            c.name,
+                            style: TextStyle(
+                              fontWeight: isSelected
+                                  ? FontWeight.w700
+                                  : FontWeight.w500,
+                              color: isSelected
+                                  ? AppColors.secondary(brightness)
+                                  : AppColors.foreground(brightness),
                             ),
                           ),
-                          if (isSelected)
+                          if (isSelected) ...[
+                            const SizedBox(width: 12),
                             Icon(
                               Icons.check_circle_rounded,
                               size: 18,
                               color: AppColors.secondary(brightness),
                             ),
+                          ],
                         ],
                       ),
                     );
