@@ -415,12 +415,12 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
 
     final textScale = MediaQuery.textScalerOf(context).scale(1.0);
     final bannerHeight =
-        (238.0 * (textScale > 1.0 ? textScale : 1.0)).clamp(230.0, 280.0);
+        (175.0 * (textScale > 1.0 ? textScale : 1.0)).clamp(170.0, 205.0);
 
     return Container(
       margin: const EdgeInsets.symmetric(
         horizontal: AppDimensions.screenPadding,
-        vertical: 10,
+        vertical: 8,
       ),
       height: bannerHeight,
       child: Stack(
@@ -486,15 +486,15 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
 
                       // Content
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(18, 16, 18, 14),
+                        padding: const EdgeInsets.fromLTRB(16, 12, 16, 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // Capsule Tag
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 9,
-                                vertical: 3.5,
+                                horizontal: 8,
+                                vertical: 2.5,
                               ),
                               decoration: BoxDecoration(
                                 color: Colors.white.withValues(alpha: 0.16),
@@ -510,23 +510,23 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
                                 children: [
                                   const Icon(
                                     Icons.auto_awesome,
-                                    size: 11,
+                                    size: 10.5,
                                     color: Color(0xFFFFD194),
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
                                     slide.tag,
                                     style: const TextStyle(
-                                      fontSize: 10,
+                                      fontSize: 9.5,
                                       fontWeight: FontWeight.w600,
-                                      letterSpacing: 0.6,
+                                      letterSpacing: 0.5,
                                       color: Colors.white,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 5),
 
                             // Heading
                             Text(
@@ -534,23 +534,23 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.playfairDisplay(
-                                fontSize: 21,
+                                fontSize: 19,
                                 fontWeight: FontWeight.w800,
                                 color: Colors.white,
                                 letterSpacing: 0.3,
                               ),
                             ),
-                            const SizedBox(height: 3),
+                            const SizedBox(height: 2),
 
                             // Subtitle
                             Text(
                               slide.subtitle,
-                              maxLines: 2,
+                              maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.cairo(
-                                fontSize: 11.5,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w500,
-                                height: 1.25,
+                                height: 1.2,
                                 color: Colors.white.withValues(alpha: 0.88),
                               ),
                             ),
@@ -570,8 +570,8 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 14,
-                                      vertical: 7,
+                                      horizontal: 13,
+                                      vertical: 6,
                                     ),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
@@ -592,7 +592,7 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
                                         Text(
                                           slide.ctaText,
                                           style: TextStyle(
-                                            fontSize: 11.5,
+                                            fontSize: 11,
                                             fontWeight: FontWeight.w700,
                                             color: slide.gradientColors[0],
                                           ),
@@ -602,7 +602,7 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
                                           Directionality.of(context) == TextDirection.rtl
                                               ? Icons.arrow_back_rounded
                                               : Icons.arrow_forward_rounded,
-                                          size: 13,
+                                          size: 12,
                                           color: slide.gradientColors[0],
                                         ),
                                       ],
@@ -626,8 +626,8 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
                                       child: AnimatedContainer(
                                         duration: const Duration(milliseconds: 300),
                                         margin: const EdgeInsets.symmetric(horizontal: 2.5),
-                                        width: isActive ? 18 : 6,
-                                        height: 5,
+                                        width: isActive ? 16 : 5.5,
+                                        height: 4.5,
                                         decoration: BoxDecoration(
                                           color: isActive
                                               ? const Color(0xFFFFD194)

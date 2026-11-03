@@ -26,18 +26,19 @@ class HeroButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final brightness = Theme.of(context).brightness;
+    final btnHeight = height ?? 52.0;
+
     return Container(
       width: width ?? double.infinity,
-      height: height,
-      constraints: BoxConstraints(minHeight: height ?? 50),
+      height: btnHeight,
       decoration: BoxDecoration(
         gradient: AppGradients.plum(brightness),
         borderRadius: BorderRadius.circular(AppDimensions.radiusDefault),
         boxShadow: [
           BoxShadow(
             color: AppColors.primary(brightness).withValues(alpha: 0.35),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
+            blurRadius: 18,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
@@ -47,7 +48,7 @@ class HeroButton extends StatelessWidget {
           onTap: isLoading ? null : onPressed,
           borderRadius: BorderRadius.circular(AppDimensions.radiusDefault),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Center(
               child: isLoading
                   ? const SizedBox(
@@ -70,6 +71,8 @@ class HeroButton extends StatelessWidget {
                           child: Text(
                             text,
                             textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                               color: Colors.white,
                               fontSize: 15,
@@ -93,12 +96,14 @@ class GlassButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
   final IconData? icon;
+  final double? height;
 
   const GlassButton({
     super.key,
     required this.text,
     this.onPressed,
     this.icon,
+    this.height,
   });
 
   @override
@@ -107,8 +112,7 @@ class GlassButton extends StatelessWidget {
     final isDark = brightness == Brightness.dark;
 
     return Container(
-      constraints: const BoxConstraints(minHeight: 48),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      height: height ?? 48.0,
       decoration: BoxDecoration(
         color: isDark
             ? Colors.white.withValues(alpha: 0.08)
@@ -125,24 +129,35 @@ class GlassButton extends StatelessWidget {
         child: InkWell(
           onTap: onPressed,
           borderRadius: BorderRadius.circular(AppDimensions.radiusDefault),
-          child: Center(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (icon != null) ...[
-                  Icon(icon,
-                      color: AppColors.secondary(brightness), size: 18),
-                  const SizedBox(width: 8),
-                ],
-                Text(
-                  text,
-                  style: GoogleFonts.poppins(
-                    color: AppColors.secondary(brightness),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (icon != null) ...[
+                    Icon(
+                      icon,
+                      color: AppColors.secondary(brightness),
+                      size: 18,
+                    ),
+                    const SizedBox(width: 8),
+                  ],
+                  Flexible(
+                    child: Text(
+                      text,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                        color: AppColors.secondary(brightness),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
