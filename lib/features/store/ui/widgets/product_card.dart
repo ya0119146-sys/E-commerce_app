@@ -35,14 +35,6 @@ class _ProductCardState extends State<ProductCard>
     with SingleTickerProviderStateMixin {
   bool _pressed = false;
 
-  String get _displayCategory {
-    final cat = widget.product.category?.trim();
-    if (cat == null || cat.isEmpty) return 'LABELLA';
-    // If it's a 24-character hexadecimal MongoDB ObjectId, hide it and use brand fallback
-    if (RegExp(r'^[0-9a-fA-F]{24}$').hasMatch(cat)) return 'LABELLA';
-    return cat.toUpperCase();
-  }
-
   @override
   Widget build(BuildContext context) {
     final brightness = Theme.of(context).brightness;
@@ -50,256 +42,252 @@ class _ProductCardState extends State<ProductCard>
     final product = widget.product;
 
     return GestureDetector(
-      onTapDown: (_) => setState(() => _pressed = true),
-      onTapUp: (_) {
-        setState(() => _pressed = false);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) =>
-                ProductDetailScreen(role: widget.role, product: product),
-          ),
-        );
-      },
-      onTapCancel: () => setState(() => _pressed = false),
-      child: AnimatedScale(
-        scale: _pressed ? 0.96 : 1.0,
-        duration: const Duration(milliseconds: 150),
-        child: Container(
-          decoration: BoxDecoration(
-            color: AppColors.card(brightness),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: AppColors.border(brightness).withValues(alpha: 0.5),
-              width: 1.0,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.04),
-                blurRadius: 16,
-                offset: const Offset(0, 6),
+          onTapDown: (_) => setState(() => _pressed = true),
+          onTapUp: (_) {
+            setState(() => _pressed = false);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) =>
+                    ProductDetailScreen(role: widget.role, product: product),
               ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // ─── 4:5 Image Section with Frosted Glass Wishlist & Sale Badge ───
-              Expanded(
-                flex: 10,
-                child: Stack(
-                  children: [
-                    // Product image
-                    ClipRRect(
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(15),
-                      ),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: double.infinity,
-                        child: product.cover != null && product.cover!.isNotEmpty
-                            ? CachedNetworkImage(
-                                imageUrl: product.cover!,
-                                fit: BoxFit.cover,
-                                placeholder: (_, __) => const ShimmerLoading(
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  borderRadius: 0,
-                                ),
-                                errorWidget: (_, __, ___) =>
-                                    _placeholder(brightness),
-                              )
-                            : _placeholder(brightness),
-                      ),
-                    ),
-
-                    // Sale / Out of Stock Pill (Top-Start)
-                    if (product.onSale || !product.inStock)
-                      PositionedDirectional(
-                        top: 9,
-                        start: 9,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 3.5,
+            );
+          },
+          onTapCancel: () => setState(() => _pressed = false),
+          child: AnimatedScale(
+            scale: _pressed ? 0.96 : 1.0,
+            duration: const Duration(milliseconds: 150),
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColors.card(brightness),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: AppColors.border(brightness).withValues(alpha: 0.5),
+                  width: 1.0,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.04),
+                    blurRadius: 16,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // ─── 4:5 Image Section with Frosted Glass Wishlist & Sale Badge ───
+                  Expanded(
+                    flex: 10,
+                    child: Stack(
+                      children: [
+                        // Product image
+                        ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(15),
                           ),
-                          decoration: BoxDecoration(
-                            color: product.onSale
-                                ? AppColors.accent(brightness)
-                                : Colors.black87,
-                            borderRadius: BorderRadius.circular(6),
-                            boxShadow: [
-                              BoxShadow(
-                                color: (product.onSale
-                                        ? AppColors.accent(brightness)
-                                        : Colors.black)
-                                    .withValues(alpha: 0.25),
-                                blurRadius: 6,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: Text(
-                            product.onSale
-                                ? '-${product.discountPercentage}%'
-                                : 'out_of_stock'.tr(context),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 10.5,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.3,
-                            ),
+                          child: SizedBox(
+                            width: double.infinity,
+                            height: double.infinity,
+                            child:
+                                product.cover != null &&
+                                    product.cover!.isNotEmpty
+                                ? CachedNetworkImage(
+                                    imageUrl: product.cover!,
+                                    fit: BoxFit.cover,
+                                    placeholder: (_, __) =>
+                                        const ShimmerLoading(
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                          borderRadius: 0,
+                                        ),
+                                    errorWidget: (_, __, ___) =>
+                                        _placeholder(brightness),
+                                  )
+                                : _placeholder(brightness),
                           ),
                         ),
-                      ),
 
-                    // Frosted Glass Wishlist Heart (Top-End)
-                    PositionedDirectional(
-                      top: 9,
-                      end: 9,
-                      child: _FrostedWishlistHeart(
-                        productId: product.id,
-                        isDark: isDark,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              // ─── Content Section (Editorial / High-Fashion Typography) ───
-              Expanded(
-                flex: 9,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Brand / Category Tag
-                          Text(
-                            _displayCategory,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 9.5,
-                              letterSpacing: 1.0,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.foreground(brightness)
-                                  .withValues(alpha: 0.45),
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-
-                          // Product Title (2 lines max)
-                          Text(
-                            product.name,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                  fontSize: 12.5,
-                                  fontWeight: FontWeight.w600,
-                                  height: 1.25,
-                                ),
-                          ),
-                          const SizedBox(height: 3),
-
-                          // Rating Stars / Count
-                          if (product.ratingAvg > 0)
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.star_rounded,
-                                  size: 13,
-                                  color: Color(0xFFFFB800),
-                                ),
-                                const SizedBox(width: 3),
-                                Text(
-                                  product.ratingAvg.toStringAsFixed(1),
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColors.foreground(brightness)
-                                        .withValues(alpha: 0.8),
-                                  ),
-                                ),
-                                if (product.ratingCount > 0) ...[
-                                  const SizedBox(width: 2),
-                                  Text(
-                                    '(${product.ratingCount})',
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: AppColors.foreground(brightness)
-                                          .withValues(alpha: 0.4),
-                                    ),
+                        // Sale / Out of Stock Pill (Top-Start)
+                        if (product.onSale || !product.inStock)
+                          PositionedDirectional(
+                            top: 9,
+                            start: 9,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 3.5,
+                              ),
+                              decoration: BoxDecoration(
+                                color: product.onSale
+                                    ? AppColors.accent(brightness)
+                                    : Colors.black87,
+                                borderRadius: BorderRadius.circular(6),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:
+                                        (product.onSale
+                                                ? AppColors.accent(brightness)
+                                                : Colors.black)
+                                            .withValues(alpha: 0.25),
+                                    blurRadius: 6,
+                                    offset: const Offset(0, 2),
                                   ),
                                 ],
-                              ],
-                            ),
-                        ],
-                      ),
-
-                      // Price Row
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          Text(
-                            '\$${product.displayPrice.toStringAsFixed(2)}',
-                            style: TextStyle(
-                              color: AppColors.secondary(brightness),
-                              fontWeight: FontWeight.w800,
-                              fontSize: 14.5,
-                            ),
-                          ),
-                          if (product.onSale) ...[
-                            const SizedBox(width: 5),
-                            Text(
-                              '\$${product.price.toStringAsFixed(2)}',
-                              style: TextStyle(
-                                color: AppColors.foreground(brightness)
-                                    .withValues(alpha: 0.4),
-                                fontSize: 11,
-                                decoration: TextDecoration.lineThrough,
+                              ),
+                              child: Text(
+                                product.onSale
+                                    ? '-${product.discountPercentage}%'
+                                    : 'out_of_stock'.tr(context),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10.5,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.3,
+                                ),
                               ),
                             ),
-                          ],
-                        ],
-                      ),
-
-                      // Sleek "+ أضف للسلة" Action Button
-                      if (widget.role != 'admin' && product.inStock)
-                        _SleekAddToCartPill(product: product)
-                      else if (!product.inStock)
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          decoration: BoxDecoration(
-                            color: AppColors.muted(brightness).withValues(alpha: 0.5),
-                            borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Center(
-                            child: Text(
-                              'out_of_stock'.tr(context),
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: AppColors.foreground(brightness)
-                                    .withValues(alpha: 0.4),
-                              ),
-                            ),
+
+                        // Frosted Glass Wishlist Heart (Top-End)
+                        PositionedDirectional(
+                          top: 9,
+                          end: 9,
+                          child: _FrostedWishlistHeart(
+                            productId: product.id,
+                            isDark: isDark,
                           ),
                         ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
+
+                  // ─── Content Section (Editorial / High-Fashion Typography) ───
+                  Expanded(
+                    flex: 10,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Product Title (2 lines max with safe line-height)
+                              Text(
+                                product.name,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.titleSmall
+                                    ?.copyWith(
+                                      fontSize: 12.5,
+                                      fontWeight: FontWeight.w600,
+                                      height: 1.25,
+                                    ),
+                              ),
+                              const SizedBox(height: 3),
+
+                              // Rating Stars / Count
+                              if (product.ratingAvg > 0)
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.star_rounded,
+                                      size: 13,
+                                      color: Color(0xFFFFB800),
+                                    ),
+                                    const SizedBox(width: 3),
+                                    Text(
+                                      product.ratingAvg.toStringAsFixed(1),
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.foreground(
+                                          brightness,
+                                        ).withValues(alpha: 0.8),
+                                      ),
+                                    ),
+                                    if (product.ratingCount > 0) ...[
+                                      const SizedBox(width: 2),
+                                      Text(
+                                        '(${product.ratingCount})',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: AppColors.foreground(
+                                            brightness,
+                                          ).withValues(alpha: 0.4),
+                                        ),
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                            ],
+                          ),
+
+                          // Price Row
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            textBaseline: TextBaseline.alphabetic,
+                            children: [
+                              Text(
+                                '\$${product.displayPrice.toStringAsFixed(2)}',
+                                style: TextStyle(
+                                  color: AppColors.secondary(brightness),
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 14.5,
+                                ),
+                              ),
+                              if (product.onSale) ...[
+                                const SizedBox(width: 5),
+                                Text(
+                                  '\$${product.price.toStringAsFixed(2)}',
+                                  style: TextStyle(
+                                    color: AppColors.foreground(
+                                      brightness,
+                                    ).withValues(alpha: 0.4),
+                                    fontSize: 11,
+                                    decoration: TextDecoration.lineThrough,
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+
+                          // Sleek "+ أضف للسلة" Action Button
+                          if (widget.role != 'admin' && product.inStock)
+                            _SleekAddToCartPill(product: product)
+                          else if (!product.inStock)
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              decoration: BoxDecoration(
+                                color: AppColors.muted(
+                                  brightness,
+                                ).withValues(alpha: 0.5),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'out_of_stock'.tr(context),
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: AppColors.foreground(
+                                      brightness,
+                                    ).withValues(alpha: 0.4),
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-    )
+        )
         .animate()
         .fade(
           duration: 350.ms,
@@ -332,10 +320,7 @@ class _FrostedWishlistHeart extends StatefulWidget {
   final String productId;
   final bool isDark;
 
-  const _FrostedWishlistHeart({
-    required this.productId,
-    required this.isDark,
-  });
+  const _FrostedWishlistHeart({required this.productId, required this.isDark});
 
   @override
   State<_FrostedWishlistHeart> createState() => _FrostedWishlistHeartState();

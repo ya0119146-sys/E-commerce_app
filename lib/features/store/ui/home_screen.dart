@@ -203,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             crossAxisCount: 2,
                             crossAxisSpacing: 14,
                             mainAxisSpacing: 14,
-                            childAspectRatio: 0.51,
+                            childAspectRatio: 0.50,
                           ),
                       delegate: SliverChildBuilderDelegate(
                         (_, __) => const ShimmerProductCard(),
@@ -278,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisCount: 2,
                           crossAxisSpacing: 14,
                           mainAxisSpacing: 14,
-                          childAspectRatio: 0.51,
+                          childAspectRatio: 0.50,
                         ),
                     delegate: SliverChildBuilderDelegate(
                       (_, index) => ProductCard(
@@ -428,7 +428,7 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
         horizontal: AppDimensions.screenPadding,
         vertical: 10,
       ),
-      height: 200,
+      height: 226,
       child: Stack(
         children: [
           PageView.builder(
@@ -492,10 +492,7 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
 
                       // Content
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 22,
-                          vertical: 18,
-                        ),
+                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 14),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -545,7 +542,7 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
                                 Text(
                                   slide.title,
                                   style: GoogleFonts.playfairDisplay(
-                                    fontSize: 23,
+                                    fontSize: 22,
                                     fontWeight: FontWeight.w800,
                                     color: Colors.white,
                                     letterSpacing: 0.3,
@@ -559,9 +556,9 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.cairo(
-                                    fontSize: 12,
+                                    fontSize: 11.5,
                                     fontWeight: FontWeight.w500,
-                                    height: 1.3,
+                                    height: 1.25,
                                     color: Colors.white.withValues(alpha: 0.88),
                                   ),
                                 ),
@@ -581,8 +578,8 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 18,
-                                      vertical: 8.5,
+                                      horizontal: 16,
+                                      vertical: 7.5,
                                     ),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
@@ -603,17 +600,17 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
                                         Text(
                                           slide.ctaText,
                                           style: TextStyle(
-                                            fontSize: 12.5,
+                                            fontSize: 12,
                                             fontWeight: FontWeight.w700,
                                             color: slide.gradientColors[0],
                                           ),
                                         ),
-                                        const SizedBox(width: 6),
+                                        const SizedBox(width: 5),
                                         Icon(
                                           Directionality.of(context) == TextDirection.rtl
                                               ? Icons.arrow_back_rounded
                                               : Icons.arrow_forward_rounded,
-                                          size: 14,
+                                          size: 13,
                                           color: slide.gradientColors[0],
                                         ),
                                       ],
