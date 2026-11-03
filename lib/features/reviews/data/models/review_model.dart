@@ -26,8 +26,8 @@ class ReviewModel extends Equatable {
   factory ReviewModel.fromJson(Map<String, dynamic> json) {
     final productData = json['product'];
     ProductModel product;
-    if (productData is Map<String, dynamic>) {
-      product = ProductModel.fromJson(productData);
+    if (productData is Map) {
+      product = ProductModel.fromJson(Map<String, dynamic>.from(productData));
     } else if (productData is String) {
       product = ProductModel(
         id: productData,

@@ -4,22 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'locale_cubit.dart';
 
-
-
 /// Comprehensive two-dictionary localization system for Labella.
 
 /// Contains English and Arabic dictionaries for every single screen, widget, dialog, and message.
 
 class AppTranslations {
-
   AppTranslations._();
-
-
 
   /// English Dictionary
 
   static const Map<String, String> en = {
-
     'invalid_login': 'Invalid email or password',
 
     'Invalid email or password': 'Invalid email or password',
@@ -34,15 +28,19 @@ class AppTranslations {
 
     'send_email': 'Error while sending email, please try again later',
 
-    'Error while sending email, please try again later': 'Error while sending email, please try again later',
+    'Error while sending email, please try again later':
+        'Error while sending email, please try again later',
 
-    'Error while sending mail... try again later': 'Error while sending mail... try again later',
+    'Error while sending mail... try again later':
+        'Error while sending mail... try again later',
 
     'check_verify_code': 'You do not have permission to verify reset code',
 
-    'You do not have permission to verify reset code': 'You do not have permission to verify reset code',
+    'You do not have permission to verify reset code':
+        'You do not have permission to verify reset code',
 
-    'you don\'t have permission to verify reset code': 'You do not have permission to verify reset code',
+    'you don\'t have permission to verify reset code':
+        'You do not have permission to verify reset code',
 
     'check_code_valid': 'Invalid or expired reset code',
 
@@ -50,9 +48,11 @@ class AppTranslations {
 
     'check_reset_code': 'You do not have permission to change password',
 
-    'You do not have permission to change password': 'You do not have permission to change password',
+    'You do not have permission to change password':
+        'You do not have permission to change password',
 
-    'You don\'t have permission to change password': 'You don\'t have permission to change password',
+    'You don\'t have permission to change password':
+        'You don\'t have permission to change password',
 
     'check_code_verify': 'Please verify your code first',
 
@@ -60,9 +60,11 @@ class AppTranslations {
 
     'check_login': 'You are not logged in! Please log in to get access',
 
-    'You are not logged in! Please log in to get access': 'You are not logged in! Please log in to get access',
+    'You are not logged in! Please log in to get access':
+        'You are not logged in! Please log in to get access',
 
-    'You are not logged in! Please log in to get access.': 'You are not logged in! Please log in to get access.',
+    'You are not logged in! Please log in to get access.':
+        'You are not logged in! Please log in to get access.',
 
     'check_user': 'The user no longer exists',
 
@@ -72,13 +74,17 @@ class AppTranslations {
 
     'sign UP First': 'Please sign up first',
 
-    'check_password_changed': 'Your password was recently changed. Please log in again',
+    'check_password_changed':
+        'Your password was recently changed. Please log in again',
 
-    'Your password was recently changed. Please log in again': 'Your password was recently changed. Please log in again',
+    'Your password was recently changed. Please log in again':
+        'Your password was recently changed. Please log in again',
 
-    'Your password has been updated since you logged in last time. Please log in again.': 'Your password has been updated since you logged in last time. Please log in again.',
+    'Your password has been updated since you logged in last time. Please log in again.':
+        'Your password has been updated since you logged in last time. Please log in again.',
 
-    'logIn Again you or Your manager changed Your Password': 'Your password was updated. Please log in again.',
+    'logIn Again you or Your manager changed Your Password':
+        'Your password was updated. Please log in again.',
 
     'check_active': 'Your account is deactivated',
 
@@ -88,11 +94,13 @@ class AppTranslations {
 
     'allowed_to': 'Privilege denied! You cannot perform this action',
 
-    'Privilege denied! You cannot perform this action': 'Privilege denied! You cannot perform this action',
+    'Privilege denied! You cannot perform this action':
+        'Privilege denied! You cannot perform this action',
 
     'not_authorized': 'You are not authorized to perform this action',
 
-    'You are not authorized to perform this action': 'You are not authorized to perform this action',
+    'You are not authorized to perform this action':
+        'You are not authorized to perform this action',
 
     'You are not authorized to do that': 'You are not authorized to do that',
 
@@ -102,9 +110,11 @@ class AppTranslations {
 
     'success_signup': 'Signed up successfully, please login',
 
-    'Signed up successfully, please login': 'Signed up successfully, please login',
+    'Signed up successfully, please login':
+        'Signed up successfully, please login',
 
-    'signed up successfully , please login': 'signed up successfully , please login',
+    'signed up successfully , please login':
+        'signed up successfully , please login',
 
     'code_verified_success': 'Code verified successfully',
 
@@ -122,11 +132,14 @@ class AppTranslations {
 
     'Please Enter Your Currant Password': 'Please Enter Your Currant Password',
 
-    'Session expired, please login again': 'Session expired, please login again',
+    'Session expired, please login again':
+        'Session expired, please login again',
 
-    'session time Expired, please login again..': 'session time Expired, please login again..',
+    'session time Expired, please login again..':
+        'session time Expired, please login again..',
 
-    'Session expired. Please log in again.': 'Session expired. Please log in again.',
+    'Session expired. Please log in again.':
+        'Session expired. Please log in again.',
 
     'not_found': 'Data not found',
 
@@ -160,38 +173,46 @@ class AppTranslations {
 
     'validation_length_short': 'Length must be between 2 and 50 characters',
 
-    'Length must be between 2 and 50 characters': 'Length must be between 2 and 50 characters',
+    'Length must be between 2 and 50 characters':
+        'Length must be between 2 and 50 characters',
 
     'length is between 10, 50': 'length is between 10, 50',
 
-    'validation_length_phone': 'Phone number length must be between 11 and 15 digits',
+    'validation_length_phone':
+        'Phone number length must be between 11 and 15 digits',
 
-    'Phone number length must be between 11 and 15 digits': 'Phone number length must be between 11 and 15 digits',
+    'Phone number length must be between 11 and 15 digits':
+        'Phone number length must be between 11 and 15 digits',
 
     'length must be between 11 ,15': 'length must be between 11 ,15',
 
     'validation_length_medium': 'Length must be between 10 and 150 characters',
 
-    'Length must be between 10 and 150 characters': 'Length must be between 10 and 150 characters',
+    'Length must be between 10 and 150 characters':
+        'Length must be between 10 and 150 characters',
 
     'length is between 10, 150': 'length is between 10, 150',
 
     'validation_length_long': 'Length must be between 10 and 500 characters',
 
-    'Length must be between 10 and 500 characters': 'Length must be between 10 and 500 characters',
+    'Length must be between 10 and 500 characters':
+        'Length must be between 10 and 500 characters',
 
     'length is between 10, 500': 'length is between 10, 500',
 
-    'validation_length_password': 'Password must be between 6 and 20 characters',
+    'validation_length_password':
+        'Password must be between 6 and 20 characters',
     'Reset code sent to your email': 'Reset code sent to your email',
     'Code verified': 'Code verified',
     'Invalid reset code': 'Invalid reset code',
-    'Reset session expired. Please request a new reset code.': 'Reset session expired. Please request a new reset code.',
+    'Reset session expired. Please request a new reset code.':
+        'Reset session expired. Please request a new reset code.',
     'Failed to reset password': 'Failed to reset password',
     'Failed to send reset code': 'Failed to send reset code',
     'Failed to verify reset code': 'Failed to verify reset code',
 
-    'Password must be between 6 and 20 characters': 'Password must be between 6 and 20 characters',
+    'Password must be between 6 and 20 characters':
+        'Password must be between 6 and 20 characters',
 
     'Password is between 6, 20': 'Password is between 6, 20',
 
@@ -221,9 +242,11 @@ class AppTranslations {
 
     'quantity_positive_integer': 'Quantity must be a positive integer',
 
-    'Quantity must be a positive integer': 'Quantity must be a positive integer',
+    'Quantity must be a positive integer':
+        'Quantity must be a positive integer',
 
-    'quantity must be a positive integer': 'quantity must be a positive integer',
+    'quantity must be a positive integer':
+        'quantity must be a positive integer',
 
     'quantity_max_stock': 'Quantity exceeds available stock',
 
@@ -233,7 +256,8 @@ class AppTranslations {
 
     'review_already_exists': 'You have already reviewed this product',
 
-    'You have already reviewed this product': 'You have already reviewed this product',
+    'You have already reviewed this product':
+        'You have already reviewed this product',
 
     'review_not_found': 'Review not found',
 
@@ -285,11 +309,14 @@ class AppTranslations {
 
     'Subcategory name already exists': 'Subcategory name already exists',
 
-    'subcategory_wrong_category': 'Subcategory does not belong to this category',
+    'subcategory_wrong_category':
+        'Subcategory does not belong to this category',
 
-    'Subcategory does not belong to this category': 'Subcategory does not belong to this category',
+    'Subcategory does not belong to this category':
+        'Subcategory does not belong to this category',
 
-    'subcategory doesn\'t exit in that category': 'Subcategory does not belong to this category',
+    'subcategory doesn\'t exit in that category':
+        'Subcategory does not belong to this category',
 
     'invalid_category_id': 'Invalid category ID',
 
@@ -301,17 +328,22 @@ class AppTranslations {
 
     'wrong category Id': 'Invalid category ID',
 
-    'discount_remove_hint': 'To remove the discount, set the product price only',
+    'discount_remove_hint':
+        'To remove the discount, set the product price only',
 
-    'To remove the discount, set the product price only': 'To remove the discount, set the product price only',
+    'To remove the discount, set the product price only':
+        'To remove the discount, set the product price only',
 
-    'discount_max_half': 'Maximum discount cannot exceed half of the product price',
+    'discount_max_half':
+        'Maximum discount cannot exceed half of the product price',
 
-    'Maximum discount cannot exceed half of the product price': 'Maximum discount cannot exceed half of the product price',
+    'Maximum discount cannot exceed half of the product price':
+        'Maximum discount cannot exceed half of the product price',
 
     'discount_min_zero': 'Discount value must be greater than 0',
 
-    'Discount value must be greater than 0': 'Discount value must be greater than 0',
+    'Discount value must be greater than 0':
+        'Discount value must be greater than 0',
 
     'Login failed. Please try again.': 'Login failed. Please try again.',
 
@@ -351,19 +383,26 @@ class AppTranslations {
 
     'No internet connection.': 'No internet connection.',
 
-    'Connection timed out. Please check your internet.': 'Connection timed out. Please check your internet.',
+    'Connection timed out. Please check your internet.':
+        'Connection timed out. Please check your internet.',
 
-    'Something went wrong. Please try again.': 'Something went wrong. Please try again.',
+    'Something went wrong. Please try again.':
+        'Something went wrong. Please try again.',
 
-    'Server error. Please try again later.': 'Server error. Please try again later.',
+    'Server error. Please try again later.':
+        'Server error. Please try again later.',
 
-    'Invalid request. Please check your input.': 'Invalid request. Please check your input.',
+    'Invalid request. Please check your input.':
+        'Invalid request. Please check your input.',
 
-    'The requested resource was not found.': 'The requested resource was not found.',
+    'The requested resource was not found.':
+        'The requested resource was not found.',
 
-    'You don\'t have permission to perform this action.': 'You don\'t have permission to perform this action.',
+    'You don\'t have permission to perform this action.':
+        'You don\'t have permission to perform this action.',
 
-    'Too many requests. Please wait a moment.': 'Too many requests. Please wait a moment.',
+    'Too many requests. Please wait a moment.':
+        'Too many requests. Please wait a moment.',
 
     'Start Shopping': 'Start Shopping',
 
@@ -372,17 +411,13 @@ class AppTranslations {
     'Change Password': 'Change Password',
 
     'Password must be at least 6 characters':
-
         'Password must be at least 6 characters',
 
     'Passwords do not match': 'Passwords do not match',
 
     'not_logged_in': 'Not logged in',
 
-
-
     // ─── App General & Common ───
-
     'app_name': 'Labella',
 
     'Labella': 'Labella',
@@ -390,7 +425,6 @@ class AppTranslations {
     'app_tagline': 'Sign in to continue your luxury experience',
 
     'Sign in to continue your luxury experience':
-
         'Sign in to continue your luxury experience',
 
     'luxury_tagline': 'Join the world of luxury beauty',
@@ -502,10 +536,7 @@ class AppTranslations {
 
     'Show less': 'Show less',
 
-
-
     // ─── Navigation ───
-
     'nav_home': 'Home',
 
     'Home': 'Home',
@@ -530,10 +561,7 @@ class AppTranslations {
 
     'Profile': 'Profile',
 
-
-
     // ─── Authentication ───
-
     'welcome_back': 'Welcome back',
 
     'Welcome back': 'Welcome back',
@@ -607,11 +635,9 @@ class AppTranslations {
     'forgot_password_title': 'Reset Password',
 
     'forgot_password_subtitle':
-
         'Enter your email address to receive a reset code',
 
     'Enter your email to receive a reset code':
-
         'Enter your email to receive a reset code',
 
     'send_code': 'Send Code',
@@ -625,7 +651,6 @@ class AppTranslations {
     'verify_code_subtitle': 'Enter the 6-digit code sent to your email',
 
     'We have sent a verification code to your email':
-
         'We have sent a verification code to your email',
 
     'Reset Code': 'Reset Code',
@@ -649,7 +674,6 @@ class AppTranslations {
     'password_reset_success': 'Password reset successfully! Please log in.',
 
     'Password reset successfully! Please log in.':
-
         'Password reset successfully! Please log in.',
 
     'account_created': 'Account created! Please log in.',
@@ -678,10 +702,7 @@ class AppTranslations {
 
     'phone_invalid': 'Please enter a valid phone number (10-15 digits)',
 
-
-
     // ─── Store & Home & Products ───
-
     'all_products': 'All Products',
 
     'All Products': 'All Products',
@@ -739,7 +760,6 @@ class AppTranslations {
     'No reviews yet': 'No reviews yet',
 
     'No reviews yet. Be the first to review!':
-
         'No reviews yet. Be the first to review!',
 
     'write_review': 'Write a Review',
@@ -751,7 +771,6 @@ class AppTranslations {
     'Delete Review': 'Delete Review',
 
     'Are you sure you want to delete this review?':
-
         'Are you sure you want to delete this review?',
 
     'Could not load reviews': 'Could not load reviews',
@@ -759,7 +778,6 @@ class AppTranslations {
     'your_review': 'Your Review',
 
     'Share your experience with this product...':
-
         'Share your experience with this product...',
 
     'submit_review': 'Submit Review',
@@ -786,10 +804,7 @@ class AppTranslations {
 
     'pinch_to_zoom': 'Pinch or double tap to zoom',
 
-
-
     // ─── Cart & Checkout ───
-
     'your_cart': 'My Cart',
 
     'My Cart': 'My Cart',
@@ -799,7 +814,6 @@ class AppTranslations {
     'Your cart is empty': 'Your cart is empty',
 
     'cart_empty_subtitle':
-
         'Explore our luxury collection and add items to your cart',
 
     'Add some items to get started': 'Add some items to get started',
@@ -809,7 +823,6 @@ class AppTranslations {
     'Clear Cart?': 'Clear Cart?',
 
     'Are you sure you want to remove all items?':
-
         'Are you sure you want to remove all items?',
 
     'start_shopping': 'Start Shopping',
@@ -853,7 +866,6 @@ class AppTranslations {
     'Continue Shopping': 'Continue Shopping',
 
     'Thank you for your purchase.\nYour order is being processed.':
-
         'Thank you for your purchase.\nYour order is being processed.',
 
     'address': 'Address',
@@ -887,7 +899,6 @@ class AppTranslations {
     'Delete Address': 'Delete Address',
 
     'Are you sure you want to remove this address?':
-
         'Are you sure you want to remove this address?',
 
     'My Addresses': 'My Addresses',
@@ -912,10 +923,7 @@ class AppTranslations {
 
     'Reached maximum stock': 'Reached maximum stock',
 
-
-
     // ─── Wishlist ───
-
     'your_wishlist': 'Your Wishlist',
 
     'Your wishlist is empty': 'Your wishlist is empty',
@@ -923,7 +931,6 @@ class AppTranslations {
     'wishlist_empty_subtitle': 'Save items you love to revisit anytime',
 
     'Save items you love to your wishlist and they will appear here.':
-
         'Save items you love to your wishlist and they will appear here.',
 
     'Explore Products': 'Explore Products',
@@ -932,10 +939,7 @@ class AppTranslations {
 
     'removed_from_wishlist': 'Removed from wishlist',
 
-
-
     // ─── Profile & Orders ───
-
     'my_profile': 'My Profile',
 
     'edit_profile': 'Edit Profile',
@@ -968,6 +972,14 @@ class AppTranslations {
 
     'Mark as Paid': 'Mark as Paid',
 
+    'Mark Deposit as Paid': 'Mark Deposit as Paid',
+
+    'Deposit Paid': 'Deposit Paid',
+
+    'Deposit Pending': 'Deposit Pending',
+
+    'Deposit': 'Deposit',
+
     'No address provided': 'No address provided',
 
     'dark_mode': 'Dark Mode',
@@ -991,7 +1003,6 @@ class AppTranslations {
     'Confirm New Password': 'Confirm New Password',
 
     'Password changed successfully! Please login again.':
-
         'Password changed successfully! Please login again.',
 
     'Enter name': 'Enter name',
@@ -1011,19 +1022,13 @@ class AppTranslations {
     'Delete Account': 'Delete Account',
 
     'delete_account_confirm':
-
         'Are you sure you want to delete your account? This action cannot be undone.',
 
     'Profile deleted successfully': 'Profile deleted successfully',
 
-
-
     // ─── Admin Panel ───
 
-
-
     // ─── Admin Panel ───
-
     'admin_dashboard': 'Admin Dashboard',
 
     'Admin Panel': 'Admin Panel',
@@ -1031,7 +1036,6 @@ class AppTranslations {
     'Confirm Delete': 'Confirm Delete',
 
     'Are you sure you want to delete this item?':
-
         'Are you sure you want to delete this item?',
 
     'No orders found': 'No orders found',
@@ -1105,11 +1109,9 @@ class AppTranslations {
     'Try Again': 'Try Again',
 
     'Reviews will appear here when customers share feedback.':
-
         'Reviews will appear here when customers share feedback.',
 
     'Be the first to share your experience.':
-
         'Be the first to share your experience.',
 
     'review': 'review',
@@ -1189,18 +1191,16 @@ class AppTranslations {
     'Exclusive Collection': 'Exclusive Collection',
     'Special Offers': 'Special Offers',
     'Up to 50% Off': 'Up to 50% Off',
-    'On luxury skincare and premium fragrances': 'On luxury skincare and premium fragrances',
+    'On luxury skincare and premium fragrances':
+        'On luxury skincare and premium fragrances',
     'Radiant Beauty': 'Radiant Beauty',
-    'Selected from world-class luxury beauty brands': 'Selected from world-class luxury beauty brands',
-
+    'Selected from world-class luxury beauty brands':
+        'Selected from world-class luxury beauty brands',
   };
-
-
 
   /// Arabic Dictionary
 
   static const Map<String, String> ar = {
-
     'invalid_login': 'البريد الإلكتروني أو كلمة المرور غير صحيحة',
 
     'Invalid email or password': 'البريد الإلكتروني أو كلمة المرور غير صحيحة',
@@ -1215,15 +1215,19 @@ class AppTranslations {
 
     'send_email': 'حدث خطأ أثناء إرسال البريد الإلكتروني، يرجى المحاولة لاحقاً',
 
-    'Error while sending email, please try again later': 'حدث خطأ أثناء إرسال البريد الإلكتروني، يرجى المحاولة لاحقاً',
+    'Error while sending email, please try again later':
+        'حدث خطأ أثناء إرسال البريد الإلكتروني، يرجى المحاولة لاحقاً',
 
-    'Error while sending mail... try again later': 'حدث خطأ أثناء إرسال البريد الإلكتروني، يرجى المحاولة لاحقاً',
+    'Error while sending mail... try again later':
+        'حدث خطأ أثناء إرسال البريد الإلكتروني، يرجى المحاولة لاحقاً',
 
     'check_verify_code': 'ليس لديك إذن لتأكيد رمز الاستعادة',
 
-    'You do not have permission to verify reset code': 'ليس لديك إذن لتأكيد رمز الاستعادة',
+    'You do not have permission to verify reset code':
+        'ليس لديك إذن لتأكيد رمز الاستعادة',
 
-    'you don\'t have permission to verify reset code': 'ليس لديك إذن لتأكيد رمز الاستعادة',
+    'you don\'t have permission to verify reset code':
+        'ليس لديك إذن لتأكيد رمز الاستعادة',
 
     'check_code_valid': 'رمز تحقق غير صالح أو منتهي الصلاحية',
 
@@ -1231,9 +1235,11 @@ class AppTranslations {
 
     'check_reset_code': 'ليس لديك إذن لتغيير كلمة المرور',
 
-    'You do not have permission to change password': 'ليس لديك إذن لتغيير كلمة المرور',
+    'You do not have permission to change password':
+        'ليس لديك إذن لتغيير كلمة المرور',
 
-    'You don\'t have permission to change password': 'ليس لديك إذن لتغيير كلمة المرور',
+    'You don\'t have permission to change password':
+        'ليس لديك إذن لتغيير كلمة المرور',
 
     'check_code_verify': 'يرجى التحقق من الرمز أولاً',
 
@@ -1241,9 +1247,11 @@ class AppTranslations {
 
     'check_login': 'يرجى تسجيل الدخول أولاً للوصول',
 
-    'You are not logged in! Please log in to get access': 'يرجى تسجيل الدخول أولاً للوصول',
+    'You are not logged in! Please log in to get access':
+        'يرجى تسجيل الدخول أولاً للوصول',
 
-    'You are not logged in! Please log in to get access.': 'يرجى تسجيل الدخول أولاً للوصول',
+    'You are not logged in! Please log in to get access.':
+        'يرجى تسجيل الدخول أولاً للوصول',
 
     'check_user': 'المستخدم غير موجود',
 
@@ -1253,13 +1261,17 @@ class AppTranslations {
 
     'sign UP First': 'يرجى إنشاء حساب أولاً',
 
-    'check_password_changed': 'تم تحديث كلمة المرور مؤخراً. يرجى تسجيل الدخول مجدداً',
+    'check_password_changed':
+        'تم تحديث كلمة المرور مؤخراً. يرجى تسجيل الدخول مجدداً',
 
-    'Your password was recently changed. Please log in again': 'تم تحديث كلمة المرور مؤخراً. يرجى تسجيل الدخول مجدداً',
+    'Your password was recently changed. Please log in again':
+        'تم تحديث كلمة المرور مؤخراً. يرجى تسجيل الدخول مجدداً',
 
-    'Your password has been updated since you logged in last time. Please log in again.': 'تم تحديث كلمة المرور مؤخراً. يرجى تسجيل الدخول مجدداً',
+    'Your password has been updated since you logged in last time. Please log in again.':
+        'تم تحديث كلمة المرور مؤخراً. يرجى تسجيل الدخول مجدداً',
 
-    'logIn Again you or Your manager changed Your Password': 'تم تحديث كلمة المرور مؤخراً. يرجى تسجيل الدخول مجدداً',
+    'logIn Again you or Your manager changed Your Password':
+        'تم تحديث كلمة المرور مؤخراً. يرجى تسجيل الدخول مجدداً',
 
     'check_active': 'تم تعطيل حسابك',
 
@@ -1269,11 +1281,13 @@ class AppTranslations {
 
     'allowed_to': 'غير مصرح لك بالقيام بهذا الإجراء',
 
-    'Privilege denied! You cannot perform this action': 'غير مصرح لك بالقيام بهذا الإجراء',
+    'Privilege denied! You cannot perform this action':
+        'غير مصرح لك بالقيام بهذا الإجراء',
 
     'not_authorized': 'غير مصرح لك بالقيام بهذه العملية',
 
-    'You are not authorized to perform this action': 'غير مصرح لك بالقيام بهذه العملية',
+    'You are not authorized to perform this action':
+        'غير مصرح لك بالقيام بهذه العملية',
 
     'You are not authorized to do that': 'غير مصرح لك بالقيام بهذا الإجراء',
 
@@ -1283,9 +1297,11 @@ class AppTranslations {
 
     'success_signup': 'تم إنشاء الحساب بنجاح، يرجى تسجيل الدخول',
 
-    'Signed up successfully, please login': 'تم إنشاء الحساب بنجاح، يرجى تسجيل الدخول',
+    'Signed up successfully, please login':
+        'تم إنشاء الحساب بنجاح، يرجى تسجيل الدخول',
 
-    'signed up successfully , please login': 'تم إنشاء الحساب بنجاح، يرجى تسجيل الدخول',
+    'signed up successfully , please login':
+        'تم إنشاء الحساب بنجاح، يرجى تسجيل الدخول',
 
     'code_verified_success': 'تم التحقق من الرمز بنجاح',
 
@@ -1303,11 +1319,14 @@ class AppTranslations {
 
     'Please Enter Your Currant Password': 'الرجاء إدخال كلمة المرور الحالية',
 
-    'Session expired, please login again': 'انتهت الجلسة، يرجى تسجيل الدخول مجدداً',
+    'Session expired, please login again':
+        'انتهت الجلسة، يرجى تسجيل الدخول مجدداً',
 
-    'session time Expired, please login again..': 'انتهت الجلسة، يرجى تسجيل الدخول مجدداً',
+    'session time Expired, please login again..':
+        'انتهت الجلسة، يرجى تسجيل الدخول مجدداً',
 
-    'Session expired. Please log in again.': 'انتهت الجلسة، يرجى تسجيل الدخول مجدداً',
+    'Session expired. Please log in again.':
+        'انتهت الجلسة، يرجى تسجيل الدخول مجدداً',
 
     'not_found': 'لم يتم العثور على البيانات',
 
@@ -1341,40 +1360,49 @@ class AppTranslations {
 
     'validation_length_short': 'يجب أن يكون الطول بين 2 و 50 حرفاً',
 
-    'Length must be between 2 and 50 characters': 'يجب أن يكون الطول بين 2 و 50 حرفاً',
+    'Length must be between 2 and 50 characters':
+        'يجب أن يكون الطول بين 2 و 50 حرفاً',
 
     'length is between 10, 50': 'يجب أن يكون الطول بين 10 و 50 حرفاً',
 
     'validation_length_phone': 'يجب أن يتراوح طول رقم الهاتف بين 11 و 15 رقماً',
 
-    'Phone number length must be between 11 and 15 digits': 'يجب أن يتراوح طول رقم الهاتف بين 11 و 15 رقماً',
+    'Phone number length must be between 11 and 15 digits':
+        'يجب أن يتراوح طول رقم الهاتف بين 11 و 15 رقماً',
 
-    'length must be between 11 ,15': 'يجب أن يتراوح طول رقم الهاتف بين 11 و 15 رقماً',
+    'length must be between 11 ,15':
+        'يجب أن يتراوح طول رقم الهاتف بين 11 و 15 رقماً',
 
     'validation_length_medium': 'يجب أن يكون الطول بين 10 و 150 حرفاً',
 
-    'Length must be between 10 and 150 characters': 'يجب أن يكون الطول بين 10 و 150 حرفاً',
+    'Length must be between 10 and 150 characters':
+        'يجب أن يكون الطول بين 10 و 150 حرفاً',
 
     'length is between 10, 150': 'يجب أن يكون الطول بين 10 و 150 حرفاً',
 
     'validation_length_long': 'يجب أن يكون الطول بين 10 و 500 حرفاً',
 
-    'Length must be between 10 and 500 characters': 'يجب أن يكون الطول بين 10 و 500 حرفاً',
+    'Length must be between 10 and 500 characters':
+        'يجب أن يكون الطول بين 10 و 500 حرفاً',
 
     'length is between 10, 500': 'يجب أن يكون الطول بين 10 و 500 حرفاً',
 
     'validation_length_password': 'يجب أن تكون كلمة المرور بين 6 و 20 حرفاً',
-    'Reset code sent to your email': 'تم إرسال رمز إعادة التعيين إلى بريدك الإلكتروني',
+    'Reset code sent to your email':
+        'تم إرسال رمز إعادة التعيين إلى بريدك الإلكتروني',
     'Code verified': 'تم التحقق من الرمز بنجاح',
     'Invalid reset code': 'رمز إعادة التعيين غير صالح',
-    'Reset session expired. Please request a new reset code.': 'انتهت صلاحية جلسة إعادة التعيين. يرجى طلب رمز جديد.',
+    'Reset session expired. Please request a new reset code.':
+        'انتهت صلاحية جلسة إعادة التعيين. يرجى طلب رمز جديد.',
     'Failed to reset password': 'فشل إعادة تعيين كلمة المرور',
     'Failed to send reset code': 'فشل إرسال رمز التحقق',
     'Failed to verify reset code': 'فشل التحقق من الرمز',
 
-    'Password must be between 6 and 20 characters': 'كلمة المرور يجب أن تكون بين 6 و 20 حرفاً أو رقماً',
+    'Password must be between 6 and 20 characters':
+        'كلمة المرور يجب أن تكون بين 6 و 20 حرفاً أو رقماً',
 
-    'Password is between 6, 20': 'كلمة المرور يجب أن تكون بين 6 و 20 حرفاً أو رقماً',
+    'Password is between 6, 20':
+        'كلمة المرور يجب أن تكون بين 6 و 20 حرفاً أو رقماً',
 
     'validation_password_match': 'كلمات المرور غير متطابقة',
 
@@ -1402,9 +1430,11 @@ class AppTranslations {
 
     'quantity_positive_integer': 'الكمية يجب أن تكون عدداً صحيحاً موجباً',
 
-    'Quantity must be a positive integer': 'الكمية يجب أن تكون عدداً صحيحاً موجباً',
+    'Quantity must be a positive integer':
+        'الكمية يجب أن تكون عدداً صحيحاً موجباً',
 
-    'quantity must be a positive integer': 'الكمية يجب أن تكون عدداً صحيحاً موجباً',
+    'quantity must be a positive integer':
+        'الكمية يجب أن تكون عدداً صحيحاً موجباً',
 
     'quantity_max_stock': 'الكمية تتجاوز المخزون المتوفر',
 
@@ -1414,7 +1444,8 @@ class AppTranslations {
 
     'review_already_exists': 'لقد قمت بتقييم هذا المنتج من قبل',
 
-    'You have already reviewed this product': 'لقد قمت بتقييم هذا المنتج من قبل',
+    'You have already reviewed this product':
+        'لقد قمت بتقييم هذا المنتج من قبل',
 
     'review_not_found': 'التقييم غير موجود',
 
@@ -1468,9 +1499,11 @@ class AppTranslations {
 
     'subcategory_wrong_category': 'القسم الفرعي لا ينتمي إلى هذا القسم',
 
-    'Subcategory does not belong to this category': 'القسم الفرعي لا ينتمي إلى هذا القسم',
+    'Subcategory does not belong to this category':
+        'القسم الفرعي لا ينتمي إلى هذا القسم',
 
-    'subcategory doesn\'t exit in that category': 'القسم الفرعي لا ينتمي إلى هذا القسم',
+    'subcategory doesn\'t exit in that category':
+        'القسم الفرعي لا ينتمي إلى هذا القسم',
 
     'invalid_category_id': 'معرف القسم غير صالح',
 
@@ -1484,19 +1517,23 @@ class AppTranslations {
 
     'discount_remove_hint': 'لإزالة الخصم قم بوضع سعر المنتج فقط',
 
-    'To remove the discount, set the product price only': 'لإزالة الخصم قم بوضع سعر المنتج فقط',
+    'To remove the discount, set the product price only':
+        'لإزالة الخصم قم بوضع سعر المنتج فقط',
 
     'discount_max_half': 'أعلى قيمة للخصم لا يمكن أن تتجاوز نصف سعر المنتج',
 
-    'Maximum discount cannot exceed half of the product price': 'أعلى قيمة للخصم لا يمكن أن تتجاوز نصف سعر المنتج',
+    'Maximum discount cannot exceed half of the product price':
+        'أعلى قيمة للخصم لا يمكن أن تتجاوز نصف سعر المنتج',
 
     'discount_min_zero': 'قيمة الخصم يجب أن تكون أكبر من 0',
 
     'Discount value must be greater than 0': 'قيمة الخصم يجب أن تكون أكبر من 0',
 
-    'Login failed. Please try again.': 'فشل تسجيل الدخول. يرجى المحاولة مرة أخرى.',
+    'Login failed. Please try again.':
+        'فشل تسجيل الدخول. يرجى المحاولة مرة أخرى.',
 
-    'Signup failed. Please try again.': 'فشل إنشاء الحساب. يرجى المحاولة مرة أخرى.',
+    'Signup failed. Please try again.':
+        'فشل إنشاء الحساب. يرجى المحاولة مرة أخرى.',
 
     'Failed to send reset code.': 'فشل إرسال رمز الاستعادة.',
 
@@ -1532,19 +1569,26 @@ class AppTranslations {
 
     'No internet connection.': 'لا يوجد اتصال بالإنترنت.',
 
-    'Connection timed out. Please check your internet.': 'انتهت مهلة الاتصال. يرجى التحقق من اتصالك بالإنترنت.',
+    'Connection timed out. Please check your internet.':
+        'انتهت مهلة الاتصال. يرجى التحقق من اتصالك بالإنترنت.',
 
-    'Something went wrong. Please try again.': 'حدث خطأ ما. يرجى المحاولة مرة أخرى.',
+    'Something went wrong. Please try again.':
+        'حدث خطأ ما. يرجى المحاولة مرة أخرى.',
 
-    'Server error. Please try again later.': 'خطأ في الخادم. يرجى المحاولة لاحقاً.',
+    'Server error. Please try again later.':
+        'خطأ في الخادم. يرجى المحاولة لاحقاً.',
 
-    'Invalid request. Please check your input.': 'طلب غير صالح. يرجى التحقق من المدخلات.',
+    'Invalid request. Please check your input.':
+        'طلب غير صالح. يرجى التحقق من المدخلات.',
 
-    'The requested resource was not found.': 'لم يتم العثور على العنصر المطلوب.',
+    'The requested resource was not found.':
+        'لم يتم العثور على العنصر المطلوب.',
 
-    'You don\'t have permission to perform this action.': 'ليس لديك الإذن للقيام بهذا الإجراء.',
+    'You don\'t have permission to perform this action.':
+        'ليس لديك الإذن للقيام بهذا الإجراء.',
 
-    'Too many requests. Please wait a moment.': 'طلبات كثيرة جداً. يرجى الانتظار قليلاً.',
+    'Too many requests. Please wait a moment.':
+        'طلبات كثيرة جداً. يرجى الانتظار قليلاً.',
 
     'Start Shopping': 'ابدأ التسوق',
 
@@ -1553,17 +1597,13 @@ class AppTranslations {
     'Change Password': 'تغيير كلمة المرور',
 
     'Password must be at least 6 characters':
-
         'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل',
 
     'Passwords do not match': 'كلمات المرور غير متطابقة',
 
     'not_logged_in': 'لم يتم تسجيل الدخول',
 
-
-
     // ─── App General & Common ───
-
     'app_name': 'لابيلا',
 
     'Labella': 'لابيلا',
@@ -1571,7 +1611,6 @@ class AppTranslations {
     'app_tagline': 'سجل الدخول لمواصلة تجربة التسوق الفاخرة',
 
     'Sign in to continue your luxury experience':
-
         'سجل الدخول لمواصلة تجربة التسوق الفاخرة',
 
     'luxury_tagline': 'انضم إلى عالم الجمال والفخامة',
@@ -1579,7 +1618,6 @@ class AppTranslations {
     'Join the world of luxury beauty': 'انضم إلى عالم الجمال والفخامة',
 
     'Discover luxury beauty essentials':
-
         'اكتشف أساسيات الجمال ومستحضرات العناية الفاخرة',
 
     'cancel': 'إلغاء',
@@ -1685,10 +1723,7 @@ class AppTranslations {
 
     'Show less': 'عرض أقل',
 
-
-
     // ─── Navigation ───
-
     'nav_home': 'الرئيسية',
 
     'Home': 'الرئيسية',
@@ -1713,10 +1748,7 @@ class AppTranslations {
 
     'Profile': 'حسابي',
 
-
-
     // ─── Authentication ───
-
     'welcome_back': 'مرحباً بعودتك',
 
     'Welcome back': 'مرحباً بعودتك',
@@ -1792,7 +1824,6 @@ class AppTranslations {
     'forgot_password_subtitle': 'أدخل بريدك الإلكتروني وسنرسل لك رمز التحقق.',
 
     'Enter your email to receive a reset code':
-
         'أدخل بريدك الإلكتروني لاستلام رمز إعادة التعيين',
 
     'send_code': 'إرسال الرمز',
@@ -1806,7 +1837,6 @@ class AppTranslations {
     'verify_code_subtitle': 'أدخل الرمز المكون من 6 أرقام المرسل إلى بريدك',
 
     'We have sent a verification code to your email':
-
         'لقد أرسلنا رمز التحقق إلى بريدك الإلكتروني',
 
     'Reset Code': 'رمز التحقق',
@@ -1828,17 +1858,14 @@ class AppTranslations {
     'Reset Password': 'إعادة تعيين كلمة المرور',
 
     'password_reset_success':
-
         'تمت إعادة تعيين كلمة المرور بنجاح! يرجى تسجيل الدخول.',
 
     'Password reset successfully! Please log in.':
-
         'تمت إعادة تعيين كلمة المرور بنجاح! يرجى تسجيل الدخول.',
 
     'account_created': 'تم إنشاء الحساب بنجاح! يرجى تسجيل الدخول.',
 
     'Account created! Please log in.':
-
         'تم إنشاء الحساب بنجاح! يرجى تسجيل الدخول.',
 
     'login_success': 'مرحباً بعودتك!',
@@ -1863,10 +1890,7 @@ class AppTranslations {
 
     'phone_invalid': 'يرجى إدخال رقم هاتف صحيح (10-15 رقماً)',
 
-
-
     // ─── Store & Home & Products ───
-
     'all_products': 'جميع المنتجات',
 
     'All Products': 'جميع المنتجات',
@@ -1924,7 +1948,6 @@ class AppTranslations {
     'No reviews yet': 'لا توجد تقييمات بعد',
 
     'No reviews yet. Be the first to review!':
-
         'لا توجد تقييمات بعد. كن أول من يقيّم هذا المنتج!',
 
     'write_review': 'أضف تقييماً',
@@ -1936,7 +1959,6 @@ class AppTranslations {
     'Delete Review': 'حذف التقييم',
 
     'Are you sure you want to delete this review?':
-
         'هل أنت متأكد من رغبتك في حذف هذا التقييم؟',
 
     'Could not load reviews': 'تعذر تحميل التقييمات',
@@ -1944,7 +1966,6 @@ class AppTranslations {
     'your_review': 'تقييمك',
 
     'Share your experience with this product...':
-
         'شاركنا تجربتك ورأيك الصادق حول هذا المنتج...',
 
     'submit_review': 'إرسال التقييم',
@@ -1971,10 +1992,7 @@ class AppTranslations {
 
     'pinch_to_zoom': 'قرّب بالإصبعين أو اضغط مرتين للتكبير',
 
-
-
     // ─── Cart & Checkout ───
-
     'your_cart': 'سلة المشتريات',
 
     'My Cart': 'سلة المشتريات',
@@ -1992,7 +2010,6 @@ class AppTranslations {
     'Clear Cart?': 'تفريغ السلة؟',
 
     'Are you sure you want to remove all items?':
-
         'هل أنت متأكد من رغبتك في تفريغ وحذف جميع منتجات السلة؟',
 
     'start_shopping': 'ابدأ التسوق',
@@ -2036,7 +2053,6 @@ class AppTranslations {
     'Continue Shopping': 'متابعة التسوق',
 
     'Thank you for your purchase.\nYour order is being processed.':
-
         'شكراً لتسوقك من لابيلا.\nطلبك قيد التجهيز الآن.',
 
     'address': 'العنوان',
@@ -2070,7 +2086,6 @@ class AppTranslations {
     'Delete Address': 'حذف العنوان',
 
     'Are you sure you want to remove this address?':
-
         'هل أنت متأكد من رغبتك في حذف هذا العنوان؟',
 
     'My Addresses': 'عناويني المحفوظة',
@@ -2095,10 +2110,7 @@ class AppTranslations {
 
     'Reached maximum stock': 'وصلت للحد الأقصى للكمية المتاحة في المخزن',
 
-
-
     // ─── Wishlist ───
-
     'your_wishlist': 'قائمة أمنياتك',
 
     'Your wishlist is empty': 'قائمة أمنياتك فارغة',
@@ -2106,7 +2118,6 @@ class AppTranslations {
     'wishlist_empty_subtitle': 'احفظ منتجاتك المفضلة لتعود إليها في أي وقت',
 
     'Save items you love to your wishlist and they will appear here.':
-
         'احفظ المنتجات التي تعجبك وستظهر لك هنا دائماً.',
 
     'Explore Products': 'استكشف المنتجات',
@@ -2115,10 +2126,7 @@ class AppTranslations {
 
     'removed_from_wishlist': 'تمت الإزالة من المفضلة',
 
-
-
     // ─── Profile & Orders ───
-
     'my_profile': 'الملف الشخصي',
 
     'edit_profile': 'تعديل الملف الشخصي',
@@ -2151,6 +2159,14 @@ class AppTranslations {
 
     'Mark as Paid': 'تحديد كمدفوع',
 
+    'Mark Deposit as Paid': 'تأكيد دفع العربون',
+
+    'Deposit Paid': 'تم دفع العربون',
+
+    'Deposit Pending': 'العربون قيد الانتظار',
+
+    'Deposit': 'العربون',
+
     'No address provided': 'لم يتم تحديد عنوان',
 
     'dark_mode': 'الوضع الداكن',
@@ -2174,7 +2190,6 @@ class AppTranslations {
     'Confirm New Password': 'تأكيد كلمة المرور الجديدة',
 
     'Password changed successfully! Please login again.':
-
         'تم تغيير كلمة المرور بنجاح! يرجى تسجيل الدخول مجدداً.',
 
     'Enter name': 'أدخل الاسم',
@@ -2194,19 +2209,13 @@ class AppTranslations {
     'Delete Account': 'حذف الحساب',
 
     'delete_account_confirm':
-
         'هل أنت متأكد من حذف حسابك؟ لا يمكن التراجع عن هذا الإجراء.',
 
     'Profile deleted successfully': 'تم حذف الحساب بنجاح',
 
-
-
     // ─── Admin Panel ───
 
-
-
     // ─── Admin Panel ───
-
     'admin_dashboard': 'لوحة تحكم المشرف',
 
     'Admin Panel': 'لوحة الإدارة',
@@ -2214,7 +2223,6 @@ class AppTranslations {
     'Confirm Delete': 'تأكيد الحذف',
 
     'Are you sure you want to delete this item?':
-
         'هل أنت متأكد من رغبتك في حذف هذا العنصر نهائياً؟',
 
     'No orders found': 'لم يتم العثور على أي طلبات',
@@ -2288,11 +2296,9 @@ class AppTranslations {
     'Try Again': 'حاول مجدداً',
 
     'Reviews will appear here when customers share feedback.':
-
         'ستظهر التقييمات هنا عندما يشارك العملاء آراءهم.',
 
     'Be the first to share your experience.':
-
         'كن أول من يشارك تجربته مع هذا المنتج.',
 
     'review': 'تقييم',
@@ -2372,24 +2378,20 @@ class AppTranslations {
     'Exclusive Collection': 'تشكيلة حصرية',
     'Special Offers': 'عروض خاصة 🌟',
     'Up to 50% Off': 'خصومات تصل 50%',
-    'On luxury skincare and premium fragrances': 'على أرقى مستحضرات العناية بالبشرة والعطور',
+    'On luxury skincare and premium fragrances':
+        'على أرقى مستحضرات العناية بالبشرة والعطور',
     'Radiant Beauty': 'إشراقة لا مثيل لها',
-    'Selected from world-class luxury beauty brands': 'مختارة بعناية من أفخم العلامات العالمية',
-
+    'Selected from world-class luxury beauty brands':
+        'مختارة بعناية من أفخم العلامات العالمية',
   };
-
-
 
   /// Translate key or English phrase according to current locale
 
   static String translate(String key, String languageCode) {
-
     final dict = languageCode == 'ar' ? ar : en;
 
     if (dict.containsKey(key)) {
-
       return dict[key]!;
-
     }
 
     // Case-insensitive / trimmed fallback
@@ -2397,13 +2399,9 @@ class AppTranslations {
     final clean = key.trim().toLowerCase();
 
     for (final entry in dict.entries) {
-
       if (entry.key.trim().toLowerCase() == clean) {
-
         return entry.value;
-
       }
-
     }
 
     // Punctuation-stripped fallback (e.g. trailing periods or exclamation marks)
@@ -2411,17 +2409,15 @@ class AppTranslations {
     final stripped = clean.replaceAll(RegExp(r'[\.\!\:\,\-]+$'), '').trim();
 
     for (final entry in dict.entries) {
-
-      final entryStripped =
-
-          entry.key.trim().toLowerCase().replaceAll(RegExp(r'[\.\!\:\,\-]+$'), '').trim();
+      final entryStripped = entry.key
+          .trim()
+          .toLowerCase()
+          .replaceAll(RegExp(r'[\.\!\:\,\-]+$'), '')
+          .trim();
 
       if (entryStripped == stripped) {
-
         return entry.value;
-
       }
-
     }
 
     // Check other dict if not found
@@ -2429,18 +2425,12 @@ class AppTranslations {
     final fallbackDict = languageCode == 'ar' ? en : ar;
 
     if (fallbackDict.containsKey(key)) {
-
       return fallbackDict[key]!;
-
     }
 
     return key;
-
   }
-
 }
-
-
 
 /// Extension on String for translating keys: `'sign_in'.tr(context)` or `'Welcome back'.tr(context)`
 

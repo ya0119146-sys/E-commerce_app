@@ -154,4 +154,14 @@ class CheckoutCubit extends Cubit<CheckoutState> {
       emit(state.copyWith(errorMessage: e.message));
     }
   }
+
+  /// Mark deposit as paid (Admin/Employee).
+  Future<void> depositeOrder(String orderId) async {
+    try {
+      await _repository.depositeOrder(orderId);
+      await fetchOrderHistory(); // Refresh
+    } on ApiException catch (e) {
+      emit(state.copyWith(errorMessage: e.message));
+    }
+  }
 }

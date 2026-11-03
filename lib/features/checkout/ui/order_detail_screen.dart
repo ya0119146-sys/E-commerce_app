@@ -96,6 +96,23 @@ class OrderDetailScreen extends StatelessWidget {
               ),
             ),
           ),
+        if (!order.isPaid && !order.isDepositePaid && order.depositeAmount > 0)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: ElevatedButton.icon(
+              onPressed: () {
+                context.read<CheckoutCubit>().depositeOrder(order.id);
+                onStatusUpdate?.call();
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.account_balance_wallet_outlined),
+              label: Text('Mark Deposit as Paid'.tr(context)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.amber.shade800,
+                foregroundColor: Colors.white,
+              ),
+            ),
+          ),
         if (!order.isPaid)
           ElevatedButton.icon(
             onPressed: () {
@@ -128,10 +145,14 @@ class OrderDetailScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                '${'Order ID'.tr(context)}: #${order.id.substring(order.id.length > 12 ? order.id.length - 12 : 0)}',
-                style: const TextStyle(fontWeight: FontWeight.bold),
+              Expanded(
+                child: Text(
+                  '${'Order ID'.tr(context)}: #${order.id.substring(order.id.length > 12 ? order.id.length - 12 : 0)}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
+              const SizedBox(width: 8),
               _statusChip(context, order.status ?? 'pending', b),
             ],
           ),
@@ -139,12 +160,14 @@ class OrderDetailScreen extends StatelessWidget {
           if (order.createdAt != null)
             Text(df.format(order.createdAt!), style: Theme.of(context).textTheme.bodySmall),
           const SizedBox(height: 12),
-          Row(
+          Wrap(
+            spacing: 8,
+            runSpacing: 6,
             children: [
               _paymentChip(context, order.paymentMethod, b),
-              const SizedBox(width: 8),
               _paymentStatusChip(context, order.isPaid, b),
-              const SizedBox(width: 8),
+              if (order.depositeAmount > 0)
+                _depositStatusChip(context, order.isDepositePaid, b),
               _deliveryStatusChip(context, order.isDelivered, b),
             ],
           ),
@@ -164,9 +187,12 @@ class OrderDetailScreen extends StatelessWidget {
                       : null,
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  '${'Customer'.tr(context)}: ${order.userName}',
-                  style: const TextStyle(fontWeight: FontWeight.w600),
+                Expanded(
+                  child: Text(
+                    '${'Customer'.tr(context)}: ${order.userName}',
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),
@@ -263,11 +289,22 @@ class OrderDetailScreen extends StatelessWidget {
           _summaryRow('Subtotal'.tr(context), order.subtotal, b),
           const SizedBox(height: 8),
           _summaryRow('Tax & Shipping'.tr(context), order.tax + order.shipping, b),
+          if (order.depositeAmount > 0) ...[
+            const SizedBox(height: 8),
+            _summaryRow(
+              '${'Deposit'.tr(context)} (${order.isDepositePaid ? 'Deposit Paid'.tr(context) : 'Deposit Pending'.tr(context)})',
+              order.depositeAmount,
+              b,
+            ),
+          ],
           const Divider(height: 24),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Total'.tr(context), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+              Expanded(
+                child: Text('Total'.tr(context), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+              ),
+              const SizedBox(width: 8),
               Text(
                 '\$${order.totalPrice.toStringAsFixed(2)}',
                 style: TextStyle(
@@ -287,7 +324,15 @@ class OrderDetailScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: const TextStyle(color: Colors.grey)),
+        Expanded(
+          child: Text(
+            label,
+            style: const TextStyle(color: Colors.grey),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        const SizedBox(width: 8),
         Text('\$${value.toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.w600)),
       ],
     );
@@ -335,6 +380,24 @@ class OrderDetailScreen extends StatelessWidget {
           fontSize: 9,
           fontWeight: FontWeight.bold,
           color: isPaid ? Colors.green : Colors.orange,
+        ),
+      ),
+    );
+  }
+
+  Widget _depositStatusChip(BuildContext context, bool isPaid, Brightness b) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        color: (isPaid ? Colors.green : Colors.amber.shade800).withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        (isPaid ? 'Deposit Paid' : 'Deposit Pending').tr(context),
+        style: TextStyle(
+          fontSize: 9,
+          fontWeight: FontWeight.bold,
+          color: isPaid ? Colors.green : Colors.amber.shade800,
         ),
       ),
     );

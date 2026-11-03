@@ -11,6 +11,8 @@ class OrderModel {
   final List<OrderItemModel> items;
   final bool isPaid;
   final bool isDelivered;
+  final bool isDepositePaid;
+  final double depositeAmount;
   final String paymentMethod;
   final AddressModel? address;
   final String? userName;
@@ -27,6 +29,8 @@ class OrderModel {
     this.items = const [],
     this.isPaid = false,
     this.isDelivered = false,
+    this.isDepositePaid = false,
+    this.depositeAmount = 0,
     this.paymentMethod = 'cash',
     this.address,
     this.userName,
@@ -45,20 +49,25 @@ class OrderModel {
       status: (json['isDelivered'] == true) ? 'delivered' : 'pending',
       isPaid: json['isPaid'] as bool? ?? false,
       isDelivered: json['isDelivered'] as bool? ?? false,
+      isDepositePaid: json['isDepositePaid'] as bool? ?? false,
+      depositeAmount: (json['DepositeAmount'] as num?)?.toDouble() ??
+          (json['depositeAmount'] as num?)?.toDouble() ??
+          0,
       paymentMethod: json['payment'] as String? ?? 'cash',
       createdAt: json['createdAt'] != null
           ? DateTime.tryParse(json['createdAt'] as String)
               ?.add(const Duration(hours: 3))
           : null,
       items: (json['items'] as List? ?? [])
-          .map((e) => OrderItemModel.fromJson(e as Map<String, dynamic>))
+          .whereType<Map>()
+          .map((e) => OrderItemModel.fromJson(Map<String, dynamic>.from(e)))
           .toList(),
       address: addr is Map
-          ? AddressModel.fromJson(addr as Map<String, dynamic>)
+          ? AddressModel.fromJson(Map<String, dynamic>.from(addr))
           : null,
-      userName: user is Map ? user['name'] as String? : null,
-      userImage: user is Map ? user['image'] as String? : null,
-      userId: user is Map ? user['_id'] as String? : null,
+      userName: user is Map ? user['name']?.toString() : null,
+      userImage: user is Map ? user['image']?.toString() : null,
+      userId: user is Map ? (user['_id']?.toString() ?? user['id']?.toString()) : null,
     );
   }
 
@@ -88,13 +97,13 @@ class OrderItemModel {
     final product = json['product'];
     return OrderItemModel(
       productId: product is Map
-          ? (product['_id'] as String? ?? product['id'] as String? ?? '')
-          : (product as String? ?? ''),
+          ? (product['_id']?.toString() ?? product['id']?.toString() ?? '')
+          : (product?.toString() ?? ''),
       title: product is Map
           ? (product['name'] as String? ?? product['title'] as String?)
           : null,
       image: product is Map ? product['cover'] as String? : null,
-      quantity: json['quantity'] as int? ?? 1,
+      quantity: (json['quantity'] as num?)?.toInt() ?? 1,
       price: (json['price'] as num?)?.toDouble() ?? 0,
     );
   }

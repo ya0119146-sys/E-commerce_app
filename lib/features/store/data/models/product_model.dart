@@ -96,7 +96,7 @@ class ProductModel {
       cover: json['cover'] as String? ?? json['imageCover'] as String?,
       images:
           (json['images'] as List<dynamic>?)
-              ?.map((e) => e as String)
+              ?.map((e) => e.toString())
               .toList() ??
           [],
       ratingAvg:

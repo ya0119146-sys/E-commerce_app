@@ -143,4 +143,16 @@ class CheckoutRepository {
           const ApiException(message: 'Failed to confirm payment');
     }
   }
+
+  /// Mark deposit as paid (Admin/Employee).
+  Future<OrderModel> depositeOrder(String id) async {
+    try {
+      final response = await _client.dio.patch(ApiConstants.orderDeposite(id));
+      final data = response.data['data'] ?? response.data;
+      return OrderModel.fromJson(data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      throw e.error as ApiException? ??
+          const ApiException(message: 'Failed to confirm deposit payment');
+    }
+  }
 }

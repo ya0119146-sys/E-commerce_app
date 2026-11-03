@@ -7,6 +7,7 @@ import 'package:e_commerce/features/auth/data/models/user_model.dart';
 import 'package:e_commerce/features/store/data/models/product_model.dart';
 import 'package:e_commerce/features/cart/data/models/cart_model.dart';
 import 'package:e_commerce/features/cart/data/repos/cart_repository.dart';
+import 'package:e_commerce/features/checkout/data/models/order_model.dart';
 import 'package:e_commerce/features/checkout/data/repos/checkout_repository.dart';
 import 'package:e_commerce/features/reviews/data/models/review_model.dart';
 
@@ -34,6 +35,7 @@ void main() {
       expect(ApiConstants.cart, equals('/api/v1/cart'));
       expect(ApiConstants.reviewsMe, equals('/api/v1/reviews/me'));
       expect(ApiConstants.deleteWishlist('123'), equals('/api/v1/wishlist/123'));
+      expect(ApiConstants.orderDeposite('123'), equals('/api/v1/order/123/deposite'));
     });
     });
 
@@ -194,6 +196,52 @@ void main() {
       expect(r2.product.id, equals('prod_xyz'));
       expect(r2.product.name, equals('Handbag'));
       expect(r2.toJson()['product'], equals('prod_xyz'));
+    });
+
+    test('OrderModel deserializes deposit fields, user and item details safely', () {
+      final orderJson = {
+        '_id': 'order_123456789012',
+        'totalPrice': 500,
+        'itemsPrice': 450,
+        'taxPrice': 50,
+        'isPaid': false,
+        'isDelivered': false,
+        'isDepositePaid': true,
+        'DepositeAmount': 225.0,
+        'payment': 'cash',
+        'user': {
+          '_id': 'user_1',
+          'name': 'Fatima',
+          'image': 'https://res.cloudinary.com/demo/image/upload/user1.jpg',
+        },
+        'items': [
+          {
+            'product': {
+              '_id': 'p1',
+              'name': 'Perfume Oil',
+              'cover': 'https://res.cloudinary.com/demo/image/upload/p1.jpg',
+            },
+            'quantity': 2,
+            'price': 225,
+          }
+        ],
+        'address': {
+          '_id': 'addr_1',
+          'street': 'Al-Tahrir St',
+          'city': 'Cairo',
+          'state': 'Cairo',
+          'zip': '11511',
+        },
+      };
+
+      final order = OrderModel.fromJson(orderJson);
+      expect(order.id, equals('order_123456789012'));
+      expect(order.isDepositePaid, isTrue);
+      expect(order.depositeAmount, equals(225.0));
+      expect(order.userName, equals('Fatima'));
+      expect(order.items.length, equals(1));
+      expect(order.items.first.title, equals('Perfume Oil'));
+      expect(order.address?.street, equals('Al-Tahrir St'));
     });
   });
 

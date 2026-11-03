@@ -22,11 +22,11 @@ class CartItemModel {
     final productData = json['product'];
     return CartItemModel(
       id: json['_id'] as String? ?? json['id'] as String? ?? '',
-      product: productData is Map<String, dynamic>
-          ? ProductModel.fromJson(productData)
+      product: productData is Map
+          ? ProductModel.fromJson(Map<String, dynamic>.from(productData))
           : null,
-      productId: productData is Map<String, dynamic>
-          ? (productData['_id'] as String? ?? productData['id'] as String? ?? '')
+      productId: productData is Map
+          ? (productData['_id']?.toString() ?? productData['id']?.toString() ?? '')
           : (productData?.toString() ?? ''),
       quantity: (json['quantity'] as num?)?.toInt() ?? 1,
       price: (json['price'] as num?)?.toDouble() ?? 0.0,
@@ -64,7 +64,8 @@ class CartModel {
   factory CartModel.fromJson(Map<String, dynamic> json) {
     // Backend field is 'items' (not 'cartItems').
     final cartItems = (json['items'] as List? ?? [])
-        .map((e) => CartItemModel.fromJson(e as Map<String, dynamic>))
+        .whereType<Map>()
+        .map((e) => CartItemModel.fromJson(Map<String, dynamic>.from(e)))
         .toList();
     return CartModel(
       id: json['_id'] as String? ?? json['id'] as String?,

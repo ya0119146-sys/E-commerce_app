@@ -72,6 +72,7 @@ class ApiConstants {
   static String orderDetails(String orderId) => '/api/v1/order/$orderId';
   static String orderDeliver(String orderId) => '/api/v1/order/$orderId/deliver';
   static String orderPay(String orderId) => '/api/v1/order/$orderId/pay';
+  static String orderDeposite(String orderId) => '/api/v1/order/$orderId/deposite';
 
   // ─── Reviews ───
   static const String reviews = '/api/v1/reviews';

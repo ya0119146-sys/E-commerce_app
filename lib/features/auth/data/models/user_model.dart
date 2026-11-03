@@ -34,7 +34,8 @@ class UserModel {
       image: json['image'] as String?,
       role: json['role'] as String? ?? 'user',
       addresses: (json['address'] as List? ?? [])
-          .map((e) => AddressModel.fromJson(e as Map<String, dynamic>))
+          .whereType<Map>()
+          .map((e) => AddressModel.fromJson(Map<String, dynamic>.from(e)))
           .toList(),
       //token: json['token'] as String?,
     );
