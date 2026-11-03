@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,7 +10,21 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await dotenv.load(fileName: ".env");
+  // Global error handlers for production stability and diagnostics
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+  };
+  PlatformDispatcher.instance.onError = (error, stack) {
+    debugPrint('Uncaught platform error: $error');
+    return true;
+  };
+
+  // Safely load environment variables, fallback gracefully to production constants
+  try {
+    await dotenv.load(fileName: ".env");
+  } catch (e) {
+    debugPrint('Warning: .env failed to load, falling back to ApiConstants defaults: $e');
+  }
 
   // Pre-load saved language synchronously so all interceptors & errors have it immediately
   try {

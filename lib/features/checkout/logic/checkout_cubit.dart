@@ -85,6 +85,8 @@ class CheckoutCubit extends Cubit<CheckoutState> {
 
   /// Place order.
   Future<void> placeOrder() async {
+    if (state.status == CheckoutStatus.placingOrder) return;
+
     if (state.selectedAddressId == null) {
       emit(
         state.copyWith(
