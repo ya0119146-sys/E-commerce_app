@@ -1,5 +1,6 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
@@ -12,7 +13,8 @@ import 'widgets/category_grid.dart';
 import 'search_screen.dart';
 import '../../../core/localization/app_translations.dart';
 
-/// Home screen with Concept 1 hero banner, Concept 1 story categories, and Concept 2 trending products.
+/// Home screen with Concept 1 auto-scrolling hero banner,
+/// Concept 1 story categories, and Concept 2 trending products.
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.role});
   final String role;
@@ -46,6 +48,14 @@ class _HomeScreenState extends State<HomeScreen> {
     if (maxScroll - currentScroll <= 250) {
       context.read<ProductsCubit>().loadMore();
     }
+  }
+
+  void _scrollToProducts() {
+    _scrollController.animateTo(
+      380,
+      duration: const Duration(milliseconds: 650),
+      curve: Curves.easeInOutCubic,
+    );
   }
 
   @override
@@ -94,232 +104,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
 
-            // ─── Hero Banner (Concept 1: Editorial Cosmetics) ───
+            // ─── Hero Banner (Concept 1: Auto-Scrolling Editorial Carousel) ───
             SliverToBoxAdapter(
-              child: Container(
-                margin: const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.screenPadding,
-                  vertical: 10,
-                ),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFF6B204D),
-                      Color(0xFF4A1236),
-                      Color(0xFF2E0921),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusXl),
-                  border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.15),
-                    width: 1.0,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF4A1236).withValues(alpha: 0.35),
-                      blurRadius: 28,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusXl),
-                  child: Stack(
-                    children: [
-                      // Background Glowing Shapes
-                      Positioned(
-                        top: -40,
-                        right: -30,
-                        child: Container(
-                          width: 160,
-                          height: 160,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: const Color(0xFFE8A598).withValues(alpha: 0.12),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: -50,
-                        left: -20,
-                        child: Container(
-                          width: 140,
-                          height: 140,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white.withValues(alpha: 0.05),
-                          ),
-                        ),
-                      ),
-
-                      // Content
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 22,
-                          vertical: 20,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            // Capsule Tag
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.16),
-                                borderRadius: BorderRadius.circular(
-                                  AppDimensions.radiusRound,
-                                ),
-                                border: Border.all(
-                                  color: Colors.white.withValues(alpha: 0.25),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(
-                                    Icons.auto_awesome,
-                                    size: 12,
-                                    color: Color(0xFFFFD194),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    'Exclusive Collection'.tr(context),
-                                    style: const TextStyle(
-                                      fontSize: 10.5,
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: 0.8,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-
-                            // Heading
-                            Text(
-                              'New Collection'.tr(context),
-                              style: GoogleFonts.playfairDisplay(
-                                fontSize: 25,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.white,
-                                letterSpacing: 0.3,
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-
-                            // Subtitle
-                            Text(
-                              'Discover luxury beauty essentials'.tr(context),
-                              style: GoogleFonts.cairo(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
-                                height: 1.35,
-                                color: Colors.white.withValues(alpha: 0.88),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-
-                            // Action Row (Shop Now Button + Carousel Dots)
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                // CTA Button
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 18,
-                                    vertical: 9,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(
-                                      AppDimensions.radiusRound,
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withValues(alpha: 0.12),
-                                        blurRadius: 10,
-                                        offset: const Offset(0, 3),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        'Shop Now'.tr(context),
-                                        style: const TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w700,
-                                          color: Color(0xFF6B204D),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 6),
-                                      Icon(
-                                        Directionality.of(context) == TextDirection.rtl
-                                            ? Icons.arrow_back_rounded
-                                            : Icons.arrow_forward_rounded,
-                                        size: 15,
-                                        color: const Color(0xFF6B204D),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-
-                                // Carousel Indicator Dots
-                                Row(
-                                  children: [
-                                    Container(
-                                      width: 18,
-                                      height: 5,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFFFD194),
-                                        borderRadius: BorderRadius.circular(3),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 5),
-                                    Container(
-                                      width: 5,
-                                      height: 5,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white.withValues(alpha: 0.4),
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 5),
-                                    Container(
-                                      width: 5,
-                                      height: 5,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white.withValues(alpha: 0.4),
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-                  .animate()
-                  .fade(duration: 600.ms)
-                  .scale(
-                    begin: const Offset(0.97, 0.97),
-                    end: const Offset(1.0, 1.0),
-                    duration: 600.ms,
-                  ),
+              child: _EditorialHeroCarousel(
+                onShopNow: _scrollToProducts,
+              ),
             ),
 
             // ─── Section: Categories (Concept 1: Story Avatars) ───
@@ -414,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             crossAxisCount: 2,
                             crossAxisSpacing: 14,
                             mainAxisSpacing: 14,
-                            childAspectRatio: 0.58,
+                            childAspectRatio: 0.51,
                           ),
                       delegate: SliverChildBuilderDelegate(
                         (_, __) => const ShimmerProductCard(),
@@ -489,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisCount: 2,
                           crossAxisSpacing: 14,
                           mainAxisSpacing: 14,
-                          childAspectRatio: 0.58,
+                          childAspectRatio: 0.51,
                         ),
                     delegate: SliverChildBuilderDelegate(
                       (_, index) => ProductCard(
@@ -532,6 +321,346 @@ class _HomeScreenState extends State<HomeScreen> {
             const SliverToBoxAdapter(child: SizedBox(height: 100)),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _BannerSlideData {
+  final String tag;
+  final String title;
+  final String subtitle;
+  final List<Color> gradientColors;
+  final String ctaText;
+
+  const _BannerSlideData({
+    required this.tag,
+    required this.title,
+    required this.subtitle,
+    required this.gradientColors,
+    required this.ctaText,
+  });
+}
+
+/// Concept 1: Luxury Editorial Auto-Scrolling Hero Banner Carousel.
+class _EditorialHeroCarousel extends StatefulWidget {
+  final VoidCallback onShopNow;
+
+  const _EditorialHeroCarousel({required this.onShopNow});
+
+  @override
+  State<_EditorialHeroCarousel> createState() => _EditorialHeroCarouselState();
+}
+
+class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
+  late PageController _pageController;
+  Timer? _timer;
+  int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 4), (_) {
+      if (_pageController.hasClients) {
+        _currentPage = (_currentPage + 1) % 3;
+        _pageController.animateToPage(
+          _currentPage,
+          duration: const Duration(milliseconds: 650),
+          curve: Curves.easeInOutCubic,
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final slides = [
+      _BannerSlideData(
+        tag: 'Exclusive Collection'.tr(context),
+        title: 'New Collection'.tr(context),
+        subtitle: 'Discover luxury beauty essentials'.tr(context),
+        gradientColors: const [
+          Color(0xFF6B204D),
+          Color(0xFF4A1236),
+          Color(0xFF2E0921),
+        ],
+        ctaText: 'Shop Now'.tr(context),
+      ),
+      _BannerSlideData(
+        tag: 'Special Offers'.tr(context),
+        title: 'Up to 50% Off'.tr(context),
+        subtitle: 'On luxury skincare and premium fragrances'.tr(context),
+        gradientColors: const [
+          Color(0xFF8E3A59),
+          Color(0xFF5A1C36),
+          Color(0xFF380E21),
+        ],
+        ctaText: 'Shop Now'.tr(context),
+      ),
+      _BannerSlideData(
+        tag: 'Trending Now'.tr(context),
+        title: 'Radiant Beauty'.tr(context),
+        subtitle: 'Selected from world-class luxury beauty brands'.tr(context),
+        gradientColors: const [
+          Color(0xFF531E4D),
+          Color(0xFF3B1036),
+          Color(0xFF230820),
+        ],
+        ctaText: 'Shop Now'.tr(context),
+      ),
+    ];
+
+    return Container(
+      margin: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.screenPadding,
+        vertical: 10,
+      ),
+      height: 200,
+      child: Stack(
+        children: [
+          PageView.builder(
+            controller: _pageController,
+            onPageChanged: (idx) {
+              setState(() => _currentPage = idx);
+              _startTimer(); // reset auto-scroll timer on user interaction
+            },
+            itemCount: slides.length,
+            itemBuilder: (context, index) {
+              final slide = slides[index];
+              return Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: slide.gradientColors,
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusXl),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.15),
+                    width: 1.0,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: slide.gradientColors[1].withValues(alpha: 0.35),
+                      blurRadius: 28,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusXl),
+                  child: Stack(
+                    children: [
+                      // Background Glowing Shapes
+                      Positioned(
+                        top: -40,
+                        right: -30,
+                        child: Container(
+                          width: 160,
+                          height: 160,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: const Color(0xFFE8A598).withValues(alpha: 0.12),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: -50,
+                        left: -20,
+                        child: Container(
+                          width: 140,
+                          height: 140,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white.withValues(alpha: 0.05),
+                          ),
+                        ),
+                      ),
+
+                      // Content
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 22,
+                          vertical: 18,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Capsule Tag
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withValues(alpha: 0.16),
+                                    borderRadius: BorderRadius.circular(
+                                      AppDimensions.radiusRound,
+                                    ),
+                                    border: Border.all(
+                                      color: Colors.white.withValues(alpha: 0.25),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(
+                                        Icons.auto_awesome,
+                                        size: 12,
+                                        color: Color(0xFFFFD194),
+                                      ),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        slide.tag,
+                                        style: const TextStyle(
+                                          fontSize: 10.5,
+                                          fontWeight: FontWeight.w600,
+                                          letterSpacing: 0.8,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+
+                                // Heading
+                                Text(
+                                  slide.title,
+                                  style: GoogleFonts.playfairDisplay(
+                                    fontSize: 23,
+                                    fontWeight: FontWeight.w800,
+                                    color: Colors.white,
+                                    letterSpacing: 0.3,
+                                  ),
+                                ),
+                                const SizedBox(height: 3),
+
+                                // Subtitle
+                                Text(
+                                  slide.subtitle,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.cairo(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    height: 1.3,
+                                    color: Colors.white.withValues(alpha: 0.88),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            // Action Row (Shop Now Button + Carousel Dots)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                // Working Shop Now CTA Button
+                                GestureDetector(
+                                  onTap: () {
+                                    HapticFeedback.lightImpact();
+                                    widget.onShopNow();
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 18,
+                                      vertical: 8.5,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(
+                                        AppDimensions.radiusRound,
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withValues(alpha: 0.12),
+                                          blurRadius: 10,
+                                          offset: const Offset(0, 3),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          slide.ctaText,
+                                          style: TextStyle(
+                                            fontSize: 12.5,
+                                            fontWeight: FontWeight.w700,
+                                            color: slide.gradientColors[0],
+                                          ),
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Icon(
+                                          Directionality.of(context) == TextDirection.rtl
+                                              ? Icons.arrow_back_rounded
+                                              : Icons.arrow_forward_rounded,
+                                          size: 14,
+                                          color: slide.gradientColors[0],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+
+                                // Interactive Carousel Indicator Dots
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: List.generate(slides.length, (dotIdx) {
+                                    final isActive = _currentPage == dotIdx;
+                                    return GestureDetector(
+                                      onTap: () {
+                                        _pageController.animateToPage(
+                                          dotIdx,
+                                          duration: const Duration(milliseconds: 400),
+                                          curve: Curves.easeInOut,
+                                        );
+                                      },
+                                      child: AnimatedContainer(
+                                        duration: const Duration(milliseconds: 300),
+                                        margin: const EdgeInsets.symmetric(horizontal: 2.5),
+                                        width: isActive ? 18 : 6,
+                                        height: 5,
+                                        decoration: BoxDecoration(
+                                          color: isActive
+                                              ? const Color(0xFFFFD194)
+                                              : Colors.white.withValues(alpha: 0.4),
+                                          borderRadius: BorderRadius.circular(3),
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

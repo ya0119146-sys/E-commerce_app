@@ -35,6 +35,14 @@ class _ProductCardState extends State<ProductCard>
     with SingleTickerProviderStateMixin {
   bool _pressed = false;
 
+  String get _displayCategory {
+    final cat = widget.product.category?.trim();
+    if (cat == null || cat.isEmpty) return 'LABELLA';
+    // If it's a 24-character hexadecimal MongoDB ObjectId, hide it and use brand fallback
+    if (RegExp(r'^[0-9a-fA-F]{24}$').hasMatch(cat)) return 'LABELLA';
+    return cat.toUpperCase();
+  }
+
   @override
   Widget build(BuildContext context) {
     final brightness = Theme.of(context).brightness;
@@ -78,7 +86,7 @@ class _ProductCardState extends State<ProductCard>
             children: [
               // ─── 4:5 Image Section with Frosted Glass Wishlist & Sale Badge ───
               Expanded(
-                flex: 11,
+                flex: 10,
                 child: Stack(
                   children: [
                     // Product image
@@ -172,7 +180,7 @@ class _ProductCardState extends State<ProductCard>
                         children: [
                           // Brand / Category Tag
                           Text(
-                            (product.category ?? 'LABELLA').toUpperCase(),
+                            _displayCategory,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(

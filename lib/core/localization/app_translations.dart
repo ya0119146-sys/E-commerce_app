@@ -1148,6 +1148,11 @@ class AppTranslations {
     'Must be 0-99': 'Must be 0-99',
     'You save': 'You save',
     'Exclusive Collection': 'Exclusive Collection',
+    'Special Offers': 'Special Offers',
+    'Up to 50% Off': 'Up to 50% Off',
+    'On luxury skincare and premium fragrances': 'On luxury skincare and premium fragrances',
+    'Radiant Beauty': 'Radiant Beauty',
+    'Selected from world-class luxury beauty brands': 'Selected from world-class luxury beauty brands',
 
   };
 
@@ -2287,6 +2292,11 @@ class AppTranslations {
     'Must be 0-99': 'يجب أن يكون بين 0 و 99',
     'You save': 'وفرت',
     'Exclusive Collection': 'تشكيلة حصرية',
+    'Special Offers': 'عروض خاصة 🌟',
+    'Up to 50% Off': 'خصومات تصل 50%',
+    'On luxury skincare and premium fragrances': 'على أرقى مستحضرات العناية بالبشرة والعطور',
+    'Radiant Beauty': 'إشراقة لا مثيل لها',
+    'Selected from world-class luxury beauty brands': 'مختارة بعناية من أفخم العلامات العالمية',
 
   };
 
