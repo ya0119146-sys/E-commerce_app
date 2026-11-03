@@ -14,7 +14,9 @@ class ProductModel {
   final double ratingAvg;
   final int ratingCount;
   final String? category;
+  final String? categoryId;
   final String? subcategory;
+  final String? subcategoryId;
   final int quantity;
   final int sold;
   final bool inStock;
@@ -32,7 +34,9 @@ class ProductModel {
     this.ratingAvg = 0.0,
     this.ratingCount = 0,
     this.category,
+    this.categoryId,
     this.subcategory,
+    this.subcategoryId,
     this.quantity = 0,
     this.sold = 0,
     this.inStock = true,
@@ -106,9 +110,25 @@ class ProductModel {
       category: json['category'] is Map
           ? _parseLocalized(json['category']['name'])
           : json['category']?.toString(),
+      categoryId: json['categoryId']?.toString() ??
+          (json['category'] is Map
+              ? (json['category']['_id']?.toString() ??
+                  json['category']['id']?.toString())
+              : (json['category'] != null &&
+                      json['category'].toString().length == 24
+                  ? json['category'].toString()
+                  : null)),
       subcategory: json['subcategory'] is Map
           ? _parseLocalized(json['subcategory']['name'])
           : json['subcategory']?.toString(),
+      subcategoryId: json['subcategoryId']?.toString() ??
+          (json['subcategory'] is Map
+              ? (json['subcategory']['_id']?.toString() ??
+                  json['subcategory']['id']?.toString())
+              : (json['subcategory'] != null &&
+                      json['subcategory'].toString().length == 24
+                  ? json['subcategory'].toString()
+                  : null)),
       quantity: quantity,
       sold: (json['sold'] as num?)?.toInt() ?? 0,
       inStock: (json['inStock'] as bool?) ?? quantity > 0,

@@ -240,13 +240,67 @@ class _UserFormState extends State<UserForm> {
                 ],
                 DropdownButtonFormField<String>(
                   value: _selectedRole,
+                  dropdownColor: AppColors.card(brightness),
+                  borderRadius: BorderRadius.circular(16),
+                  icon: Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    color: AppColors.secondary(brightness),
+                  ),
                   decoration: InputDecoration(
                     labelText: 'Role'.tr(context),
                     prefixIcon: const Icon(Icons.admin_panel_settings_outlined),
                   ),
                   items: [
-                    DropdownMenuItem(value: 'user', child: Text('User'.tr(context))),
-                    DropdownMenuItem(value: 'admin', child: Text('Admin'.tr(context))),
+                    DropdownMenuItem(
+                      value: 'user',
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'User'.tr(context),
+                            style: TextStyle(
+                              fontWeight: _selectedRole == 'user'
+                                  ? FontWeight.w700
+                                  : FontWeight.w500,
+                              color: _selectedRole == 'user'
+                                  ? AppColors.secondary(brightness)
+                                  : AppColors.foreground(brightness),
+                            ),
+                          ),
+                          if (_selectedRole == 'user')
+                            Icon(
+                              Icons.check_circle_rounded,
+                              size: 18,
+                              color: AppColors.secondary(brightness),
+                            ),
+                        ],
+                      ),
+                    ),
+                    DropdownMenuItem(
+                      value: 'admin',
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Admin'.tr(context),
+                            style: TextStyle(
+                              fontWeight: _selectedRole == 'admin'
+                                  ? FontWeight.w700
+                                  : FontWeight.w500,
+                              color: _selectedRole == 'admin'
+                                  ? AppColors.secondary(brightness)
+                                  : AppColors.foreground(brightness),
+                            ),
+                          ),
+                          if (_selectedRole == 'admin')
+                            Icon(
+                              Icons.check_circle_rounded,
+                              size: 18,
+                              color: AppColors.secondary(brightness),
+                            ),
+                        ],
+                      ),
+                    ),
                   ],
                   onChanged: (v) => setState(() => _selectedRole = v!),
                 ),

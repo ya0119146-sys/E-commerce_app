@@ -1134,6 +1134,8 @@ class AppTranslations {
 
     'Create Product': 'Create Product',
 
+    'Tap to choose cover': 'Tap to choose cover',
+
     'Update Product': 'Update Product',
 
     'Create Category': 'Create Category',
@@ -2306,6 +2308,8 @@ class AppTranslations {
     'Subcategories': 'التصنيفات الفرعية',
 
     'Create Product': 'إضافة منتج جديد',
+
+    'Tap to choose cover': 'اضغط لاختيار صورة الغلاف',
 
     'Update Product': 'تعديل المنتج',
 

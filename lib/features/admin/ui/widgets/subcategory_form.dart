@@ -146,12 +146,46 @@ class _SubcategoryFormState extends State<SubcategoryForm> {
                 const SizedBox(height: 24),
                 DropdownButtonFormField<String>(
                   value: _selectedCategoryId,
+                  dropdownColor: AppColors.card(brightness),
+                  borderRadius: BorderRadius.circular(16),
+                  icon: Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    color: AppColors.secondary(brightness),
+                  ),
                   decoration: InputDecoration(
                     labelText: 'Parent Category'.tr(context),
                     prefixIcon: const Icon(Icons.category_outlined),
                   ),
                   items: widget.categories.map((c) {
-                    return DropdownMenuItem(value: c.id, child: Text(c.name));
+                    final isSelected = c.id == _selectedCategoryId;
+                    return DropdownMenuItem(
+                      value: c.id,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              c.name,
+                              style: TextStyle(
+                                fontWeight: isSelected
+                                    ? FontWeight.w700
+                                    : FontWeight.w500,
+                                color: isSelected
+                                    ? AppColors.secondary(brightness)
+                                    : AppColors.foreground(brightness),
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if (isSelected)
+                            Icon(
+                              Icons.check_circle_rounded,
+                              size: 18,
+                              color: AppColors.secondary(brightness),
+                            ),
+                        ],
+                      ),
+                    );
                   }).toList(),
                   onChanged: (v) => setState(() => _selectedCategoryId = v),
                   validator: (v) =>

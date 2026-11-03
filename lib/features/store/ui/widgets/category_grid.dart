@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_dimensions.dart';
 import '../../../../core/localization/app_translations.dart';
-import '../../../../core/widgets/shimmer_loading.dart';
 import '../../data/models/category_model.dart';
 
 /// Concept 1: Instagram-Story style circular category avatars with luxury gradient rings.
@@ -28,6 +27,7 @@ class CategoryGrid extends StatelessWidget {
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
+        cacheExtent: 300.0,
         padding: const EdgeInsets.symmetric(
           horizontal: AppDimensions.screenPadding,
         ),
@@ -86,81 +86,78 @@ class CategoryGrid extends StatelessWidget {
       end: Alignment.bottomRight,
     );
 
-    return GestureDetector(
-      onTap: onTap,
-      child: SizedBox(
-        width: 66,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Outer Ring
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              width: circleSize,
-              height: circleSize,
-              padding: const EdgeInsets.all(2.5),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: isSelected ? activeGradient : null,
-                border: isSelected
-                    ? null
-                    : Border.all(
-                        color: AppColors.border(brightness).withValues(alpha: 0.6),
-                        width: 1.5,
-                      ),
-                boxShadow: isSelected
-                    ? [
-                        BoxShadow(
-                          color: AppColors.secondary(brightness).withValues(alpha: 0.28),
-                          blurRadius: 10,
-                          offset: const Offset(0, 3),
-                        ),
-                      ]
-                    : null,
-              ),
-              child: Container(
-                width: innerSize,
-                height: innerSize,
+    return RepaintBoundary(
+      child: GestureDetector(
+        onTap: onTap,
+        child: SizedBox(
+          width: 66,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Outer Ring
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                width: circleSize,
+                height: circleSize,
+                padding: const EdgeInsets.all(2.5),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.card(brightness),
+                  gradient: isSelected ? activeGradient : null,
+                  border: isSelected
+                      ? null
+                      : Border.all(
+                          color: AppColors.border(brightness).withValues(alpha: 0.6),
+                          width: 1.5,
+                        ),
+                  boxShadow: isSelected
+                      ? [
+                          BoxShadow(
+                            color: AppColors.secondary(brightness).withValues(alpha: 0.28),
+                            blurRadius: 10,
+                            offset: const Offset(0, 3),
+                          ),
+                        ]
+                      : null,
                 ),
-                child: ClipOval(
-                  child: imageUrl != null && imageUrl.isNotEmpty
-                      ? CachedNetworkImage(
-                          imageUrl: imageUrl,
-                          fit: BoxFit.cover,
-                          placeholder: (_, __) => const ShimmerLoading(
-                            width: innerSize,
-                            height: innerSize,
-                            borderRadius: innerSize / 2,
-                          ),
-                          errorWidget: (_, __, ___) => _fallbackIcon(
-                            icon,
-                            isSelected,
-                            brightness,
-                          ),
-                        )
-                      : _fallbackIcon(icon, isSelected, brightness),
+                child: Container(
+                  width: innerSize,
+                  height: innerSize,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.card(brightness),
+                    image: imageUrl != null && imageUrl.isNotEmpty
+                        ? DecorationImage(
+                            image: CachedNetworkImageProvider(
+                              imageUrl,
+                              maxWidth: 150,
+                              maxHeight: 150,
+                            ),
+                            fit: BoxFit.cover,
+                          )
+                        : null,
+                  ),
+                  child: imageUrl == null || imageUrl.isEmpty
+                      ? _fallbackIcon(icon, isSelected, brightness)
+                      : null,
                 ),
               ),
-            ),
-            const SizedBox(height: 6),
-            // Category Name Label
-            Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                color: isSelected
-                    ? AppColors.secondary(brightness)
-                    : AppColors.foreground(brightness).withValues(alpha: 0.8),
+              const SizedBox(height: 6),
+              // Category Name Label
+              Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                  color: isSelected
+                      ? AppColors.secondary(brightness)
+                      : AppColors.foreground(brightness).withValues(alpha: 0.8),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
