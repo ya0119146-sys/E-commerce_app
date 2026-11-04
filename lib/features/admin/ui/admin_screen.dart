@@ -32,6 +32,7 @@ class AdminScreen extends StatefulWidget {
 class _AdminScreenState extends State<AdminScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final ScrollController _productsScrollController = ScrollController();
   List<SubCategoryModel> _allSubcategories = [];
   bool _isLoadingSubcats = false;
 
@@ -40,7 +41,16 @@ class _AdminScreenState extends State<AdminScreen>
     super.initState();
     _tabController = TabController(length: 5, vsync: this);
     _tabController.addListener(_onTabChanged);
+    _productsScrollController.addListener(_onProductsScroll);
     _refreshData();
+  }
+
+  void _onProductsScroll() {
+    if (_productsScrollController.hasClients &&
+        _productsScrollController.position.pixels >=
+            _productsScrollController.position.maxScrollExtent - 200) {
+      context.read<ProductsCubit>().loadMore();
+    }
   }
 
   void _onTabChanged() {
@@ -51,7 +61,12 @@ class _AdminScreenState extends State<AdminScreen>
 
   Future<void> _refreshData() async {
     if (!mounted) return;
-    context.read<ProductsCubit>().fetchProducts(refresh: true);
+    context.read<ProductsCubit>().fetchProducts(
+      refresh: true,
+      clearCategory: true,
+      clearKeyword: true,
+      clearSort: true,
+    );
     context.read<CategoriesCubit>().fetchCategories();
     context.read<CheckoutCubit>().fetchOrderHistory();
     context.read<UsersCubit>().fetchUsers();
@@ -74,6 +89,8 @@ class _AdminScreenState extends State<AdminScreen>
   void dispose() {
     _tabController.removeListener(_onTabChanged);
     _tabController.dispose();
+    _productsScrollController.removeListener(_onProductsScroll);
+    _productsScrollController.dispose();
     super.dispose();
   }
 
@@ -218,16 +235,34 @@ class _AdminScreenState extends State<AdminScreen>
         if (state.status == ProductsStatus.loading) {
           return const Center(child: CircularProgressIndicator());
         }
-        return ListView.builder(
-          padding: const EdgeInsets.fromLTRB(
-            AppDimensions.screenPadding,
-            AppDimensions.screenPadding,
-            AppDimensions.screenPadding,
-            100,
-          ),
-          itemCount: state.products.length,
-          itemBuilder: (context, index) {
-            final product = state.products[index];
+        final isLoadingMore = state.status == ProductsStatus.loadingMore;
+        final totalCount = state.products.length + (isLoadingMore ? 1 : 0);
+
+        return RefreshIndicator(
+          onRefresh: () => context.read<ProductsCubit>().fetchProducts(
+                refresh: true,
+                clearCategory: true,
+                clearKeyword: true,
+                clearSort: true,
+              ),
+          child: ListView.builder(
+            controller: _productsScrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(
+              AppDimensions.screenPadding,
+              AppDimensions.screenPadding,
+              AppDimensions.screenPadding,
+              100,
+            ),
+            itemCount: totalCount,
+            itemBuilder: (context, index) {
+              if (index >= state.products.length) {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+              final product = state.products[index];
             return Card(
               margin: const EdgeInsets.only(bottom: 12),
               child: ListTile(
@@ -289,12 +324,13 @@ class _AdminScreenState extends State<AdminScreen>
               ),
             );
           },
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
+}
 
-  Widget _buildCategoriesTab(Brightness brightness) {
+Widget _buildCategoriesTab(Brightness brightness) {
     return BlocBuilder<CategoriesCubit, CategoriesState>(
       builder: (context, state) {
         if (state.status == CategoriesStatus.loading) {

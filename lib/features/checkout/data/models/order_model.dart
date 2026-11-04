@@ -1,3 +1,4 @@
+import '../../../../core/constants/egypt_governorates.dart';
 import 'address_model.dart';
 
 /// Order model for order history and details.
@@ -41,11 +42,30 @@ class OrderModel {
   factory OrderModel.fromJson(Map<String, dynamic> json) {
     final user = json['user'];
     final addr = json['address'];
+    final rawTotalPrice = (json['totalPrice'] as num?)?.toDouble() ?? 0;
+    final rawItemsPrice = (json['itemsPrice'] as num?)?.toDouble() ?? 0;
+    var parsedTaxPrice = (json['taxPrice'] as num?)?.toDouble() ?? 0;
+
+    final parsedAddress = addr is Map
+        ? AddressModel.fromJson(Map<String, dynamic>.from(addr))
+        : null;
+
+    if (parsedTaxPrice == 0 &&
+        parsedAddress != null &&
+        parsedAddress.state.isNotEmpty &&
+        !EgyptGovernorates.isSharqia(parsedAddress.state)) {
+      parsedTaxPrice = EgyptGovernorates.getShippingFee(parsedAddress.state);
+    }
+
+    final effectiveTotal = (rawTotalPrice > 0 && rawTotalPrice > rawItemsPrice)
+        ? rawTotalPrice
+        : (rawItemsPrice + parsedTaxPrice);
+
     return OrderModel(
       id: json['_id'] as String? ?? json['id'] as String? ?? '',
-      totalPrice: (json['totalPrice'] as num?)?.toDouble() ?? 0,
-      itemsPrice: (json['itemsPrice'] as num?)?.toDouble() ?? 0,
-      taxPrice: (json['taxPrice'] as num?)?.toDouble() ?? 0,
+      totalPrice: effectiveTotal,
+      itemsPrice: rawItemsPrice,
+      taxPrice: parsedTaxPrice,
       status: (json['isDelivered'] == true) ? 'delivered' : 'pending',
       isPaid: json['isPaid'] as bool? ?? false,
       isDelivered: json['isDelivered'] as bool? ?? false,
@@ -64,9 +84,7 @@ class OrderModel {
           .whereType<Map>()
           .map((e) => OrderItemModel.fromJson(Map<String, dynamic>.from(e)))
           .toList(),
-      address: addr is Map
-          ? AddressModel.fromJson(Map<String, dynamic>.from(addr))
-          : null,
+      address: parsedAddress,
       userName: user is Map ? user['name']?.toString() : null,
       userImage: user is Map ? user['image']?.toString() : null,
       userId: user is Map

@@ -294,6 +294,48 @@ void main() {
         expect(order.address?.street, equals('Al-Tahrir St'));
       },
     );
+
+    test('OrderModel recalculates shipping for governorates outside Sharqia when taxPrice is 0', () {
+      final orderJson = {
+        '_id': 'order_alex_123',
+        'totalPrice': 1600.0,
+        'itemsPrice': 1600.0,
+        'taxPrice': 0.0,
+        'address': {
+          '_id': 'addr_alex',
+          'street': '21, سموحة',
+          'city': 'الإسكندرية',
+          'state': 'محافظة الإسكندرية',
+          'zip': '5239',
+        },
+      };
+
+      final order = OrderModel.fromJson(orderJson);
+      expect(order.taxPrice, equals(100.0));
+      expect(order.totalPrice, equals(1700.0));
+      expect(order.tax + order.shipping, equals(100.0));
+    });
+
+    test('OrderModel preserves 0 shipping for Sharqia orders', () {
+      final orderJson = {
+        '_id': 'order_sharqia_123',
+        'totalPrice': 1600.0,
+        'itemsPrice': 1600.0,
+        'taxPrice': 0.0,
+        'address': {
+          '_id': 'addr_sh',
+          'street': 'شارع المحطة',
+          'city': 'الزقازيق',
+          'state': 'محافظة الشرقية',
+          'zip': '44511',
+        },
+      };
+
+      final order = OrderModel.fromJson(orderJson);
+      expect(order.taxPrice, equals(0.0));
+      expect(order.totalPrice, equals(1600.0));
+      expect(order.tax + order.shipping, equals(0.0));
+    });
   });
 
   group('HTTP 404 Tolerant Repositories', () {

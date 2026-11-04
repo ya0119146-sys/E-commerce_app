@@ -198,7 +198,7 @@ class _ProductCardState extends State<ProductCard>
                     children: [
                       // Product Title (2 lines max, clear font, no clipping)
                       SizedBox(
-                        height: 32,
+                        height: 36,
                         child: Text(
                           product.name,
                           maxLines: 2,

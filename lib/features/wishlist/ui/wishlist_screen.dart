@@ -78,7 +78,10 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
         listener: (context, state) {
           if (state.errorMessage != null) {
-            CustomSnackBar.showError(context, state.errorMessage!.tr(context));
+            CustomSnackBar.showError(
+              context,
+              state.errorMessage!.tr(context),
+            );
           }
         },
 

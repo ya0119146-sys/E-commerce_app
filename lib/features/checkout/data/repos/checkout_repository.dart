@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import '../../../../core/constants/egypt_governorates.dart';
 import '../../../../core/network/api_constants.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/network/dio_client.dart';
@@ -80,10 +81,12 @@ class CheckoutRepository {
     String id,
   ) async {
     try {
+      final shippingFee = EgyptGovernorates.getShippingFee(state);
       final response = await _client.dio.post(
         ApiConstants.order,
         data: {
           'address': id, // ⚠️ must be the address _id string, not an object
+          'taxPrice': shippingFee,
         },
       );
       final data = response.data['data'] ?? response.data;
