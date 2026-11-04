@@ -180,6 +180,30 @@ void main() {
         expect(discountProduct.displayPrice, equals(150.0));
         expect(discountProduct.discountPercentage, equals(25));
         expect(discountProduct.savingsAmount, equals(50.0));
+
+        // Case 4: Category is a 24-char hex ID, subcategory is populated with nested parent category
+        final backendProductJson = {
+          '_id': '6a8553cda283ceb9b10a0e63',
+          'name': 'Retinol Serum',
+          'price': 350,
+          'category': '6a46ace4242c228e4920441e', // Unpopulated Mongo hex ID
+          'subcategory': {
+            '_id': '6a46ae9c242c228e49204457',
+            'name': 'Skin Care',
+            'category': {
+              '_id': '6a46ace4242c228e4920441e',
+              'name': 'Facial Care',
+            },
+          },
+        };
+        final resolvedProduct = ProductModel.fromJson(backendProductJson);
+        expect(resolvedProduct.category, equals('Facial Care'));
+        expect(resolvedProduct.categoryId, equals('6a46ace4242c228e4920441e'));
+        expect(resolvedProduct.subcategory, equals('Skin Care'));
+        expect(
+          resolvedProduct.subcategoryId,
+          equals('6a46ae9c242c228e49204457'),
+        );
       },
     );
 

@@ -49,6 +49,7 @@ class WhatsAppHelper {
     bool onSale = false,
     String? size,
     String? category,
+    String? subcategory,
     String? productId,
     bool inStock = true,
     bool isArabic = true,
@@ -68,7 +69,15 @@ class WhatsAppHelper {
         buffer.writeln('📏 المقاس: $size');
       }
       if (category != null && category.isNotEmpty) {
-        buffer.writeln('📂 التصنيف: $category');
+        if (subcategory != null &&
+            subcategory.isNotEmpty &&
+            subcategory != category) {
+          buffer.writeln('📂 التصنيف: $category › $subcategory');
+        } else {
+          buffer.writeln('📂 التصنيف: $category');
+        }
+      } else if (subcategory != null && subcategory.isNotEmpty) {
+        buffer.writeln('📂 التصنيف: $subcategory');
       }
       buffer.writeln('📦 الحالة: ${inStock ? 'متوفر بالمخزون' : 'غير متوفر'}');
 
@@ -90,7 +99,15 @@ class WhatsAppHelper {
         buffer.writeln('📏 Size: $size');
       }
       if (category != null && category.isNotEmpty) {
-        buffer.writeln('📂 Category: $category');
+        if (subcategory != null &&
+            subcategory.isNotEmpty &&
+            subcategory != category) {
+          buffer.writeln('📂 Category: $category › $subcategory');
+        } else {
+          buffer.writeln('📂 Category: $category');
+        }
+      } else if (subcategory != null && subcategory.isNotEmpty) {
+        buffer.writeln('📂 Category: $subcategory');
       }
       buffer.writeln('📦 Status: ${inStock ? 'In Stock' : 'Out of Stock'}');
 

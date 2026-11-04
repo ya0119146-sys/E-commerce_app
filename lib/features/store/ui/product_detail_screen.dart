@@ -15,6 +15,7 @@ import '../../wishlist/logic/wishlist_cubit.dart';
 import '../../reviews/logic/review_cubit.dart';
 import '../../reviews/ui/widgets/review_list_widget.dart';
 import '../data/models/product_model.dart';
+import '../data/models/category_model.dart';
 import 'widgets/product_image_lightbox.dart';
 import '../../admin/logic/admin_cubit.dart';
 import '../../admin/ui/widgets/product_form.dart';
@@ -78,6 +79,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       onSale: widget.product.onSale,
       size: widget.product.size,
       category: widget.product.category,
+      subcategory: widget.product.subcategory,
       productId: widget.product.id,
       inStock: widget.product.inStock,
       isArabic: context.isArabic,
@@ -92,6 +94,46 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       if (product.cover != null) product.cover!,
       ...product.images,
     ];
+
+    // ─── Resolve Category & Subcategory Names ───
+    String? categoryName = product.category;
+    if (categoryName == null ||
+        categoryName.trim().isEmpty ||
+        (categoryName.trim().length == 24 &&
+            RegExp(r'^[0-9a-fA-F]{24}$').hasMatch(categoryName.trim()))) {
+      if (product.categoryId != null && product.categoryId!.isNotEmpty) {
+        try {
+          final cats = context.read<CategoriesCubit>().state.categories;
+          final match = cats.firstWhere(
+            (c) => c.id == product.categoryId,
+            orElse: () => const CategoryModel(id: '', name: ''),
+          );
+          if (match.name.isNotEmpty) {
+            categoryName = match.name;
+          } else {
+            categoryName = null;
+          }
+        } catch (_) {
+          categoryName = null;
+        }
+      } else {
+        categoryName = null;
+      }
+    }
+
+    String? subcategoryName = product.subcategory;
+    if (subcategoryName != null &&
+        (subcategoryName.trim().isEmpty ||
+            (subcategoryName.trim().length == 24 &&
+                RegExp(r'^[0-9a-fA-F]{24}$').hasMatch(subcategoryName.trim())))) {
+      subcategoryName = null;
+    }
+
+    final isSameCategory =
+        categoryName != null &&
+        subcategoryName != null &&
+        categoryName.trim().toLowerCase() ==
+            subcategoryName.trim().toLowerCase();
 
     return Scaffold(
       body: CustomScrollView(
@@ -524,6 +566,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // ─── Luxury Category & Subcategory Breadcrumb Pills ───
+                  if (categoryName != null || subcategoryName != null) ...[
+                    _buildCategoryBreadcrumbs(
+                      context: context,
+                      brightness: brightness,
+                      categoryName: categoryName,
+                      categoryId: product.categoryId,
+                      subcategoryName: subcategoryName,
+                      isSame: isSameCategory,
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+
                   // Title
                   Text(
                         product.name,
@@ -899,6 +954,125 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
             ),
     );
+  }
+
+  Widget _buildCategoryBreadcrumbs({
+    required BuildContext context,
+    required Brightness brightness,
+    required String? categoryName,
+    required String? categoryId,
+    required String? subcategoryName,
+    required bool isSame,
+  }) {
+    final isArabic = context.isArabic;
+
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 6,
+      runSpacing: 6,
+      children: [
+        if (categoryName != null && categoryName.trim().isNotEmpty)
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () {
+                if (categoryId != null && categoryId.isNotEmpty) {
+                  context.read<CategoriesCubit>().selectCategory(categoryId);
+                  context.read<ProductsCubit>().fetchProducts(
+                    category: categoryId,
+                    refresh: true,
+                  );
+                  Navigator.pop(context);
+                }
+              },
+              borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.secondary(
+                    brightness,
+                  ).withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(
+                    AppDimensions.radiusRound,
+                  ),
+                  border: Border.all(
+                    color: AppColors.secondary(
+                      brightness,
+                    ).withValues(alpha: 0.24),
+                    width: 1.0,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.spa_outlined,
+                      size: 14,
+                      color: AppColors.secondary(brightness),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      categoryName.trim(),
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.secondary(brightness),
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        if (!isSame &&
+            subcategoryName != null &&
+            subcategoryName.trim().isNotEmpty) ...[
+          Icon(
+            isArabic ? Icons.chevron_left_rounded : Icons.chevron_right_rounded,
+            size: 15,
+            color: AppColors.foreground(brightness).withValues(alpha: 0.35),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 6,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.primary(brightness).withValues(alpha: 0.07),
+              borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
+              border: Border.all(
+                color: AppColors.primary(brightness).withValues(alpha: 0.20),
+                width: 1.0,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.auto_awesome,
+                  size: 12,
+                  color: AppColors.primary(brightness),
+                ),
+                const SizedBox(width: 5),
+                Text(
+                  subcategoryName.trim(),
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primary(brightness),
+                    letterSpacing: 0.2,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ],
+    ).animate().fade(duration: 450.ms).moveY(begin: 8, end: 0, duration: 450.ms);
   }
 }
 

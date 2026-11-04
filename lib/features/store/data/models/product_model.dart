@@ -86,6 +86,66 @@ class ProductModel {
         (json['countInStock'] as num?)?.toInt() ??
         0;
 
+    final ratingCount =
+        (json['rating'] as num?)?.toInt() ??
+        (json['ratingsQuantity'] as num?)?.toInt() ??
+        0;
+
+    // ─── Resolve Category & Subcategory Safely ───
+    final rawCategory = json['category'];
+    String? categoryName;
+    String? categoryId = json['categoryId']?.toString();
+
+    if (rawCategory is Map) {
+      categoryName = _parseLocalized(rawCategory['name']);
+      categoryId ??=
+          rawCategory['_id']?.toString() ?? rawCategory['id']?.toString();
+    } else if (rawCategory is String) {
+      final trimmed = rawCategory.trim();
+      final isHexId =
+          trimmed.length == 24 &&
+          RegExp(r'^[0-9a-fA-F]{24}$').hasMatch(trimmed);
+      if (isHexId) {
+        categoryId ??= trimmed;
+      } else if (trimmed.isNotEmpty) {
+        categoryName = trimmed;
+      }
+    }
+
+    final rawSubcategory = json['subcategory'];
+    String? subcategoryName;
+    String? subcategoryId = json['subcategoryId']?.toString();
+
+    if (rawSubcategory is Map) {
+      subcategoryName = _parseLocalized(rawSubcategory['name']);
+      subcategoryId ??=
+          rawSubcategory['_id']?.toString() ??
+          rawSubcategory['id']?.toString();
+
+      // If category name was not populated at root level, extract from subcategory's populated parent category
+      if (categoryName == null || categoryName.isEmpty) {
+        final subCatParent = rawSubcategory['category'];
+        if (subCatParent is Map) {
+          categoryName = _parseLocalized(subCatParent['name']);
+          categoryId ??=
+              subCatParent['_id']?.toString() ??
+              subCatParent['id']?.toString();
+        } else if (subCatParent is String && categoryId == null) {
+          categoryId = subCatParent;
+        }
+      }
+    } else if (rawSubcategory is String) {
+      final trimmed = rawSubcategory.trim();
+      final isHexId =
+          trimmed.length == 24 &&
+          RegExp(r'^[0-9a-fA-F]{24}$').hasMatch(trimmed);
+      if (isHexId) {
+        subcategoryId ??= trimmed;
+      } else if (trimmed.isNotEmpty) {
+        subcategoryName = trimmed;
+      }
+    }
+
     return ProductModel(
       id: json['_id'] as String? ?? json['id'] as String? ?? '',
       name: _parseLocalized(json['name'] ?? json['title']),
@@ -106,34 +166,11 @@ class ProductModel {
           (json['rateAvg'] as num?)?.toDouble() ??
           (json['ratingsAverage'] as num?)?.toDouble() ??
           0.0,
-      ratingCount:
-          (json['rating'] as num?)?.toInt() ??
-          (json['ratingsQuantity'] as num?)?.toInt() ??
-          0,
-      category: json['category'] is Map
-          ? _parseLocalized(json['category']['name'])
-          : json['category']?.toString(),
-      categoryId:
-          json['categoryId']?.toString() ??
-          (json['category'] is Map
-              ? (json['category']['_id']?.toString() ??
-                    json['category']['id']?.toString())
-              : (json['category'] != null &&
-                        json['category'].toString().length == 24
-                    ? json['category'].toString()
-                    : null)),
-      subcategory: json['subcategory'] is Map
-          ? _parseLocalized(json['subcategory']['name'])
-          : json['subcategory']?.toString(),
-      subcategoryId:
-          json['subcategoryId']?.toString() ??
-          (json['subcategory'] is Map
-              ? (json['subcategory']['_id']?.toString() ??
-                    json['subcategory']['id']?.toString())
-              : (json['subcategory'] != null &&
-                        json['subcategory'].toString().length == 24
-                    ? json['subcategory'].toString()
-                    : null)),
+      ratingCount: ratingCount,
+      category: categoryName,
+      categoryId: categoryId,
+      subcategory: subcategoryName,
+      subcategoryId: subcategoryId,
       quantity: quantity,
       sold: (json['sold'] as num?)?.toInt() ?? 0,
       inStock: (json['inStock'] as bool?) ?? quantity > 0,
