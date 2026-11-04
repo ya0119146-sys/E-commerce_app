@@ -61,7 +61,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  'Password changed successfully! Please login again.'.tr(context),
+                  'Password changed successfully! Please login again.'.tr(
+                    context,
+                  ),
                 ),
               ),
             );
@@ -124,7 +126,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         return 'Please enter new password'.tr(context);
                       }
                       if (value.length < 6) {
-                        return 'Password must be at least 6 characters'.tr(context);
+                        return 'Password must be at least 6 characters'.tr(
+                          context,
+                        );
                       }
                       return null;
                     },

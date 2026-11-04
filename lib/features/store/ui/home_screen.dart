@@ -97,20 +97,19 @@ class _HomeScreenState extends State<HomeScreen> {
               actions: [
                 IconButton(
                   tooltip: 'Contact on WhatsApp'.tr(context),
-                  icon: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF25D366).withValues(alpha: 0.15),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.chat_bubble_outline_rounded,
-                      color: Color(0xFF25D366),
-                      size: 19,
+                  icon: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      'assets/icons/whatsapp_icon.png',
+                      width: 26,
+                      height: 26,
+                      fit: BoxFit.contain,
                     ),
                   ),
                   onPressed: () => WhatsAppHelper.launchWhatsApp(
-                    text: 'مرحباً، أود التواصل مع متجر لابيلا',
+                    text: context.isArabic
+                        ? 'مرحباً، أود التواصل مع متجر لابيلا'
+                        : 'Hello, I would like to contact Labella store',
                   ),
                 ),
                 IconButton(

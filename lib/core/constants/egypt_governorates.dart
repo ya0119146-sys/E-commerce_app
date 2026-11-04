@@ -57,3 +57,4 @@ class EgyptGovernorates {
     return isSharqia(state) ? 0.0 : 100.0;
   }
 }
+

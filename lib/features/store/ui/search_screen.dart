@@ -57,6 +57,10 @@ class _SearchScreenState extends State<SearchScreen> {
 
     _lastSearchQuery = trimmedQuery;
 
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(0.0);
+    }
+
     if (trimmedQuery.isEmpty) {
       context.read<ProductsCubit>().clearSearch();
       return;
@@ -142,17 +146,28 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
       ),
-      body: BlocBuilder<ProductsCubit, ProductsState>(
+      body: BlocConsumer<ProductsCubit, ProductsState>(
+        listener: (context, state) {
+          if (state.status == ProductsStatus.loading &&
+              _scrollController.hasClients &&
+              _scrollController.offset > 0) {
+            _scrollController.jumpTo(0.0);
+          }
+        },
         builder: (context, state) {
           if (state.status == ProductsStatus.loading) {
             return Padding(
               padding: const EdgeInsets.all(AppDimensions.screenPadding),
-              child: MasonryGridView.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 14,
-                mainAxisSpacing: 14,
-                itemCount: 6,
-                itemBuilder: (_, __) => const ShimmerProductCard(),
+              child: CustomScrollView(
+                slivers: [
+                  SliverMasonryGrid.count(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 14,
+                    mainAxisSpacing: 14,
+                    childCount: 6,
+                    itemBuilder: (_, __) => const ShimmerProductCard(),
+                  ),
+                ],
               ),
             );
           }
@@ -185,36 +200,38 @@ class _SearchScreenState extends State<SearchScreen> {
             );
           }
 
-          return Column(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(AppDimensions.screenPadding),
-                  child: MasonryGridView.count(
-                    controller: _scrollController,
-                    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 14,
-                    mainAxisSpacing: 14,
-                    itemCount: state.products.length,
-                    itemBuilder: (_, index) => ProductCard(
-                      role: widget.role,
-                      product: state.products[index],
-                      index: index,
-                    ),
+          return CustomScrollView(
+            key: ValueKey('search_scroll_${_lastSearchQuery}_${state.products.length}'),
+            controller: _scrollController,
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            slivers: [
+              SliverPadding(
+                padding: const EdgeInsets.all(AppDimensions.screenPadding),
+                sliver: SliverMasonryGrid.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 14,
+                  mainAxisSpacing: 14,
+                  childCount: state.products.length,
+                  itemBuilder: (_, index) => ProductCard(
+                    key: ValueKey(state.products[index].id),
+                    role: widget.role,
+                    product: state.products[index],
+                    index: index,
                   ),
                 ),
               ),
               if (state.status == ProductsStatus.loadingMore)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Center(
-                    child: SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2.5,
-                        color: AppColors.primary(brightness),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: Center(
+                      child: SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.5,
+                          color: AppColors.primary(brightness),
+                        ),
                       ),
                     ),
                   ),

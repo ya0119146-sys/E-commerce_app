@@ -507,12 +507,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                 _profileTile(
                   context,
-                  icon: Icons.chat_bubble_outline_rounded,
-                  iconColor: const Color(0xFF25D366),
+                  customLeading: ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: Image.asset(
+                      'assets/icons/whatsapp_icon.png',
+                      width: 26,
+                      height: 26,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                   title: 'Contact Us on WhatsApp'.tr(context),
                   subtitle: WhatsAppHelper.displayPhone,
                   onTap: () => WhatsAppHelper.launchWhatsApp(
-                    text: 'مرحباً، أود التواصل مع متجر لابيلا',
+                    text: context.isArabic
+                        ? 'مرحباً، أود التواصل مع متجر لابيلا'
+                        : 'Hello, I would like to contact Labella store',
                   ),
                   index: 3,
                 ),
@@ -811,7 +820,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _profileTile(
     BuildContext context, {
-    required IconData icon,
+    IconData? icon,
+    Widget? customLeading,
     required String title,
     String? subtitle,
     Color? iconColor,
@@ -831,7 +841,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           child: ListTile(
             onTap: onTap,
-            leading: Icon(icon, color: iconColor ?? AppColors.secondary(brightness)),
+            leading: customLeading ??
+                (icon != null
+                    ? Icon(icon, color: iconColor ?? AppColors.secondary(brightness))
+                    : null),
             title: Text(title, style: Theme.of(context).textTheme.titleSmall),
             subtitle: subtitle != null
                 ? Text(

@@ -40,4 +40,64 @@ class WhatsAppHelper {
       return false;
     }
   }
+
+  /// Open WhatsApp chat with prefilled product inquiry details.
+  static Future<bool> inquireAboutProduct({
+    required String productName,
+    required double price,
+    double? originalPrice,
+    bool onSale = false,
+    String? size,
+    String? category,
+    String? productId,
+    bool inStock = true,
+    bool isArabic = true,
+  }) {
+    final buffer = StringBuffer();
+    if (isArabic) {
+      buffer.writeln('مرحباً، أود الاستفسار عن هذا المنتج من متجر لابيلا:');
+      buffer.writeln('━━━━━━━━━━━━━━━━');
+      buffer.writeln('🛍️ المنتج: $productName');
+      buffer.writeln('💰 السعر: \$${price.toStringAsFixed(2)}');
+      if (onSale && originalPrice != null) {
+        buffer.writeln(
+          '🏷️ السعر قبل الخصم: \$${originalPrice.toStringAsFixed(2)}',
+        );
+      }
+      if (size != null && size.isNotEmpty) {
+        buffer.writeln('📏 المقاس: $size');
+      }
+      if (category != null && category.isNotEmpty) {
+        buffer.writeln('📂 التصنيف: $category');
+      }
+      buffer.writeln('📦 الحالة: ${inStock ? 'متوفر بالمخزون' : 'غير متوفر'}');
+
+      buffer.writeln('━━━━━━━━━━━━━━━━');
+      buffer.write('هل المنتج متاح للطلب الآن؟');
+    } else {
+      buffer.writeln(
+        'Hello, I would like to inquire about this product from Labella:',
+      );
+      buffer.writeln('━━━━━━━━━━━━━━━━');
+      buffer.writeln('🛍️ Product: $productName');
+      buffer.writeln('💰 Price: \$${price.toStringAsFixed(2)}');
+      if (onSale && originalPrice != null) {
+        buffer.writeln(
+          '🏷️ Original Price: \$${originalPrice.toStringAsFixed(2)}',
+        );
+      }
+      if (size != null && size.isNotEmpty) {
+        buffer.writeln('📏 Size: $size');
+      }
+      if (category != null && category.isNotEmpty) {
+        buffer.writeln('📂 Category: $category');
+      }
+      buffer.writeln('📦 Status: ${inStock ? 'In Stock' : 'Out of Stock'}');
+
+      buffer.writeln('━━━━━━━━━━━━━━━━');
+      buffer.write('Is this product available for order?');
+    }
+
+    return launchWhatsApp(text: buffer.toString());
+  }
 }

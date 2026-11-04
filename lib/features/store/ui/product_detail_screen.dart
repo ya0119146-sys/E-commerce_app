@@ -20,6 +20,7 @@ import '../../admin/ui/widgets/product_form.dart';
 import '../logic/categories_cubit.dart';
 import '../logic/products_cubit.dart';
 import '../../../core/localization/app_translations.dart';
+import '../../../core/utils/whatsapp_helper.dart';
 
 /// Full-screen product detail with image, info, and Add to Cart.
 class ProductDetailScreen extends StatefulWidget {
@@ -66,6 +67,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       _pageController.jumpToPage(newIndex);
       setState(() => _selectedImageIndex = newIndex);
     }
+  }
+
+  void _launchProductWhatsApp(BuildContext context) {
+    WhatsAppHelper.inquireAboutProduct(
+      productName: widget.product.name,
+      price: widget.product.displayPrice,
+      originalPrice: widget.product.price,
+      onSale: widget.product.onSale,
+      size: widget.product.size,
+      category: widget.product.category,
+      productId: widget.product.id,
+      inStock: widget.product.inStock,
+      isArabic: context.isArabic,
+    );
   }
 
   @override
@@ -125,6 +140,55 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
             ),
             actions: [
+              // WhatsApp Merchant Inquiry Button
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 4.0,
+                  vertical: 8.0,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(
+                    AppDimensions.radiusRound,
+                  ),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: AppColors.card(
+                          brightness,
+                        ).withValues(alpha: 0.85),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.border(
+                            brightness,
+                          ).withValues(alpha: 0.3),
+                          width: 0.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.1),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        tooltip: 'Contact on WhatsApp'.tr(context),
+                        icon: Image.asset(
+                          'assets/icons/whatsapp_icon.png',
+                          width: 22,
+                          height: 22,
+                          fit: BoxFit.contain,
+                        ),
+                        onPressed: () => _launchProductWhatsApp(context),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               BlocBuilder<WishlistCubit, WishlistState>(
                 builder: (context, state) {
                   final isFav = state.isInWishlist(product.id);
@@ -644,23 +708,65 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                 ),
               ),
-              child: HeroButton(
-                text: product.inStock
-                    ? 'add_to_cart'.tr(context)
-                    : 'out_of_stock'.tr(context),
-                icon: Icons.shopping_bag_outlined,
-                onPressed: product.inStock
-                    ? () {
-                        context.read<CartCubit>().addToCart(product.id);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('${'added_to_cart'.tr(context)} ✨'),
-                            duration: const Duration(seconds: 1),
-                            behavior: SnackBarBehavior.floating,
+              child: Row(
+                children: [
+                  // WhatsApp Direct Inquire Button
+                  Tooltip(
+                    message: 'Contact on WhatsApp'.tr(context),
+                    child: InkWell(
+                      onTap: () => _launchProductWhatsApp(context),
+                      borderRadius:
+                          BorderRadius.circular(AppDimensions.radiusDefault),
+                      child: Container(
+                        height: 52,
+                        width: 52,
+                        decoration: BoxDecoration(
+                          color:
+                              const Color(0xFF25D366).withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.radiusDefault,
                           ),
-                        );
-                      }
-                    : null,
+                          border: Border.all(
+                            color: const Color(0xFF25D366)
+                                .withValues(alpha: 0.35),
+                            width: 1.2,
+                          ),
+                        ),
+                        child: Center(
+                          child: Image.asset(
+                            'assets/icons/whatsapp_icon.png',
+                            width: 28,
+                            height: 28,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  // Add to Cart Button
+                  Expanded(
+                    child: HeroButton(
+                      text: product.inStock
+                          ? 'add_to_cart'.tr(context)
+                          : 'out_of_stock'.tr(context),
+                      icon: Icons.shopping_bag_outlined,
+                      onPressed: product.inStock
+                          ? () {
+                              context.read<CartCubit>().addToCart(product.id);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content:
+                                      Text('${'added_to_cart'.tr(context)} ✨'),
+                                  duration: const Duration(seconds: 1),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            }
+                          : null,
+                    ),
+                  ),
+                ],
               ),
             )
           : Container(
@@ -673,31 +779,76 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                 ),
               ),
-              child: HeroButton(
-                text: 'Edit Product'.tr(context),
-                icon: Icons.edit_outlined,
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    backgroundColor: Theme.of(context).cardColor,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              child: Row(
+                children: [
+                  Tooltip(
+                    message: 'Contact on WhatsApp'.tr(context),
+                    child: InkWell(
+                      onTap: () => _launchProductWhatsApp(context),
+                      borderRadius:
+                          BorderRadius.circular(AppDimensions.radiusDefault),
+                      child: Container(
+                        height: 52,
+                        width: 52,
+                        decoration: BoxDecoration(
+                          color:
+                              const Color(0xFF25D366).withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.radiusDefault,
+                          ),
+                          border: Border.all(
+                            color: const Color(0xFF25D366)
+                                .withValues(alpha: 0.35),
+                            width: 1.2,
+                          ),
+                        ),
+                        child: Center(
+                          child: Image.asset(
+                            'assets/icons/whatsapp_icon.png',
+                            width: 28,
+                            height: 28,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
                     ),
-                    builder: (_) => ProductForm(
-                      product: product,
-                      categories: context.read<CategoriesCubit>().state.categories,
-                      subcategories: const [],
-                      onSubmit: (data) async {
-                        await context.read<AdminCubit>().updateProduct(product.id, data);
-                        if (context.mounted) {
-                          context.read<ProductsCubit>().fetchProducts(refresh: true);
-                          Navigator.pop(context);
-                        }
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: HeroButton(
+                      text: 'Edit Product'.tr(context),
+                      icon: Icons.edit_outlined,
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Theme.of(context).cardColor,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(20)),
+                          ),
+                          builder: (_) => ProductForm(
+                            product: product,
+                            categories:
+                                context.read<CategoriesCubit>().state.categories,
+                            subcategories: const [],
+                            onSubmit: (data) async {
+                              await context
+                                  .read<AdminCubit>()
+                                  .updateProduct(product.id, data);
+                              if (context.mounted) {
+                                context
+                                    .read<ProductsCubit>()
+                                    .fetchProducts(refresh: true);
+                                Navigator.pop(context);
+                              }
+                            },
+                          ),
+                        );
                       },
                     ),
-                  );
-                },
+                  ),
+                ],
               ),
             ),
     );

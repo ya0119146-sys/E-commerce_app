@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:e_commerce/core/constants/egypt_governorates.dart';
+import 'package:e_commerce/core/utils/whatsapp_helper.dart';
 import 'package:e_commerce/core/network/api_constants.dart';
 import 'package:e_commerce/core/network/api_exception.dart';
 import 'package:e_commerce/core/network/dio_client.dart';
@@ -324,6 +325,13 @@ void main() {
       expect(EgyptGovernorates.getShippingFee('محافظة القاهرة'), equals(100.0));
       expect(EgyptGovernorates.getShippingFee('محافظة الإسكندرية'), equals(100.0));
       expect(EgyptGovernorates.getShippingFee(null), equals(100.0));
+    });
+  });
+
+  group('WhatsApp Integration', () {
+    test('Merchant phone format is correct', () {
+      expect(WhatsAppHelper.merchantPhone, equals('201093727578'));
+      expect(WhatsAppHelper.displayPhone, equals('01093727578'));
     });
   });
 }
