@@ -156,29 +156,32 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (context, state) {
                   if (state.status == CategoriesStatus.loading) {
                     return SizedBox(
-                      height: 98,
+                      height: 114,
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
                         padding: const EdgeInsets.symmetric(
                           horizontal: AppDimensions.screenPadding,
                         ),
                         itemCount: 5,
-                        separatorBuilder: (_, __) => const SizedBox(width: 14),
-                        itemBuilder: (_, __) => const Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ShimmerLoading(
-                              width: 60,
-                              height: 60,
-                              borderRadius: 30,
-                            ),
-                            SizedBox(height: 6),
-                            ShimmerLoading(
-                              width: 50,
-                              height: 12,
-                              borderRadius: 6,
-                            ),
-                          ],
+                        separatorBuilder: (_, __) => const SizedBox(width: 12),
+                        itemBuilder: (_, __) => const SizedBox(
+                          width: 78,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ShimmerLoading(
+                                width: 60,
+                                height: 60,
+                                borderRadius: 30,
+                              ),
+                              SizedBox(height: 6),
+                              ShimmerLoading(
+                                width: 56,
+                                height: 14,
+                                borderRadius: 6,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );

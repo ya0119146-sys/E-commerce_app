@@ -23,7 +23,7 @@ class CategoryGrid extends StatelessWidget {
     final brightness = Theme.of(context).brightness;
 
     return SizedBox(
-      height: 98,
+      height: 114,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
@@ -32,7 +32,7 @@ class CategoryGrid extends StatelessWidget {
           horizontal: AppDimensions.screenPadding,
         ),
         itemCount: categories.length + 1,
-        separatorBuilder: (_, __) => const SizedBox(width: 14),
+        separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
           if (index == 0) {
             final isSelected = selectedId == null || selectedId!.isEmpty;
@@ -90,7 +90,7 @@ class CategoryGrid extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: SizedBox(
-          width: 66,
+          width: 78,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -143,17 +143,23 @@ class CategoryGrid extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               // Category Name Label
-              Text(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                  color: isSelected
-                      ? AppColors.secondary(brightness)
-                      : AppColors.foreground(brightness).withValues(alpha: 0.8),
+              SizedBox(
+                height: 32,
+                child: Center(
+                  child: Text(
+                    label,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      height: 1.25,
+                      fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                      color: isSelected
+                          ? AppColors.secondary(brightness)
+                          : AppColors.foreground(brightness).withValues(alpha: 0.85),
+                    ),
+                  ),
                 ),
               ),
             ],
