@@ -92,15 +92,92 @@ class _ReviewListWidgetState extends State<ReviewListWidget> {
 
     if (state is ReviewLoaded) {
       if (state.reviews.isEmpty) {
-        return _ReviewStateCard(
-          icon: Icons.rate_review_outlined,
-          title: 'No reviews yet'.tr(context),
-          message: widget.role == 'admin'
-              ? 'Reviews will appear here when customers share feedback.'.tr(
-                  context,
-                )
-              : 'Be the first to share your experience.'.tr(context),
-          brightness: brightness,
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+          decoration: BoxDecoration(
+            color: AppColors.card(brightness),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: AppColors.border(brightness).withValues(alpha: 0.5),
+              width: 1.0,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(
+                  alpha: brightness == Brightness.dark ? 0.2 : 0.03,
+                ),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  5,
+                  (i) => const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 2.0),
+                    child: Icon(
+                      Icons.star_rounded,
+                      size: 22,
+                      color: Color(0xFFFFB800),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'No reviews yet'.tr(context),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.foreground(brightness),
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                widget.role == 'admin'
+                    ? 'Reviews will appear here when customers share feedback.'.tr(
+                        context,
+                      )
+                    : 'Be the first to share your experience.'.tr(context),
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: AppColors.foreground(
+                    brightness,
+                  ).withValues(alpha: 0.65),
+                ),
+              ),
+              if (widget.role != 'admin') ...[
+                const SizedBox(height: 16),
+                OutlinedButton.icon(
+                  onPressed: () => _showAddReview(context),
+                  icon: const Icon(Icons.rate_review_outlined, size: 16),
+                  label: Text('Write a Review'.tr(context)),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.secondary(brightness),
+                    side: BorderSide(
+                      color: AppColors.secondary(
+                        brightness,
+                      ).withValues(alpha: 0.4),
+                      width: 1.0,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.radiusRound,
+                      ),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
         );
       }
 

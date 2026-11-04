@@ -654,42 +654,72 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
                   const SizedBox(height: 20),
 
-                  // Product Size / Volume Luxury Badge
+                  // ─── Product Size / Volume Luxury Capsule ───
                   if (product.size != null && product.size!.trim().isNotEmpty) ...[
                     Container(
+                      width: double.infinity,
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 7,
+                        horizontal: 16,
+                        vertical: 12,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.secondary(
-                          brightness,
-                        ).withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(
-                          AppDimensions.radiusRound,
-                        ),
+                        color: AppColors.card(brightness),
+                        borderRadius: BorderRadius.circular(14),
                         border: Border.all(
                           color: AppColors.secondary(
                             brightness,
-                          ).withValues(alpha: 0.25),
+                          ).withValues(alpha: 0.28),
                           width: 1.0,
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(
+                              alpha: brightness == Brightness.dark ? 0.2 : 0.03,
+                            ),
+                            blurRadius: 10,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
                       ),
                       child: Row(
-                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Icon(
-                            Icons.opacity_rounded,
-                            size: 16,
-                            color: AppColors.secondary(brightness),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.science_outlined,
+                                size: 18,
+                                color: AppColors.secondary(brightness),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                '${'Size'.tr(context)}: ${product.size}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.foreground(brightness),
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 6),
-                          Text(
-                            '${'Size'.tr(context)}: ${product.size}',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.secondary(brightness),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 3,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.secondary(
+                                brightness,
+                              ).withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Text(
+                              'Standard'.tr(context),
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.secondary(brightness),
+                              ),
                             ),
                           ),
                         ],
@@ -725,17 +755,60 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ],
                   ),
 
+                  // ─── Luxury Porcelain Description Card ───
                   if (product.description != null &&
                       product.description!.trim().isNotEmpty) ...[
                     const SizedBox(height: 24),
-                    const Divider(),
-                    const SizedBox(height: 16),
-                    Text(
-                      'description'.tr(context),
-                      style: Theme.of(context).textTheme.titleMedium,
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(18),
+                      decoration: BoxDecoration(
+                        color: AppColors.card(brightness),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: AppColors.border(
+                            brightness,
+                          ).withValues(alpha: 0.5),
+                          width: 1.0,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(
+                              alpha: brightness == Brightness.dark ? 0.2 : 0.03,
+                            ),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.auto_awesome,
+                                size: 16,
+                                color: AppColors.secondary(brightness),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                'description'.tr(context),
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                      color: AppColors.secondary(brightness),
+                                    ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          _ExpandableDescription(
+                            description: product.description!,
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 8),
-                    _ExpandableDescription(description: product.description!),
                   ],
 
                   const SizedBox(height: 32),
