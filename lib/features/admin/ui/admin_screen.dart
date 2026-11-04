@@ -1,3 +1,4 @@
+import '../../../core/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -97,20 +98,15 @@ class _AdminScreenState extends State<AdminScreen>
     return BlocListener<AdminCubit, AdminState>(
       listener: (context, state) {
         if (state.status == AdminStatus.success) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                (state.message ?? 'Operation successful').tr(context),
-              ),
-            ),
+          CustomSnackBar.showSuccess(
+            context,
+            (state.message ?? 'Operation successful').tr(context),
           );
           _refreshData();
         } else if (state.status == AdminStatus.error) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text((state.error ?? 'Error occurred').tr(context)),
-              backgroundColor: AppColors.error,
-            ),
+          CustomSnackBar.showError(
+            context,
+            (state.error ?? 'Error occurred').tr(context),
           );
         }
       },

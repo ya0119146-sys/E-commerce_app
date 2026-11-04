@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/localization/app_translations.dart';
+import '../../../core/widgets/custom_snackbar.dart';
 import '../data/models/order_model.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,12 +31,7 @@ class OrderDetailScreen extends StatelessWidget {
     return BlocListener<CheckoutCubit, CheckoutState>(
       listener: (context, state) {
         if (state.errorMessage != null && isAdmin) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.errorMessage!.tr(context)),
-              backgroundColor: AppColors.error,
-            ),
-          );
+          CustomSnackBar.showError(context, state.errorMessage!.tr(context));
         }
       },
       child: Scaffold(

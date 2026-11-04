@@ -23,10 +23,10 @@ class ProductGridDelegate {
     final textScale = MediaQuery.textScalerOf(
       context,
     ).scale(1.0).clamp(1.0, 1.3);
-    // 1:1 square image + content area (padding, title 2-lines, rating/badge, price, button)
-    final double contentHeight = 158.0 * textScale;
+    // 1:1 square image + compact content area (padding, title 2-lines, rating/badge, price, tight 6px gap, button)
+    final double contentHeight = 120.0 * textScale;
     final double itemHeight = itemWidth + contentHeight;
-    final double aspectRatio = (itemWidth / itemHeight).clamp(0.45, 0.65);
+    final double aspectRatio = (itemWidth / itemHeight).clamp(0.48, 0.70);
 
     return SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: crossAxisCount,

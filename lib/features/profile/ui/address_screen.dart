@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
+import '../../../core/widgets/custom_snackbar.dart';
 import '../../../core/constants/egypt_governorates.dart';
 import '../../../core/localization/app_translations.dart';
 import '../../checkout/logic/checkout_cubit.dart';
@@ -170,12 +171,7 @@ class _AddressScreenState extends State<AddressScreen> {
         listener: (context, state) {
           if (state.status == CheckoutStatus.error &&
               state.errorMessage != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage!.tr(context)),
-                backgroundColor: AppColors.error,
-              ),
-            );
+            CustomSnackBar.showError(context, state.errorMessage!.tr(context));
           }
         },
         builder: (context, state) {

@@ -1,3 +1,4 @@
+import 'package:e_commerce/core/widgets/custom_snackbar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:e_commerce/core/constants/egypt_governorates.dart';
@@ -480,6 +481,41 @@ void main() {
         AppTranslations.ar['Press back again to exit'],
         equals('اضغط مرة أخرى للخروج من التطبيق'),
       );
+    });
+  });
+
+  group('CustomSnackBar Notification System', () {
+    testWidgets('CustomSnackBar renders message and dismisses cleanly', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () {
+                  CustomSnackBar.showSuccess(
+                    context,
+                    'Item added successfully',
+                  );
+                },
+                child: const Text('Show'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Show'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 350));
+
+      expect(find.text('Item added successfully'), findsOneWidget);
+      expect(find.byIcon(Icons.check_circle_rounded), findsOneWidget);
+
+      CustomSnackBar.dismiss();
+      await tester.pump();
+      expect(find.text('Item added successfully'), findsNothing);
     });
   });
 }

@@ -8,6 +8,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/widgets/star_rating.dart';
 import '../../../core/widgets/hero_button.dart';
+import '../../../core/widgets/custom_snackbar.dart';
 import '../../../core/widgets/shimmer_loading.dart';
 import '../../cart/logic/cart_cubit.dart';
 import '../../wishlist/logic/wishlist_cubit.dart';
@@ -766,14 +767,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       onPressed: product.inStock
                           ? () {
                               context.read<CartCubit>().addToCart(product.id);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    '${'added_to_cart'.tr(context)} ✨',
-                                  ),
-                                  duration: const Duration(seconds: 1),
-                                  behavior: SnackBarBehavior.floating,
-                                ),
+                              CustomSnackBar.showCart(
+                                context,
+                                '${'added_to_cart'.tr(context)} ✨',
                               );
                             }
                           : null,

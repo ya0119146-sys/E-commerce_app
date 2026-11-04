@@ -1,3 +1,4 @@
+import '../../../core/widgets/custom_snackbar.dart';
 import 'dart:io';
 
 import 'package:e_commerce/features/auth/ui/login_screen.dart';
@@ -107,10 +108,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             BlocConsumer<ProfileCubit, ProfileState>(
               listener: (context, state) {
                 if (state is ProfileSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text((state.message ?? 'success').tr(context)),
-                    ),
+                  CustomSnackBar.showSuccess(
+                    context,
+                    (state.message ?? 'success').tr(context),
                   );
 
                   // Cache updated values locally so UI reflects immediately
@@ -129,13 +129,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                   context.read<GetProfileCubit>().getProfile();
                 } else if (state is ProfileError) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(state.message.tr(context)),
-
-                      backgroundColor: AppColors.error,
-                    ),
-                  );
+                  CustomSnackBar.showError(context, state.message.tr(context));
                 }
               },
 
@@ -793,10 +787,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               if (context.mounted) {
                 Navigator.pop(ctx);
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Profile deleted successfully'.tr(context)),
-                  ),
+                CustomSnackBar.showSuccess(
+                  context,
+                  'Profile deleted successfully'.tr(context),
                 );
 
                 Navigator.of(context).pushAndRemoveUntil(

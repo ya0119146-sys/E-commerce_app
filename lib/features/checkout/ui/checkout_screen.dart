@@ -6,6 +6,7 @@ import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/egypt_governorates.dart';
 import '../../../core/localization/app_translations.dart';
 import '../../../core/widgets/hero_button.dart';
+import '../../../core/widgets/custom_snackbar.dart';
 import '../../../core/widgets/shimmer_loading.dart';
 import '../../cart/logic/cart_cubit.dart';
 import '../data/models/address_model.dart';
@@ -188,9 +189,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           }
           if (state.status == CheckoutStatus.error &&
               state.errorMessage != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.errorMessage!.tr(context))),
-            );
+            CustomSnackBar.showError(context, state.errorMessage!.tr(context));
           }
         },
         builder: (context, state) {

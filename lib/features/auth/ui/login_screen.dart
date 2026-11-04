@@ -11,6 +11,7 @@ import '../logic/auth_cubit.dart';
 import 'signup_screen.dart';
 import 'forget_password_screen.dart';
 import '../../../app/bottom_nav_shell.dart';
+import '../../../core/widgets/custom_snackbar.dart';
 import '../../../core/localization/app_translations.dart';
 
 /// Login screen with luxury glassmorphism design.
@@ -76,9 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
           if (state is AuthError) {
             TextInput.finishAutofillContext(shouldSave: false);
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message.tr(context))));
+            CustomSnackBar.showError(context, state.message.tr(context));
           }
         },
         child: Container(

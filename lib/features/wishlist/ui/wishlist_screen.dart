@@ -11,6 +11,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 
 import '../../../core/widgets/shimmer_loading.dart';
+import '../../../core/widgets/custom_snackbar.dart';
 import '../../../core/widgets/product_grid_delegate.dart';
 import '../../store/ui/widgets/product_card.dart';
 
@@ -77,9 +78,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
         listener: (context, state) {
           if (state.errorMessage != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.errorMessage!.tr(context))),
-            );
+            CustomSnackBar.showError(context, state.errorMessage!.tr(context));
           }
         },
 

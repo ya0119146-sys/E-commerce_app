@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../core/constants/app_colors.dart';
+import '../core/widgets/custom_snackbar.dart';
 import '../features/store/ui/home_screen.dart';
 import '../features/store/ui/search_screen.dart';
 import '../features/cart/ui/cart_screen.dart';
@@ -74,14 +75,9 @@ class _BottomNavShellState extends State<BottomNavShell> {
         if (_lastBackPressTime == null ||
             now.difference(_lastBackPressTime!) > const Duration(seconds: 2)) {
           _lastBackPressTime = now;
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Press back again to exit'.tr(context)),
-              duration: const Duration(seconds: 2),
-              behavior: SnackBarBehavior.floating,
-              margin: const EdgeInsets.fromLTRB(20, 0, 20, 80),
-            ),
+          CustomSnackBar.showInfo(
+            context,
+            'Press back again to exit'.tr(context),
           );
           return;
         }

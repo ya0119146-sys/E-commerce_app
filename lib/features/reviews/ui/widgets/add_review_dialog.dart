@@ -4,6 +4,8 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_dimensions.dart';
 import '../../../../core/localization/app_translations.dart';
 import '../../../../core/widgets/hero_button.dart';
+
+import '../../../../core/widgets/custom_snackbar.dart';
 import '../../logic/review_cubit.dart';
 import '../../logic/review_state.dart';
 
@@ -45,15 +47,11 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
       listener: (context, state) {
         if (state is ReviewActionSuccess) {
           Navigator.pop(context);
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.message.tr(context))));
+          CustomSnackBar.showError(context, state.message.tr(context));
           // Refresh reviews
           context.read<ReviewCubit>().fetchProductReviews(widget.productId);
         } else if (state is ReviewError) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.message.tr(context))));
+          CustomSnackBar.showSuccess(context, state.message.tr(context));
         }
       },
       child: Form(

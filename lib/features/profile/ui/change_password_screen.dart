@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/localization/app_translations.dart';
 import '../../../core/widgets/hero_button.dart';
+
+import '../../../core/widgets/custom_snackbar.dart';
 import '../../auth/logic/auth_cubit.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -52,20 +54,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         listener: (context, state) {
           if (state is AuthError) {
             TextInput.finishAutofillContext(shouldSave: false);
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message.tr(context))));
+            CustomSnackBar.showError(context, state.message.tr(context));
           } else if (state is AuthUnauthenticated) {
             TextInput.finishAutofillContext(shouldSave: true);
             FocusScope.of(context).unfocus();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  'Password changed successfully! Please login again.'.tr(
-                    context,
-                  ),
-                ),
-              ),
+            CustomSnackBar.showSuccess(
+              context,
+              'Password changed successfully! Please login again.'.tr(context),
             );
             Future.delayed(const Duration(milliseconds: 300), () {
               if (!context.mounted) return;

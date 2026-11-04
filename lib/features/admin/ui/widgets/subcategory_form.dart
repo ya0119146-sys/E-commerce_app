@@ -1,3 +1,4 @@
+import '../../../../core/widgets/custom_snackbar.dart';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:e_commerce/core/constants/app_colors.dart';
@@ -57,11 +58,10 @@ class _SubcategoryFormState extends State<SubcategoryForm> {
   void _submit() async {
     if (_formKey.currentState!.validate()) {
       if (_selectedCategoryId == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Please select a parent category'.tr(context)),
-            backgroundColor: AppColors.error,
-          ),
+        CustomSnackBar.show(
+          context,
+          message: 'Please select a parent category'.tr(context),
+          type: SnackBarType.warning,
         );
         return;
       }

@@ -8,6 +8,8 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_gradients.dart';
 import '../../../core/widgets/hero_button.dart';
+
+import '../../../core/widgets/custom_snackbar.dart';
 import '../logic/auth_cubit.dart';
 import '../../../core/localization/app_translations.dart';
 
@@ -63,15 +65,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         listener: (context, state) {
           if (state is AuthError) {
             TextInput.finishAutofillContext(shouldSave: false);
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message.tr(context))));
+            CustomSnackBar.showError(context, state.message.tr(context));
           } else if (state is AuthResetPasswordSuccess ||
               state is AuthUnauthenticated) {
             TextInput.finishAutofillContext(shouldSave: true);
             FocusScope.of(context).unfocus();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('password_reset_success'.tr(context))),
+            CustomSnackBar.showSuccess(
+              context,
+              'password_reset_success'.tr(context),
             );
             Future.delayed(const Duration(milliseconds: 300), () {
               if (!context.mounted) return;

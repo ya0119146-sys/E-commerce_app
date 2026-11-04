@@ -6,6 +6,8 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_gradients.dart';
 import '../../../core/widgets/hero_button.dart';
+
+import '../../../core/widgets/custom_snackbar.dart';
 import '../logic/auth_cubit.dart';
 import 'reset_password_screen.dart';
 import '../../../core/localization/app_translations.dart';
@@ -56,14 +58,11 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthError) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message.tr(context))));
+            CustomSnackBar.showError(context, state.message.tr(context));
           } else if (state is AuthResetCodeVerified) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Code verified successfully!'.tr(context)),
-              ),
+            CustomSnackBar.showSuccess(
+              context,
+              'Code verified successfully!'.tr(context),
             );
             Navigator.pushReplacement(
               context,

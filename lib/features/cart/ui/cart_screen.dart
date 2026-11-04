@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/widgets/hero_button.dart';
+import '../../../core/widgets/custom_snackbar.dart';
 import '../../../core/widgets/shimmer_loading.dart';
 import '../../checkout/ui/checkout_screen.dart';
 import '../data/models/cart_model.dart';
@@ -53,9 +54,7 @@ class _CartScreenState extends State<CartScreen> {
         listenWhen: (prev, curr) =>
             prev.errorMessage != curr.errorMessage && curr.errorMessage != null,
         listener: (context, state) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.errorMessage!.tr(context))),
-          );
+          CustomSnackBar.showError(context, state.errorMessage!.tr(context));
         },
         child: BlocBuilder<CartCubit, CartState>(
           builder: (context, state) {
@@ -508,19 +507,12 @@ class _CartItemCard extends StatelessWidget {
                                         final maxStock = product?.quantity ?? 0;
                                         if (maxStock > 0 &&
                                             item.quantity >= maxStock) {
-                                          ScaffoldMessenger.of(
+                                          CustomSnackBar.show(
                                             context,
-                                          ).showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                context.isArabic
-                                                    ? 'وصلت للحد الأقصى ($maxStock)'
-                                                    : 'Reached maximum stock ($maxStock)',
-                                              ),
-                                              duration: const Duration(
-                                                seconds: 1,
-                                              ),
-                                            ),
+                                            message: context.isArabic
+                                                ? 'وصلت للحد الأقصى ($maxStock)'
+                                                : 'Reached maximum stock ($maxStock)',
+                                            type: SnackBarType.warning,
                                           );
                                           return;
                                         }

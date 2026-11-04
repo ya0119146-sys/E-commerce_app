@@ -7,6 +7,8 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_gradients.dart';
 import '../../../core/widgets/hero_button.dart';
+
+import '../../../core/widgets/custom_snackbar.dart';
 import '../logic/auth_cubit.dart';
 import '../../../core/localization/app_translations.dart';
 
@@ -69,17 +71,13 @@ class _SignupScreenState extends State<SignupScreen> {
         listener: (context, state) {
           if (state is AuthError) {
             TextInput.finishAutofillContext(shouldSave: false);
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message.tr(context))));
+            CustomSnackBar.showError(context, state.message.tr(context));
           }
           // Backend does NOT return a token on signup — navigate to login.
           if (state is AuthSignupSuccess) {
             TextInput.finishAutofillContext(shouldSave: true);
             FocusScope.of(context).unfocus();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('account_created'.tr(context))),
-            );
+            CustomSnackBar.showSuccess(context, 'account_created'.tr(context));
             Future.delayed(const Duration(milliseconds: 300), () {
               if (!context.mounted) return;
               Navigator.pop(context); // back to login screen
