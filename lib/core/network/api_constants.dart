@@ -70,9 +70,11 @@ class ApiConstants {
   // ─── Orders ───
   static const String order = '/api/v1/order';
   static String orderDetails(String orderId) => '/api/v1/order/$orderId';
-  static String orderDeliver(String orderId) => '/api/v1/order/$orderId/deliver';
+  static String orderDeliver(String orderId) =>
+      '/api/v1/order/$orderId/deliver';
   static String orderPay(String orderId) => '/api/v1/order/$orderId/pay';
-  static String orderDeposite(String orderId) => '/api/v1/order/$orderId/deposite';
+  static String orderDeposite(String orderId) =>
+      '/api/v1/order/$orderId/deposite';
 
   // ─── Reviews ───
   static const String reviews = '/api/v1/reviews';
@@ -89,5 +91,6 @@ class ApiConstants {
 
   /// Images from this backend are absolute Cloudinary URLs — use them directly.
   /// This helper is kept for backward compatibility but should not be needed.
-  static String imageUrl(String path) => path.startsWith('http') ? path : '$baseUrl/$path';
+  static String imageUrl(String path) =>
+      path.startsWith('http') ? path : '$baseUrl/$path';
 }

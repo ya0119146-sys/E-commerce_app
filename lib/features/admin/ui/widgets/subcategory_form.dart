@@ -65,7 +65,7 @@ class _SubcategoryFormState extends State<SubcategoryForm> {
         );
         return;
       }
-      
+
       final Map<String, dynamic> data = {
         'name': _nameController.text.trim(),
         'category': _selectedCategoryId,
@@ -133,12 +133,15 @@ class _SubcategoryFormState extends State<SubcategoryForm> {
                             )
                           : (widget.subcategory?.image != null
                                 ? DecorationImage(
-                                    image: NetworkImage(widget.subcategory!.image!),
+                                    image: NetworkImage(
+                                      widget.subcategory!.image!,
+                                    ),
                                     fit: BoxFit.cover,
                                   )
                                 : null),
                     ),
-                    child: _imageFile == null && widget.subcategory?.image == null
+                    child:
+                        _imageFile == null && widget.subcategory?.image == null
                         ? const Icon(Icons.add_a_photo_outlined, size: 40)
                         : null,
                   ),
@@ -187,8 +190,9 @@ class _SubcategoryFormState extends State<SubcategoryForm> {
                     );
                   }).toList(),
                   onChanged: (v) => setState(() => _selectedCategoryId = v),
-                  validator: (v) =>
-                      v == null ? 'Parent category is required'.tr(context) : null,
+                  validator: (v) => v == null
+                      ? 'Parent category is required'.tr(context)
+                      : null,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
@@ -197,7 +201,8 @@ class _SubcategoryFormState extends State<SubcategoryForm> {
                     labelText: 'Subcategory Name'.tr(context),
                     prefixIcon: const Icon(Icons.subtitles_outlined),
                   ),
-                  validator: (v) => v!.isEmpty ? 'Name is required'.tr(context) : null,
+                  validator: (v) =>
+                      v!.isEmpty ? 'Name is required'.tr(context) : null,
                 ),
                 const SizedBox(height: 30),
                 SizedBox(
@@ -207,7 +212,11 @@ class _SubcategoryFormState extends State<SubcategoryForm> {
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    child: Text(widget.subcategory == null ? 'Create'.tr(context) : 'Update'.tr(context)),
+                    child: Text(
+                      widget.subcategory == null
+                          ? 'Create'.tr(context)
+                          : 'Update'.tr(context),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),

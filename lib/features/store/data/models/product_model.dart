@@ -73,7 +73,10 @@ class ProductModel {
         (json['priceAfterDiscount'] as num?)?.toDouble() ??
         (json['salePrice'] as num?)?.toDouble();
     double? salePrice = (pad != null && pad > 0 && pad < price) ? pad : null;
-    if (salePrice == null && parsedDiscount != null && parsedDiscount > 0 && parsedDiscount < 100) {
+    if (salePrice == null &&
+        parsedDiscount != null &&
+        parsedDiscount > 0 &&
+        parsedDiscount < 100) {
       salePrice = price * (1 - parsedDiscount / 100);
     }
 
@@ -110,25 +113,27 @@ class ProductModel {
       category: json['category'] is Map
           ? _parseLocalized(json['category']['name'])
           : json['category']?.toString(),
-      categoryId: json['categoryId']?.toString() ??
+      categoryId:
+          json['categoryId']?.toString() ??
           (json['category'] is Map
               ? (json['category']['_id']?.toString() ??
-                  json['category']['id']?.toString())
+                    json['category']['id']?.toString())
               : (json['category'] != null &&
-                      json['category'].toString().length == 24
-                  ? json['category'].toString()
-                  : null)),
+                        json['category'].toString().length == 24
+                    ? json['category'].toString()
+                    : null)),
       subcategory: json['subcategory'] is Map
           ? _parseLocalized(json['subcategory']['name'])
           : json['subcategory']?.toString(),
-      subcategoryId: json['subcategoryId']?.toString() ??
+      subcategoryId:
+          json['subcategoryId']?.toString() ??
           (json['subcategory'] is Map
               ? (json['subcategory']['_id']?.toString() ??
-                  json['subcategory']['id']?.toString())
+                    json['subcategory']['id']?.toString())
               : (json['subcategory'] != null &&
-                      json['subcategory'].toString().length == 24
-                  ? json['subcategory'].toString()
-                  : null)),
+                        json['subcategory'].toString().length == 24
+                    ? json['subcategory'].toString()
+                    : null)),
       quantity: quantity,
       sold: (json['sold'] as num?)?.toInt() ?? 0,
       inStock: (json['inStock'] as bool?) ?? quantity > 0,

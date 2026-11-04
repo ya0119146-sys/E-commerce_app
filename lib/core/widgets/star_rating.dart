@@ -22,7 +22,8 @@ class StarRating extends StatelessWidget {
   Widget build(BuildContext context) {
     final brightness = Theme.of(context).brightness;
     final active = activeColor ?? AppColors.accent(brightness);
-    final inactive = inactiveColor ??
+    final inactive =
+        inactiveColor ??
         AppColors.foreground(brightness).withValues(alpha: 0.2);
 
     return Row(

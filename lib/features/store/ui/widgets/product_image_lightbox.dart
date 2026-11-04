@@ -115,8 +115,9 @@ class _ProductImageLightboxState extends State<ProductImageLightbox> {
                   ),
                   builder: (context, index) {
                     return PhotoViewGalleryPageOptions(
-                      imageProvider:
-                          CachedNetworkImageProvider(widget.images[index]),
+                      imageProvider: CachedNetworkImageProvider(
+                        widget.images[index],
+                      ),
                       initialScale: PhotoViewComputedScale.contained,
                       minScale: PhotoViewComputedScale.contained,
                       maxScale: PhotoViewComputedScale.covered * 3.5,
@@ -140,7 +141,7 @@ class _ProductImageLightboxState extends State<ProductImageLightbox> {
                       value: event == null
                           ? null
                           : event.cumulativeBytesLoaded /
-                              (event.expectedTotalBytes ?? 1),
+                                (event.expectedTotalBytes ?? 1),
                       color: AppColors.secondary(brightness),
                       strokeWidth: 2.5,
                     ),
@@ -180,30 +181,19 @@ class _ProductImageLightboxState extends State<ProductImageLightbox> {
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.2),
-                ),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
               ),
-              child: const Icon(
-                Icons.close,
-                color: Colors.white,
-                size: 20,
-              ),
+              child: const Icon(Icons.close, color: Colors.white, size: 20),
             ),
           ),
 
           // Image Counter Pill
           Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 6,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(AppDimensions.radiusXl),
-              border: Border.all(
-                color: Colors.white.withValues(alpha: 0.2),
-              ),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
             ),
             child: Text(
               '${_currentIndex + 1} / ${widget.images.length}',
@@ -287,8 +277,9 @@ class _ProductImageLightboxState extends State<ProductImageLightbox> {
                           boxShadow: isSelected
                               ? [
                                   BoxShadow(
-                                    color: AppColors.primary(brightness)
-                                        .withValues(alpha: 0.5),
+                                    color: AppColors.primary(
+                                      brightness,
+                                    ).withValues(alpha: 0.5),
                                     blurRadius: 10,
                                     offset: const Offset(0, 2),
                                   ),

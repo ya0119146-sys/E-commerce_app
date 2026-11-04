@@ -40,7 +40,9 @@ class AppTheme {
         selectionHandleColor: AppColors.secondary(brightness),
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.background(brightness).withValues(alpha: 0.85),
+        backgroundColor: AppColors.background(
+          brightness,
+        ).withValues(alpha: 0.85),
         foregroundColor: AppColors.foreground(brightness),
         elevation: 0,
         centerTitle: true,
@@ -92,7 +94,10 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.muted(brightness).withValues(alpha: 0.5),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 16,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimensions.radiusDefault),
           borderSide: BorderSide(color: AppColors.border(brightness)),
@@ -124,10 +129,15 @@ class AppTheme {
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: AppColors.card(brightness),
         selectedItemColor: AppColors.secondary(brightness),
-        unselectedItemColor: AppColors.foreground(brightness).withValues(alpha: 0.4),
+        unselectedItemColor: AppColors.foreground(
+          brightness,
+        ).withValues(alpha: 0.4),
         type: BottomNavigationBarType.fixed,
         elevation: 0,
-        selectedLabelStyle: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.w600),
+        selectedLabelStyle: GoogleFonts.poppins(
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+        ),
         unselectedLabelStyle: GoogleFonts.poppins(fontSize: 11),
       ),
       dividerTheme: DividerThemeData(
@@ -136,7 +146,10 @@ class AppTheme {
       ),
       snackBarTheme: SnackBarThemeData(
         backgroundColor: AppColors.secondary(brightness),
-        contentTextStyle: GoogleFonts.poppins(color: AppColors.white, fontSize: 14),
+        contentTextStyle: GoogleFonts.poppins(
+          color: AppColors.white,
+          fontSize: 14,
+        ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
         ),

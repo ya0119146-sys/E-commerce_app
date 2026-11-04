@@ -163,8 +163,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   children: [
                                     TextFormField(
                                       controller: _emailController,
-                                      cursorColor:
-                                          AppColors.secondary(brightness),
+                                      cursorColor: AppColors.secondary(
+                                        brightness,
+                                      ),
                                       cursorWidth: 2.0,
                                       showCursor: true,
                                       keyboardType: TextInputType.emailAddress,
@@ -175,15 +176,25 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ],
                                       decoration: InputDecoration(
                                         labelText: 'Email'.tr(context),
-                                        prefixIcon: const Icon(Icons.email_outlined),
+                                        prefixIcon: const Icon(
+                                          Icons.email_outlined,
+                                        ),
                                       ),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          return 'please_enter_email'.tr(context);
+                                          return 'please_enter_email'.tr(
+                                            context,
+                                          );
                                         }
-                                        final emailRegExp = RegExp(r'^[\w\.\-]+@[a-zA-Z0-9\-]+(\.[a-zA-Z0-9\-]+)+$');
-                                        if (!emailRegExp.hasMatch(value.trim())) {
-                                          return 'please_enter_valid_email'.tr(context);
+                                        final emailRegExp = RegExp(
+                                          r'^[\w\.\-]+@[a-zA-Z0-9\-]+(\.[a-zA-Z0-9\-]+)+$',
+                                        );
+                                        if (!emailRegExp.hasMatch(
+                                          value.trim(),
+                                        )) {
+                                          return 'please_enter_valid_email'.tr(
+                                            context,
+                                          );
                                         }
                                         return null;
                                       },
@@ -193,8 +204,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                     TextFormField(
                                       controller: _passwordController,
-                                      cursorColor:
-                                          AppColors.secondary(brightness),
+                                      cursorColor: AppColors.secondary(
+                                        brightness,
+                                      ),
                                       cursorWidth: 2.0,
                                       showCursor: true,
                                       obscureText: _obscurePassword,
@@ -226,10 +238,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          return 'please_enter_password'.tr(context);
+                                          return 'please_enter_password'.tr(
+                                            context,
+                                          );
                                         }
                                         if (value.length < 6) {
-                                          return 'password_too_short'.tr(context);
+                                          return 'password_too_short'.tr(
+                                            context,
+                                          );
                                         }
                                         return null;
                                       },

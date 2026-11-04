@@ -588,7 +588,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 borderRadius: BorderRadius.circular(6),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: AppColors.accent(brightness).withValues(alpha: 0.3),
+                                    color: AppColors.accent(
+                                      brightness,
+                                    ).withValues(alpha: 0.3),
                                     blurRadius: 8,
                                     offset: const Offset(0, 2),
                                   ),
@@ -609,12 +611,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       if (product.onSale && product.savingsAmount > 0) ...[
                         const SizedBox(height: 6),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF2E7D32).withValues(alpha: 0.1),
+                            color: const Color(
+                              0xFF2E7D32,
+                            ).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(6),
                             border: Border.all(
-                              color: const Color(0xFF2E7D32).withValues(alpha: 0.3),
+                              color: const Color(
+                                0xFF2E7D32,
+                              ).withValues(alpha: 0.3),
                               width: 0.8,
                             ),
                           ),
@@ -715,20 +724,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     message: 'Contact on WhatsApp'.tr(context),
                     child: InkWell(
                       onTap: () => _launchProductWhatsApp(context),
-                      borderRadius:
-                          BorderRadius.circular(AppDimensions.radiusDefault),
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.radiusDefault,
+                      ),
                       child: Container(
                         height: 52,
                         width: 52,
                         decoration: BoxDecoration(
-                          color:
-                              const Color(0xFF25D366).withValues(alpha: 0.12),
+                          color: const Color(
+                            0xFF25D366,
+                          ).withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(
                             AppDimensions.radiusDefault,
                           ),
                           border: Border.all(
-                            color: const Color(0xFF25D366)
-                                .withValues(alpha: 0.35),
+                            color: const Color(
+                              0xFF25D366,
+                            ).withValues(alpha: 0.35),
                             width: 1.2,
                           ),
                         ),
@@ -756,8 +768,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               context.read<CartCubit>().addToCart(product.id);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content:
-                                      Text('${'added_to_cart'.tr(context)} ✨'),
+                                  content: Text(
+                                    '${'added_to_cart'.tr(context)} ✨',
+                                  ),
                                   duration: const Duration(seconds: 1),
                                   behavior: SnackBarBehavior.floating,
                                 ),
@@ -785,20 +798,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     message: 'Contact on WhatsApp'.tr(context),
                     child: InkWell(
                       onTap: () => _launchProductWhatsApp(context),
-                      borderRadius:
-                          BorderRadius.circular(AppDimensions.radiusDefault),
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.radiusDefault,
+                      ),
                       child: Container(
                         height: 52,
                         width: 52,
                         decoration: BoxDecoration(
-                          color:
-                              const Color(0xFF25D366).withValues(alpha: 0.12),
+                          color: const Color(
+                            0xFF25D366,
+                          ).withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(
                             AppDimensions.radiusDefault,
                           ),
                           border: Border.all(
-                            color: const Color(0xFF25D366)
-                                .withValues(alpha: 0.35),
+                            color: const Color(
+                              0xFF25D366,
+                            ).withValues(alpha: 0.35),
                             width: 1.2,
                           ),
                         ),
@@ -824,22 +840,26 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           isScrollControlled: true,
                           backgroundColor: Theme.of(context).cardColor,
                           shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.vertical(top: Radius.circular(20)),
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(20),
+                            ),
                           ),
                           builder: (_) => ProductForm(
                             product: product,
-                            categories:
-                                context.read<CategoriesCubit>().state.categories,
+                            categories: context
+                                .read<CategoriesCubit>()
+                                .state
+                                .categories,
                             subcategories: const [],
                             onSubmit: (data) async {
-                              await context
-                                  .read<AdminCubit>()
-                                  .updateProduct(product.id, data);
+                              await context.read<AdminCubit>().updateProduct(
+                                product.id,
+                                data,
+                              );
                               if (context.mounted) {
-                                context
-                                    .read<ProductsCubit>()
-                                    .fetchProducts(refresh: true);
+                                context.read<ProductsCubit>().fetchProducts(
+                                  refresh: true,
+                                );
                                 Navigator.pop(context);
                               }
                             },

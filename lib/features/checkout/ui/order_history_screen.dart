@@ -74,91 +74,99 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
             separatorBuilder: (_, __) => const SizedBox(height: 12),
             itemBuilder: (context, index) {
               final order = state.orders[index];
-              final orderIdSnippet = order.id.substring(order.id.length > 8 ? order.id.length - 8 : 0);
+              final orderIdSnippet = order.id.substring(
+                order.id.length > 8 ? order.id.length - 8 : 0,
+              );
               return InkWell(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => OrderDetailScreen(order: order),
-                  ),
-                ),
-                borderRadius: BorderRadius.circular(AppDimensions.radiusDefault),
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: AppColors.card(brightness),
-                    borderRadius:
-                        BorderRadius.circular(AppDimensions.radiusDefault),
-                    border: Border.all(
-                      color: AppColors.border(brightness).withValues(alpha: 0.4),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => OrderDetailScreen(order: order),
+                      ),
                     ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '${'Order ID'.tr(context)} #$orderIdSnippet',
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                          if (order.status != null)
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.accent(brightness)
-                                    .withValues(alpha: 0.15),
-                                borderRadius: BorderRadius.circular(
-                                  AppDimensions.radiusSm,
-                                ),
-                              ),
-                              child: Text(
-                                order.status!.tr(context),
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.accent(brightness),
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          if (order.createdAt != null)
-                            Text(
-                              dateFormat.format(order.createdAt!),
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                          Text(
-                            '\$${order.totalPrice.toStringAsFixed(2)}',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.secondary(brightness),
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
-                      ),
-                      if (order.items.isNotEmpty) ...[
-                        const SizedBox(height: 8),
-                        Text(
-                          context.isArabic
-                              ? '${order.items.length} ${'items'.tr(context)}'
-                              : '${order.items.length} item${order.items.length > 1 ? 's' : ''}',
-                          style: Theme.of(context).textTheme.labelSmall,
+                    borderRadius: BorderRadius.circular(
+                      AppDimensions.radiusDefault,
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: AppColors.card(brightness),
+                        borderRadius: BorderRadius.circular(
+                          AppDimensions.radiusDefault,
                         ),
-                      ],
-                    ],
-                  ),
-                ),
-              )
+                        border: Border.all(
+                          color: AppColors.border(
+                            brightness,
+                          ).withValues(alpha: 0.4),
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '${'Order ID'.tr(context)} #$orderIdSnippet',
+                                style: Theme.of(context).textTheme.titleSmall,
+                              ),
+                              if (order.status != null)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.accent(
+                                      brightness,
+                                    ).withValues(alpha: 0.15),
+                                    borderRadius: BorderRadius.circular(
+                                      AppDimensions.radiusSm,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    order.status!.tr(context),
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.accent(brightness),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              if (order.createdAt != null)
+                                Text(
+                                  dateFormat.format(order.createdAt!),
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                              Text(
+                                '\$${order.totalPrice.toStringAsFixed(2)}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.secondary(brightness),
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                          if (order.items.isNotEmpty) ...[
+                            const SizedBox(height: 8),
+                            Text(
+                              context.isArabic
+                                  ? '${order.items.length} ${'items'.tr(context)}'
+                                  : '${order.items.length} item${order.items.length > 1 ? 's' : ''}',
+                              style: Theme.of(context).textTheme.labelSmall,
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  )
                   .animate()
                   .fade(
                     duration: 350.ms,

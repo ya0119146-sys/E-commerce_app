@@ -173,7 +173,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                   autofillHints: const [AutofillHints.name],
                                   decoration: InputDecoration(
                                     labelText: 'Full Name'.tr(context),
-                                    prefixIcon: const Icon(Icons.person_outline),
+                                    prefixIcon: const Icon(
+                                      Icons.person_outline,
+                                    ),
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -193,11 +195,15 @@ class _SignupScreenState extends State<SignupScreen> {
                                   textInputAction: TextInputAction.next,
                                   decoration: InputDecoration(
                                     labelText: 'Username'.tr(context),
-                                    prefixIcon: const Icon(Icons.person_outline),
+                                    prefixIcon: const Icon(
+                                      Icons.person_outline,
+                                    ),
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'please_enter_username'.tr(context);
+                                      return 'please_enter_username'.tr(
+                                        context,
+                                      );
                                     }
                                     return null;
                                   },
@@ -218,15 +224,21 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ],
                                   decoration: InputDecoration(
                                     labelText: 'Email'.tr(context),
-                                    prefixIcon: const Icon(Icons.email_outlined),
+                                    prefixIcon: const Icon(
+                                      Icons.email_outlined,
+                                    ),
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'please_enter_email'.tr(context);
                                     }
-                                    final emailRegExp = RegExp(r'^[\w\.\-]+@[a-zA-Z0-9\-]+(\.[a-zA-Z0-9\-]+)+$');
+                                    final emailRegExp = RegExp(
+                                      r'^[\w\.\-]+@[a-zA-Z0-9\-]+(\.[a-zA-Z0-9\-]+)+$',
+                                    );
                                     if (!emailRegExp.hasMatch(value.trim())) {
-                                      return 'please_enter_valid_email'.tr(context);
+                                      return 'please_enter_valid_email'.tr(
+                                        context,
+                                      );
                                     }
                                     return null;
                                   },
@@ -246,7 +258,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ],
                                   decoration: InputDecoration(
                                     labelText: 'Phone Number'.tr(context),
-                                    prefixIcon: const Icon(Icons.phone_outlined),
+                                    prefixIcon: const Icon(
+                                      Icons.phone_outlined,
+                                    ),
                                     hintText: 'e.g. 01012345678'.tr(context),
                                   ),
                                   validator: (value) {
@@ -293,7 +307,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'please_enter_password'.tr(context);
+                                      return 'please_enter_password'.tr(
+                                        context,
+                                      );
                                     }
                                     if (value.length < 6) {
                                       return 'password_too_short'.tr(context);

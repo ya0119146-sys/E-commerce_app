@@ -21,8 +21,7 @@ class ShimmerLoading extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Shimmer.fromColors(
       baseColor: isDark ? AppColors.darkMuted : const Color(0xFFEBE5DE),
-      highlightColor:
-          isDark ? AppColors.darkCard : const Color(0xFFF5EBE0),
+      highlightColor: isDark ? AppColors.darkCard : const Color(0xFFF5EBE0),
       child: Container(
         width: width,
         height: height,
@@ -77,7 +76,11 @@ class ShimmerProductCard extends StatelessWidget {
                 SizedBox(height: 6),
                 ShimmerLoading(width: 70, height: 15),
                 SizedBox(height: 8),
-                ShimmerLoading(width: double.infinity, height: 26, borderRadius: 8),
+                ShimmerLoading(
+                  width: double.infinity,
+                  height: 26,
+                  borderRadius: 8,
+                ),
               ],
             ),
           ),

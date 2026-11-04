@@ -841,9 +841,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           child: ListTile(
             onTap: onTap,
-            leading: customLeading ??
+            leading:
+                customLeading ??
                 (icon != null
-                    ? Icon(icon, color: iconColor ?? AppColors.secondary(brightness))
+                    ? Icon(
+                        icon,
+                        color: iconColor ?? AppColors.secondary(brightness),
+                      )
                     : null),
             title: Text(title, style: Theme.of(context).textTheme.titleSmall),
             subtitle: subtitle != null
@@ -851,7 +855,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     subtitle,
                     style: TextStyle(
                       fontSize: 12,
-                      color: AppColors.foreground(brightness).withValues(alpha: 0.6),
+                      color: AppColors.foreground(
+                        brightness,
+                      ).withValues(alpha: 0.6),
                     ),
                   )
                 : null,

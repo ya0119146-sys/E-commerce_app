@@ -17,29 +17,31 @@ class CategoriesCubit extends Cubit<CategoriesState> {
     emit(state.copyWith(status: CategoriesStatus.loading));
     try {
       final categories = await _repository.getCategories();
-      emit(state.copyWith(
-        status: CategoriesStatus.loaded,
-        categories: categories,
-      ));
+      emit(
+        state.copyWith(status: CategoriesStatus.loaded, categories: categories),
+      );
     } on ApiException catch (e) {
-      emit(state.copyWith(
-        status: CategoriesStatus.error,
-        errorMessage: e.message,
-      ));
+      emit(
+        state.copyWith(status: CategoriesStatus.error, errorMessage: e.message),
+      );
     } catch (_) {
-      emit(state.copyWith(
-        status: CategoriesStatus.error,
-        errorMessage: 'Failed to load categories',
-      ));
+      emit(
+        state.copyWith(
+          status: CategoriesStatus.error,
+          errorMessage: 'Failed to load categories',
+        ),
+      );
     }
   }
 
   /// Select a category.
   void selectCategory(String? categoryId) {
     final shouldClear = categoryId == null || categoryId.trim().isEmpty;
-    emit(state.copyWith(
-      selectedCategoryId: shouldClear ? null : categoryId.trim(),
-      clearSelectedCategory: shouldClear,
-    ));
+    emit(
+      state.copyWith(
+        selectedCategoryId: shouldClear ? null : categoryId.trim(),
+        clearSelectedCategory: shouldClear,
+      ),
+    );
   }
 }

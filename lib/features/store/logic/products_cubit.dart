@@ -34,8 +34,7 @@ class ProductsCubit extends Cubit<ProductsState> {
         ? null
         : (keyword != null ? keyword.trim() : state.keyword);
 
-    final shouldClearSort =
-        clearSort || (sort != null && sort.trim().isEmpty);
+    final shouldClearSort = clearSort || (sort != null && sort.trim().isEmpty);
     final effectiveSort = shouldClearSort
         ? null
         : (sort != null ? sort.trim() : state.sort);

@@ -73,7 +73,9 @@ class _CategoryFormState extends State<CategoryForm> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              widget.category == null ? 'Create Category'.tr(context) : 'Update Category'.tr(context),
+              widget.category == null
+                  ? 'Create Category'.tr(context)
+                  : 'Update Category'.tr(context),
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 20),
@@ -105,15 +107,22 @@ class _CategoryFormState extends State<CategoryForm> {
             const SizedBox(height: 20),
             TextFormField(
               controller: _nameController,
-              decoration: InputDecoration(labelText: 'Category Name'.tr(context)),
-              validator: (v) => v!.isEmpty ? 'Name is required'.tr(context) : null,
+              decoration: InputDecoration(
+                labelText: 'Category Name'.tr(context),
+              ),
+              validator: (v) =>
+                  v!.isEmpty ? 'Name is required'.tr(context) : null,
             ),
             const SizedBox(height: 30),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: _submit,
-                child: Text(widget.category == null ? 'Create'.tr(context) : 'Update'.tr(context)),
+                child: Text(
+                  widget.category == null
+                      ? 'Create'.tr(context)
+                      : 'Update'.tr(context),
+                ),
               ),
             ),
           ],

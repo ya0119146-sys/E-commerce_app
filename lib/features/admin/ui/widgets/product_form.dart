@@ -160,8 +160,9 @@ class _ProductFormState extends State<ProductForm> {
   void _submit() async {
     if (_formKey.currentState!.validate()) {
       final discountText = _discountController.text.trim();
-      final discountVal =
-          discountText.isNotEmpty ? (double.tryParse(discountText) ?? 0.0) : 0.0;
+      final discountVal = discountText.isNotEmpty
+          ? (double.tryParse(discountText) ?? 0.0)
+          : 0.0;
       final Map<String, dynamic> data = {
         'name': _nameController.text.trim(),
         'description': _descController.text.trim(),
@@ -175,7 +176,8 @@ class _ProductFormState extends State<ProductForm> {
           'category': _selectedCategoryId
         else if (widget.product != null)
           'category': '',
-        if (_selectedSubcategoryId != null && _selectedSubcategoryId!.isNotEmpty)
+        if (_selectedSubcategoryId != null &&
+            _selectedSubcategoryId!.isNotEmpty)
           'subcategory': _selectedSubcategoryId
         else if (widget.product != null)
           'subcategory': '',
@@ -283,7 +285,9 @@ class _ProductFormState extends State<ProductForm> {
                         AppDimensions.radiusMd,
                       ),
                       border: Border.all(
-                        color: AppColors.border(brightness).withValues(alpha: 0.3),
+                        color: AppColors.border(
+                          brightness,
+                        ).withValues(alpha: 0.3),
                       ),
                       image: _coverImage != null
                           ? DecorationImage(
@@ -291,19 +295,23 @@ class _ProductFormState extends State<ProductForm> {
                               fit: BoxFit.cover,
                             )
                           : ((widget.product?.cover != null && !_coverRemoved)
-                              ? DecorationImage(
-                                  image: NetworkImage(widget.product!.cover!),
-                                  fit: BoxFit.cover,
-                                )
-                              : null),
+                                ? DecorationImage(
+                                    image: NetworkImage(widget.product!.cover!),
+                                    fit: BoxFit.cover,
+                                  )
+                                : null),
                     ),
-                    child: (_coverImage == null &&
+                    child:
+                        (_coverImage == null &&
                             (widget.product?.cover == null || _coverRemoved))
                         ? Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(Icons.add_a_photo_outlined, size: 36),
+                                const Icon(
+                                  Icons.add_a_photo_outlined,
+                                  size: 36,
+                                ),
                                 const SizedBox(height: 6),
                                 Text(
                                   'Tap to choose cover'.tr(context),
@@ -327,7 +335,10 @@ class _ProductFormState extends State<ProductForm> {
                     ),
                     TextButton.icon(
                       onPressed: _pickAdditional,
-                      icon: const Icon(Icons.add_photo_alternate_outlined, size: 18),
+                      icon: const Icon(
+                        Icons.add_photo_alternate_outlined,
+                        size: 18,
+                      ),
                       label: Text('Add More'.tr(context)),
                     ),
                   ],
@@ -349,8 +360,9 @@ class _ProductFormState extends State<ProductForm> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
-                                    color: AppColors.border(brightness)
-                                        .withValues(alpha: 0.3),
+                                    color: AppColors.border(
+                                      brightness,
+                                    ).withValues(alpha: 0.3),
                                   ),
                                   image: DecorationImage(
                                     image: NetworkImage(url),
@@ -392,8 +404,9 @@ class _ProductFormState extends State<ProductForm> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
-                                    color: AppColors.border(brightness)
-                                        .withValues(alpha: 0.3),
+                                    color: AppColors.border(
+                                      brightness,
+                                    ).withValues(alpha: 0.3),
                                   ),
                                   image: DecorationImage(
                                     image: FileImage(file),
@@ -464,13 +477,17 @@ class _ProductFormState extends State<ProductForm> {
 
                 TextFormField(
                   controller: _nameController,
-                  decoration: InputDecoration(labelText: 'Product Name'.tr(context)),
+                  decoration: InputDecoration(
+                    labelText: 'Product Name'.tr(context),
+                  ),
                   validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
                   controller: _descController,
-                  decoration: InputDecoration(labelText: 'Description'.tr(context)),
+                  decoration: InputDecoration(
+                    labelText: 'Description'.tr(context),
+                  ),
                   maxLines: 3,
                   validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
                 ),
@@ -480,7 +497,8 @@ class _ProductFormState extends State<ProductForm> {
                   decoration: InputDecoration(
                     labelText: 'Size (e.g. S, M, L, XL, Standard)'.tr(context),
                   ),
-                  validator: (v) => v!.isEmpty ? 'Size is required'.tr(context) : null,
+                  validator: (v) =>
+                      v!.isEmpty ? 'Size is required'.tr(context) : null,
                 ),
                 const SizedBox(height: 12),
                 Row(
@@ -488,10 +506,13 @@ class _ProductFormState extends State<ProductForm> {
                     Expanded(
                       child: TextFormField(
                         controller: _priceController,
-                        decoration: InputDecoration(labelText: 'Price'.tr(context)),
+                        decoration: InputDecoration(
+                          labelText: 'Price'.tr(context),
+                        ),
                         keyboardType: TextInputType.number,
                         onChanged: (_) => setState(() {}),
-                        validator: (v) => v!.isEmpty ? 'Required'.tr(context) : null,
+                        validator: (v) =>
+                            v!.isEmpty ? 'Required'.tr(context) : null,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -521,9 +542,14 @@ class _ProductFormState extends State<ProductForm> {
                   Padding(
                     padding: const EdgeInsets.only(top: 6, bottom: 2),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
-                        color: AppColors.accent(brightness).withValues(alpha: 0.12),
+                        color: AppColors.accent(
+                          brightness,
+                        ).withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
@@ -585,8 +611,9 @@ class _ProductFormState extends State<ProductForm> {
                                   : FontWeight.w500,
                               color: _selectedCategoryId == null
                                   ? AppColors.secondary(brightness)
-                                  : AppColors.foreground(brightness)
-                                      .withValues(alpha: 0.6),
+                                  : AppColors.foreground(
+                                      brightness,
+                                    ).withValues(alpha: 0.6),
                             ),
                           ),
                           if (_selectedCategoryId == null) ...[
@@ -661,16 +688,19 @@ class _ProductFormState extends State<ProductForm> {
                     final filteredSubcats = _selectedCategoryId == null
                         ? _subcategoriesList
                         : _subcategoriesList
-                            .where((s) =>
-                                s.categoryId.isEmpty ||
-                                s.categoryId == _selectedCategoryId)
-                            .toList();
+                              .where(
+                                (s) =>
+                                    s.categoryId.isEmpty ||
+                                    s.categoryId == _selectedCategoryId,
+                              )
+                              .toList();
                     final subcatsToShow = filteredSubcats.isNotEmpty
                         ? filteredSubcats
                         : _subcategoriesList;
 
                     // Ensure _selectedSubcategoryId is actually present in subcatsToShow
-                    final currentValue = subcatsToShow.any((s) => s.id == _selectedSubcategoryId)
+                    final currentValue =
+                        subcatsToShow.any((s) => s.id == _selectedSubcategoryId)
                         ? _selectedSubcategoryId
                         : null;
 
@@ -700,8 +730,9 @@ class _ProductFormState extends State<ProductForm> {
                                       : FontWeight.w500,
                                   color: currentValue == null
                                       ? AppColors.secondary(brightness)
-                                      : AppColors.foreground(brightness)
-                                          .withValues(alpha: 0.6),
+                                      : AppColors.foreground(
+                                          brightness,
+                                        ).withValues(alpha: 0.6),
                                 ),
                               ),
                               if (currentValue == null) ...[

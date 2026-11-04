@@ -846,7 +846,8 @@ class AppTranslations {
 
     'Calculated at checkout': 'Calculated at checkout',
 
-    'Shipping Policy Note': 'Free delivery to Al Sharqia • 100 EGP for other governorates',
+    'Shipping Policy Note':
+        'Free delivery to Al Sharqia • 100 EGP for other governorates',
 
     'Shipping & Tax': 'Shipping & Tax',
 
@@ -2048,7 +2049,8 @@ class AppTranslations {
 
     'Calculated at checkout': 'يُحسب عند إتمام الطلب',
 
-    'Shipping Policy Note': 'التوصيل لمحافظة الشرقية مجاناً • باقي المحافظات 100 ج.م',
+    'Shipping Policy Note':
+        'التوصيل لمحافظة الشرقية مجاناً • باقي المحافظات 100 ج.م',
 
     'Shipping & Tax': 'الشحن والضريبة',
 

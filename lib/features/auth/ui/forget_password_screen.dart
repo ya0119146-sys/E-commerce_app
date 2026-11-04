@@ -55,17 +55,18 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message.tr(context))),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message.tr(context))));
           } else if (state is AuthResetCodeSent) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message.tr(context))),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message.tr(context))));
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => VerifyCodeScreen(email: _emailController.text.trim()),
+                builder: (_) =>
+                    VerifyCodeScreen(email: _emailController.text.trim()),
               ),
             );
           }
@@ -90,9 +91,12 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   ).animate().fade(duration: 600.ms).scale(),
                   const SizedBox(height: 12),
                   Text(
-                    'Forgot Password?'.tr(context),
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ).animate().fade(duration: 500.ms, delay: 200.ms).moveY(begin: 15, end: 0),
+                        'Forgot Password?'.tr(context),
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      )
+                      .animate()
+                      .fade(duration: 500.ms, delay: 200.ms)
+                      .moveY(begin: 15, end: 0),
                   const SizedBox(height: 8),
                   Text(
                     'Enter your email to receive a reset code'.tr(context),
@@ -103,64 +107,79 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
                   // ─── Form Card ───
                   Container(
-                    padding: const EdgeInsets.all(AppDimensions.spacingLg),
-                    decoration: BoxDecoration(
-                      color: AppColors.card(brightness).withValues(alpha: 0.85),
-                      borderRadius: BorderRadius.circular(AppDimensions.radiusXl),
-                      border: Border.all(
-                        color: AppColors.border(brightness).withValues(alpha: 0.5),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.secondary(brightness).withValues(alpha: 0.08),
-                          blurRadius: 30,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      autovalidateMode: _autovalidateMode,
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            controller: _emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            textInputAction: TextInputAction.done,
-                            autofillHints: const [
-                              AutofillHints.email,
-                              AutofillHints.username,
-                            ],
-                            onFieldSubmitted: (_) => _onSendCode(),
-                            decoration: InputDecoration(
-                              labelText: 'Email Address'.tr(context),
-                              prefixIcon: const Icon(Icons.email_outlined),
+                        padding: const EdgeInsets.all(AppDimensions.spacingLg),
+                        decoration: BoxDecoration(
+                          color: AppColors.card(
+                            brightness,
+                          ).withValues(alpha: 0.85),
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.radiusXl,
+                          ),
+                          border: Border.all(
+                            color: AppColors.border(
+                              brightness,
+                            ).withValues(alpha: 0.5),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.secondary(
+                                brightness,
+                              ).withValues(alpha: 0.08),
+                              blurRadius: 30,
+                              offset: const Offset(0, 10),
                             ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'please_enter_email'.tr(context);
-                              }
-                              final emailRegExp = RegExp(r'^[\w\.\-]+@[a-zA-Z0-9\-]+(\.[a-zA-Z0-9\-]+)+$');
-                              if (!emailRegExp.hasMatch(value.trim())) {
-                                return 'please_enter_valid_email'.tr(context);
-                              }
-                              return null;
-                            },
+                          ],
+                        ),
+                        child: Form(
+                          key: _formKey,
+                          autovalidateMode: _autovalidateMode,
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                controller: _emailController,
+                                keyboardType: TextInputType.emailAddress,
+                                textInputAction: TextInputAction.done,
+                                autofillHints: const [
+                                  AutofillHints.email,
+                                  AutofillHints.username,
+                                ],
+                                onFieldSubmitted: (_) => _onSendCode(),
+                                decoration: InputDecoration(
+                                  labelText: 'Email Address'.tr(context),
+                                  prefixIcon: const Icon(Icons.email_outlined),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'please_enter_email'.tr(context);
+                                  }
+                                  final emailRegExp = RegExp(
+                                    r'^[\w\.\-]+@[a-zA-Z0-9\-]+(\.[a-zA-Z0-9\-]+)+$',
+                                  );
+                                  if (!emailRegExp.hasMatch(value.trim())) {
+                                    return 'please_enter_valid_email'.tr(
+                                      context,
+                                    );
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: AppDimensions.spacingLg),
+                              BlocBuilder<AuthCubit, AuthState>(
+                                builder: (context, state) {
+                                  return HeroButton(
+                                    text: 'Send Code'.tr(context),
+                                    isLoading: state is AuthLoading,
+                                    onPressed: _onSendCode,
+                                  );
+                                },
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: AppDimensions.spacingLg),
-                          BlocBuilder<AuthCubit, AuthState>(
-                            builder: (context, state) {
-                              return HeroButton(
-                                text: 'Send Code'.tr(context),
-                                isLoading: state is AuthLoading,
-                                onPressed: _onSendCode,
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ).animate().fade(duration: 600.ms, delay: 400.ms).moveY(begin: 30, end: 0),
+                        ),
+                      )
+                      .animate()
+                      .fade(duration: 600.ms, delay: 400.ms)
+                      .moveY(begin: 30, end: 0),
                 ],
               ),
             ),

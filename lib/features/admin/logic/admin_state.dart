@@ -13,11 +13,7 @@ class AdminState extends Equatable {
     this.error,
   });
 
-  AdminState copyWith({
-    AdminStatus? status,
-    String? message,
-    String? error,
-  }) {
+  AdminState copyWith({AdminStatus? status, String? message, String? error}) {
     return AdminState(
       status: status ?? this.status,
       message: message ?? this.message,

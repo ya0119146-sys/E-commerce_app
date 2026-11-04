@@ -46,7 +46,9 @@ class EgyptGovernorates {
   static bool isSharqia(String? state) {
     if (state == null) return false;
     final lower = state.trim().toLowerCase();
-    return state.contains('الشرقية') || lower.contains('sharqia') || lower.contains('sharkia');
+    return state.contains('الشرقية') ||
+        lower.contains('sharqia') ||
+        lower.contains('sharkia');
   }
 
   /// Calculates the shipping fee for a given governorate:
@@ -57,4 +59,3 @@ class EgyptGovernorates {
     return isSharqia(state) ? 0.0 : 100.0;
   }
 }
-

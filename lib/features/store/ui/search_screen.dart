@@ -201,7 +201,9 @@ class _SearchScreenState extends State<SearchScreen> {
           }
 
           return CustomScrollView(
-            key: ValueKey('search_scroll_${_lastSearchQuery}_${state.products.length}'),
+            key: ValueKey(
+              'search_scroll_${_lastSearchQuery}_${state.products.length}',
+            ),
             controller: _scrollController,
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             slivers: [

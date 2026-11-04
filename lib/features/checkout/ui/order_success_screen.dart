@@ -23,8 +23,9 @@ class OrderSuccessScreen extends StatelessWidget {
 
     void navigateToHomeShell() {
       final authState = context.read<AuthCubit>().state;
-      final role =
-          authState is AuthAuthenticated ? authState.user.role : 'user';
+      final role = authState is AuthAuthenticated
+          ? authState.user.role
+          : 'user';
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -50,18 +51,18 @@ class OrderSuccessScreen extends StatelessWidget {
                 children: [
                   // Success icon
                   Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.success.withValues(alpha: 0.1),
-                    ),
-                    child: const Icon(
-                      Icons.check_circle,
-                      size: 60,
-                      color: AppColors.success,
-                    ),
-                  )
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.success.withValues(alpha: 0.1),
+                        ),
+                        child: const Icon(
+                          Icons.check_circle,
+                          size: 60,
+                          color: AppColors.success,
+                        ),
+                      )
                       .animate()
                       .scale(
                         begin: const Offset(0.0, 0.0),
@@ -74,41 +75,50 @@ class OrderSuccessScreen extends StatelessWidget {
                   const SizedBox(height: 32),
 
                   Text(
-                    'Order Confirmed!'.tr(context),
-                    style: GoogleFonts.playfairDisplay(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.foreground(brightness),
-                    ),
-                  )
+                        'Order Confirmed!'.tr(context),
+                        style: GoogleFonts.playfairDisplay(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.foreground(brightness),
+                        ),
+                      )
                       .animate()
                       .fade(duration: 500.ms, delay: 300.ms)
-                      .moveY(begin: 15, end: 0, duration: 500.ms, delay: 300.ms),
+                      .moveY(
+                        begin: 15,
+                        end: 0,
+                        duration: 500.ms,
+                        delay: 300.ms,
+                      ),
 
                   const SizedBox(height: 12),
 
                   Text(
-                    'Thank you for your purchase.\nYour order is being processed.'.tr(context),
+                    'Thank you for your purchase.\nYour order is being processed.'
+                        .tr(context),
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          height: 1.5,
-                        ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(height: 1.5),
                   ).animate().fade(duration: 500.ms, delay: 500.ms),
 
                   const SizedBox(height: 40),
 
                   HeroButton(
-                    text: 'View Order Details'.tr(context),
-                    icon: Icons.receipt_long_outlined,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => OrderDetailScreen(order: order),
-                        ),
-                      );
-                    },
-                  ).animate().fade(duration: 400.ms, delay: 700.ms).moveY(
+                        text: 'View Order Details'.tr(context),
+                        icon: Icons.receipt_long_outlined,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => OrderDetailScreen(order: order),
+                            ),
+                          );
+                        },
+                      )
+                      .animate()
+                      .fade(duration: 400.ms, delay: 700.ms)
+                      .moveY(
                         begin: 20,
                         end: 0,
                         duration: 400.ms,
@@ -124,7 +134,9 @@ class OrderSuccessScreen extends StatelessWidget {
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 54),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(AppDimensions.radiusDefault),
+                        borderRadius: BorderRadius.circular(
+                          AppDimensions.radiusDefault,
+                        ),
                       ),
                     ),
                   ).animate().fade(duration: 400.ms, delay: 850.ms),

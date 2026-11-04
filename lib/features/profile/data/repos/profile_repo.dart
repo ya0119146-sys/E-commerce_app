@@ -14,7 +14,7 @@ class ProfileRepository {
   Future<UserModel> getProfile() async {
     try {
       final response = await _client.dio.get(ApiConstants.profile);
-            return UserModel.fromJson(response.data['data'] ?? response.data);
+      return UserModel.fromJson(response.data['data'] ?? response.data);
     } on DioException catch (e) {
       throw e.error as ApiException? ??
           const ApiException(message: 'Failed to load profile');

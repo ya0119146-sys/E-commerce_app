@@ -40,7 +40,8 @@ void main() {
     items: const [
       OrderItemModel(
         productId: 'prod_1',
-        title: 'عطر الورد الدمشقي الفاخر الطبيعي 100 مل - إصدار محدود خاص لعام 2026',
+        title:
+            'عطر الورد الدمشقي الفاخر الطبيعي 100 مل - إصدار محدود خاص لعام 2026',
         image: 'https://example.com/perfume.jpg',
         quantity: 2,
         price: 575.0,
@@ -66,50 +67,54 @@ void main() {
   }
 
   for (final size in viewports) {
-    testWidgets('OrderDetailScreen renders without overflow on ${size.width}x${size.height}',
-        (WidgetTester tester) async {
-      tester.view.physicalSize = size;
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
+    testWidgets(
+      'OrderDetailScreen renders without overflow on ${size.width}x${size.height}',
+      (WidgetTester tester) async {
+        tester.view.physicalSize = size;
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
 
-      await tester.pumpWidget(
-        createTestWidget(
-          child: OrderDetailScreen(
-            order: sampleOrderWithDeposit,
-            isAdmin: true,
+        await tester.pumpWidget(
+          createTestWidget(
+            child: OrderDetailScreen(
+              order: sampleOrderWithDeposit,
+              isAdmin: true,
+            ),
           ),
-        ),
-      );
+        );
 
-      await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-      expect(find.byType(OrderDetailScreen), findsOneWidget);
-      expect(tester.takeException(), isNull);
-    });
+        expect(find.byType(OrderDetailScreen), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      },
+    );
 
-    testWidgets('OrderDetailScreen renders in Arabic RTL on ${size.width}x${size.height}',
-        (WidgetTester tester) async {
-      tester.view.physicalSize = size;
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
+    testWidgets(
+      'OrderDetailScreen renders in Arabic RTL on ${size.width}x${size.height}',
+      (WidgetTester tester) async {
+        tester.view.physicalSize = size;
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
 
-      await tester.pumpWidget(
-        createTestWidget(
-          locale: const Locale('ar'),
-          textDirection: TextDirection.rtl,
-          child: OrderDetailScreen(
-            order: sampleOrderWithDeposit,
-            isAdmin: false,
+        await tester.pumpWidget(
+          createTestWidget(
+            locale: const Locale('ar'),
+            textDirection: TextDirection.rtl,
+            child: OrderDetailScreen(
+              order: sampleOrderWithDeposit,
+              isAdmin: false,
+            ),
           ),
-        ),
-      );
+        );
 
-      await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-      expect(find.byType(OrderDetailScreen), findsOneWidget);
-      expect(tester.takeException(), isNull);
-    });
+        expect(find.byType(OrderDetailScreen), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      },
+    );
   }
 }

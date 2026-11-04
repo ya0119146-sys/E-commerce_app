@@ -96,7 +96,9 @@ class _ReviewListWidgetState extends State<ReviewListWidget> {
           icon: Icons.rate_review_outlined,
           title: 'No reviews yet'.tr(context),
           message: widget.role == 'admin'
-              ? 'Reviews will appear here when customers share feedback.'.tr(context)
+              ? 'Reviews will appear here when customers share feedback.'.tr(
+                  context,
+                )
               : 'Be the first to share your experience.'.tr(context),
           brightness: brightness,
         );
@@ -148,7 +150,9 @@ class _ReviewListWidgetState extends State<ReviewListWidget> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text('Delete Review'.tr(context)),
-        content: Text('Are you sure you want to delete this review?'.tr(context)),
+        content: Text(
+          'Are you sure you want to delete this review?'.tr(context),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -184,7 +188,10 @@ class _ReviewHeader extends StatelessWidget {
     final title = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Customer Reviews'.tr(context), style: Theme.of(context).textTheme.titleLarge),
+        Text(
+          'Customer Reviews'.tr(context),
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         if (countLabel != null) ...[
           const SizedBox(height: AppDimensions.spacingXs),
           Text(countLabel!, style: Theme.of(context).textTheme.bodySmall),
@@ -247,8 +254,12 @@ class _ReviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final reviewerName = review.name.trim().isEmpty ? 'Customer'.tr(context) : review.name.trim();
-    final formattedDate = review.createdAt == null ? null : DateFormat.yMMMd().format(review.createdAt!);
+    final reviewerName = review.name.trim().isEmpty
+        ? 'Customer'.tr(context)
+        : review.name.trim();
+    final formattedDate = review.createdAt == null
+        ? null
+        : DateFormat.yMMMd().format(review.createdAt!);
 
     return GlassPanel(
       padding: const EdgeInsets.all(AppDimensions.spacingMd),
@@ -270,7 +281,9 @@ class _ReviewCard extends StatelessWidget {
                         reviewerName,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                       const SizedBox(height: 4),
                       StarRating(rating: review.rate, size: 14),
@@ -284,9 +297,14 @@ class _ReviewCard extends StatelessWidget {
                       if (formattedDate != null)
                         Text(
                           formattedDate,
-                          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: Theme.of(context).textTheme.labelSmall?.color?.withValues(alpha: 0.7),
-                          ),
+                          style: Theme.of(context).textTheme.labelSmall
+                              ?.copyWith(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .labelSmall
+                                    ?.color
+                                    ?.withValues(alpha: 0.7),
+                              ),
                         ),
                       if (isAdmin) ...[
                         const SizedBox(height: AppDimensions.spacingXs),
@@ -299,7 +317,11 @@ class _ReviewCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(20),
                               child: const Padding(
                                 padding: EdgeInsets.all(4.0),
-                                child: Icon(Icons.delete_outline_rounded, size: 18, color: AppColors.error),
+                                child: Icon(
+                                  Icons.delete_outline_rounded,
+                                  size: 18,
+                                  color: AppColors.error,
+                                ),
                               ),
                             ),
                           ),
@@ -313,7 +335,9 @@ class _ReviewCard extends StatelessWidget {
               const SizedBox(height: AppDimensions.spacingMd),
               Text(
                 review.comment.trim(),
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(height: 1.5),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(height: 1.5),
               ),
             ],
           ],
@@ -391,9 +415,9 @@ class _ReviewStateCard extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: AppDimensions.spacingSm),
             Text(

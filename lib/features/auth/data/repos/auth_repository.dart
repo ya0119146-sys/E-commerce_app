@@ -80,7 +80,8 @@ class AuthRepository {
       final response = await _client.dio.put(
         ApiConstants.changePassword,
         data: {
-          'currantPassword': currentPassword, // ⚠️ backend typo: 'currantPassword'
+          'currantPassword':
+              currentPassword, // ⚠️ backend typo: 'currantPassword'
           'password': password,
           'confirmPassword': confirmPassword,
         },
@@ -91,7 +92,8 @@ class AuthRepository {
       if (newToken != null) {
         await _client.saveToken(newToken);
       }
-      return response.data['message'] as String? ?? 'Password changed successfully!';
+      return response.data['message'] as String? ??
+          'Password changed successfully!';
     } on DioException catch (e) {
       throw e.error as ApiException? ??
           const ApiException(message: 'Failed to change password');
@@ -140,7 +142,8 @@ class AuthRepository {
       if (resetToken != null) {
         await _client.saveResetToken(resetToken);
       }
-      return response.data['message'] as String? ?? 'Reset code sent to your email';
+      return response.data['message'] as String? ??
+          'Reset code sent to your email';
     } on DioException catch (e) {
       throw e.error as ApiException? ??
           const ApiException(message: 'Failed to send reset code');
@@ -161,9 +164,7 @@ class AuthRepository {
       final response = await _client.dio.post(
         ApiConstants.verifyCode,
         data: {'resetcode': code}, // ⚠️ exact key: 'resetcode' (all lowercase)
-        options: Options(
-          headers: {'Authorization': 'Bearer $resetToken'},
-        ),
+        options: Options(headers: {'Authorization': 'Bearer $resetToken'}),
       );
       return response.data['message'] as String? ?? 'Code verified';
     } on DioException catch (e) {
@@ -187,9 +188,7 @@ class AuthRepository {
       await _client.dio.post(
         ApiConstants.resetPassword,
         data: {'password': password, 'confirmPassword': confirmPassword},
-        options: Options(
-          headers: {'Authorization': 'Bearer $resetToken'},
-        ),
+        options: Options(headers: {'Authorization': 'Bearer $resetToken'}),
       );
       // Clear the one-time reset token after use.
       await _client.clearResetToken();

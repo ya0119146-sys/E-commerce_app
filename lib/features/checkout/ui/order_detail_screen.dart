@@ -31,13 +31,19 @@ class OrderDetailScreen extends StatelessWidget {
       listener: (context, state) {
         if (state.errorMessage != null && isAdmin) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.errorMessage!.tr(context)), backgroundColor: AppColors.error),
+            SnackBar(
+              content: Text(state.errorMessage!.tr(context)),
+              backgroundColor: AppColors.error,
+            ),
           );
         }
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Order Details'.tr(context), style: Theme.of(context).textTheme.titleMedium),
+          title: Text(
+            'Order Details'.tr(context),
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(AppDimensions.screenPadding),
@@ -49,19 +55,30 @@ class OrderDetailScreen extends StatelessWidget {
               const SizedBox(height: 24),
 
               // ─── Order Items ───
-              Text('Items'.tr(context), style: Theme.of(context).textTheme.titleSmall),
+              Text(
+                'Items'.tr(context),
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
               const SizedBox(height: 12),
-              ...order.items.map((item) => _buildItemCard(context, item, brightness)),
+              ...order.items.map(
+                (item) => _buildItemCard(context, item, brightness),
+              ),
               const SizedBox(height: 24),
 
               // ─── Shipping Address ───
-              Text('Shipping Address'.tr(context), style: Theme.of(context).textTheme.titleSmall),
+              Text(
+                'Shipping Address'.tr(context),
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
               const SizedBox(height: 12),
               _buildAddressCard(context, brightness),
               const SizedBox(height: 24),
 
               // ─── Order Summary ───
-              Text('Order Summary'.tr(context), style: Theme.of(context).textTheme.titleSmall),
+              Text(
+                'Order Summary'.tr(context),
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
               const SizedBox(height: 12),
               _buildSummaryCard(context, brightness),
               const SizedBox(height: 32),
@@ -158,7 +175,10 @@ class OrderDetailScreen extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           if (order.createdAt != null)
-            Text(df.format(order.createdAt!), style: Theme.of(context).textTheme.bodySmall),
+            Text(
+              df.format(order.createdAt!),
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
           const SizedBox(height: 12),
           Wrap(
             spacing: 8,
@@ -202,7 +222,11 @@ class OrderDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildItemCard(BuildContext context, OrderItemModel item, Brightness b) {
+  Widget _buildItemCard(
+    BuildContext context,
+    OrderItemModel item,
+    Brightness b,
+  ) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
@@ -222,10 +246,17 @@ class OrderDetailScreen extends StatelessWidget {
                   ? CachedNetworkImage(
                       imageUrl: item.image!,
                       fit: BoxFit.cover,
-                      placeholder: (_, __) => Container(color: AppColors.muted(b)),
-                      errorWidget: (_, __, ___) => Container(color: AppColors.muted(b), child: const Icon(Icons.image_outlined)),
+                      placeholder: (_, __) =>
+                          Container(color: AppColors.muted(b)),
+                      errorWidget: (_, __, ___) => Container(
+                        color: AppColors.muted(b),
+                        child: const Icon(Icons.image_outlined),
+                      ),
                     )
-                  : Container(color: AppColors.muted(b), child: const Icon(Icons.image_outlined)),
+                  : Container(
+                      color: AppColors.muted(b),
+                      child: const Icon(Icons.image_outlined),
+                    ),
             ),
           ),
           const SizedBox(width: 12),
@@ -239,13 +270,19 @@ class OrderDetailScreen extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                Text('${'Quantity'.tr(context)}: ${item.quantity}', style: Theme.of(context).textTheme.bodySmall),
+                Text(
+                  '${'Quantity'.tr(context)}: ${item.quantity}',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
               ],
             ),
           ),
           Text(
             '\$${item.price.toStringAsFixed(2)}',
-            style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.secondary(b)),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: AppColors.secondary(b),
+            ),
           ),
         ],
       ),
@@ -288,7 +325,11 @@ class OrderDetailScreen extends StatelessWidget {
         children: [
           _summaryRow('Subtotal'.tr(context), order.subtotal, b),
           const SizedBox(height: 8),
-          _summaryRow('Tax & Shipping'.tr(context), order.tax + order.shipping, b),
+          _summaryRow(
+            'Tax & Shipping'.tr(context),
+            order.tax + order.shipping,
+            b,
+          ),
           if (order.depositeAmount > 0) ...[
             const SizedBox(height: 8),
             _summaryRow(
@@ -302,7 +343,13 @@ class OrderDetailScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Text('Total'.tr(context), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                child: Text(
+                  'Total'.tr(context),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
               ),
               const SizedBox(width: 8),
               Text(
@@ -333,7 +380,10 @@ class OrderDetailScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 8),
-        Text('\$${value.toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.w600)),
+        Text(
+          '\$${value.toStringAsFixed(2)}',
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
       ],
     );
   }
@@ -347,7 +397,11 @@ class OrderDetailScreen extends StatelessWidget {
       ),
       child: Text(
         status.tr(context).toUpperCase(),
-        style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.primary(b)),
+        style: TextStyle(
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+          color: AppColors.primary(b),
+        ),
       ),
     );
   }
@@ -361,7 +415,11 @@ class OrderDetailScreen extends StatelessWidget {
       ),
       child: Text(
         method.tr(context).toUpperCase(),
-        style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: AppColors.secondary(b)),
+        style: TextStyle(
+          fontSize: 9,
+          fontWeight: FontWeight.bold,
+          color: AppColors.secondary(b),
+        ),
       ),
     );
   }
@@ -389,7 +447,9 @@ class OrderDetailScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
-        color: (isPaid ? Colors.green : Colors.amber.shade800).withValues(alpha: 0.1),
+        color: (isPaid ? Colors.green : Colors.amber.shade800).withValues(
+          alpha: 0.1,
+        ),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
@@ -403,7 +463,11 @@ class OrderDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _deliveryStatusChip(BuildContext context, bool isDelivered, Brightness b) {
+  Widget _deliveryStatusChip(
+    BuildContext context,
+    bool isDelivered,
+    Brightness b,
+  ) {
     final deliveryText = isDelivered ? 'DELIVERED' : 'PENDING DELIVERY';
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),

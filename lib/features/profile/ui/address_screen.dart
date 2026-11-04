@@ -60,7 +60,10 @@ class _AddressScreenState extends State<AddressScreen> {
                   isExpanded: true,
                   decoration: InputDecoration(
                     labelText: 'Governorate'.tr(context),
-                    prefixIcon: const Icon(Icons.location_city_outlined, size: 20),
+                    prefixIcon: const Icon(
+                      Icons.location_city_outlined,
+                      size: 20,
+                    ),
                   ),
                   items: EgyptGovernorates.governorates.map((gov) {
                     final isFree = EgyptGovernorates.isSharqia(gov);
@@ -78,7 +81,10 @@ class _AddressScreenState extends State<AddressScreen> {
                           ),
                           if (isFree)
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 2,
+                              ),
                               decoration: BoxDecoration(
                                 color: Colors.green.withValues(alpha: 0.15),
                                 borderRadius: BorderRadius.circular(4),
@@ -135,11 +141,11 @@ class _AddressScreenState extends State<AddressScreen> {
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       context.read<CheckoutCubit>().addAddress(
-                            streetController.text.trim(),
-                            cityController.text.trim(),
-                            selectedGovernorate,
-                            zipController.text.trim(),
-                          );
+                        streetController.text.trim(),
+                        cityController.text.trim(),
+                        selectedGovernorate,
+                        zipController.text.trim(),
+                      );
                       Navigator.pop(context);
                     }
                   },
@@ -159,19 +165,22 @@ class _AddressScreenState extends State<AddressScreen> {
     final brightness = Theme.of(context).brightness;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('My Addresses'.tr(context)),
-      ),
+      appBar: AppBar(title: Text('My Addresses'.tr(context))),
       body: BlocConsumer<CheckoutCubit, CheckoutState>(
         listener: (context, state) {
-          if (state.status == CheckoutStatus.error && state.errorMessage != null) {
+          if (state.status == CheckoutStatus.error &&
+              state.errorMessage != null) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.errorMessage!.tr(context)), backgroundColor: AppColors.error),
+              SnackBar(
+                content: Text(state.errorMessage!.tr(context)),
+                backgroundColor: AppColors.error,
+              ),
             );
           }
         },
         builder: (context, state) {
-          if (state.status == CheckoutStatus.loading && state.addresses.isEmpty) {
+          if (state.status == CheckoutStatus.loading &&
+              state.addresses.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           }
 
@@ -180,7 +189,11 @@ class _AddressScreenState extends State<AddressScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.location_off_outlined, size: 64, color: AppColors.muted(brightness)),
+                  Icon(
+                    Icons.location_off_outlined,
+                    size: 64,
+                    color: AppColors.muted(brightness),
+                  ),
                   const SizedBox(height: 16),
                   Text('No addresses saved yet'.tr(context)),
                   const SizedBox(height: 24),
@@ -207,9 +220,14 @@ class _AddressScreenState extends State<AddressScreen> {
                     child: Icon(Icons.location_on_outlined),
                   ),
                   title: Text(address.street),
-                  subtitle: Text('${address.city}, ${address.state} ${address.zip}'),
+                  subtitle: Text(
+                    '${address.city}, ${address.state} ${address.zip}',
+                  ),
                   trailing: IconButton(
-                    icon: const Icon(Icons.delete_outline, color: AppColors.error),
+                    icon: const Icon(
+                      Icons.delete_outline,
+                      color: AppColors.error,
+                    ),
                     onPressed: () {
                       _showDeleteConfirmation(context, address);
                     },
@@ -232,7 +250,9 @@ class _AddressScreenState extends State<AddressScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text('Delete Address'.tr(context)),
-        content: Text('Are you sure you want to remove this address?'.tr(context)),
+        content: Text(
+          'Are you sure you want to remove this address?'.tr(context),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -243,7 +263,10 @@ class _AddressScreenState extends State<AddressScreen> {
               this.context.read<CheckoutCubit>().removeAddress(address.id);
               Navigator.pop(context);
             },
-            child: Text('Delete'.tr(context), style: const TextStyle(color: AppColors.error)),
+            child: Text(
+              'Delete'.tr(context),
+              style: const TextStyle(color: AppColors.error),
+            ),
           ),
         ],
       ),

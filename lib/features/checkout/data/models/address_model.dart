@@ -27,9 +27,9 @@ class AddressModel {
   }
 
   Map<String, dynamic> toJson() => {
-        'street': street,
-        'city': city,
-        'state': state,
-        'zip': zip,
-      };
+    'street': street,
+    'city': city,
+    'state': state,
+    'zip': zip,
+  };
 }

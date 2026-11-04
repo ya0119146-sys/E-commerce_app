@@ -53,9 +53,9 @@ class _CartScreenState extends State<CartScreen> {
         listenWhen: (prev, curr) =>
             prev.errorMessage != curr.errorMessage && curr.errorMessage != null,
         listener: (context, state) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.errorMessage!.tr(context))));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.errorMessage!.tr(context))),
+          );
         },
         child: BlocBuilder<CartCubit, CartState>(
           builder: (context, state) {
@@ -272,7 +272,10 @@ class _CartScreenState extends State<CartScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Total'.tr(context), style: Theme.of(context).textTheme.titleLarge),
+              Text(
+                'Total'.tr(context),
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
               Text(
                 '\$${total.toStringAsFixed(2)}',
                 style: TextStyle(

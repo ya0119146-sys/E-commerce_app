@@ -35,7 +35,8 @@ class SubCategoryModel {
     String cname = '';
 
     if (categoryData is Map) {
-      cid = categoryData['_id'] as String? ?? categoryData['id'] as String? ?? '';
+      cid =
+          categoryData['_id'] as String? ?? categoryData['id'] as String? ?? '';
       cname = _parseLocalized(categoryData['name']);
     } else if (categoryData is String) {
       cid = categoryData;
@@ -51,8 +52,8 @@ class SubCategoryModel {
   }
 
   Map<String, dynamic> toJson() => {
-        'name': name,
-        if (image != null) 'image': image,
-        'category': categoryId,
-      };
+    'name': name,
+    if (image != null) 'image': image,
+    'category': categoryId,
+  };
 }

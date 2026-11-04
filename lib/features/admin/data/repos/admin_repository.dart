@@ -65,10 +65,7 @@ class AdminRepository {
     }
   }
 
-  Future<SubCategoryModel> updateSubcategory(
-    String id,
-    dynamic data,
-  ) async {
+  Future<SubCategoryModel> updateSubcategory(String id, dynamic data) async {
     try {
       final response = await _client.dio.put(
         ApiConstants.updateSubCategory(id),
@@ -163,10 +160,7 @@ class AdminRepository {
 
   Future<UserModel> createUser(FormData data) async {
     try {
-      final response = await _client.dio.post(
-        ApiConstants.users,
-        data: data,
-      );
+      final response = await _client.dio.post(ApiConstants.users, data: data);
       return UserModel.fromJson(response.data['data']);
     } on DioException catch (e) {
       throw e.error as ApiException? ??

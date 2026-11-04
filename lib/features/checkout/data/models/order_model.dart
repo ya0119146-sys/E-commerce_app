@@ -50,13 +50,15 @@ class OrderModel {
       isPaid: json['isPaid'] as bool? ?? false,
       isDelivered: json['isDelivered'] as bool? ?? false,
       isDepositePaid: json['isDepositePaid'] as bool? ?? false,
-      depositeAmount: (json['DepositeAmount'] as num?)?.toDouble() ??
+      depositeAmount:
+          (json['DepositeAmount'] as num?)?.toDouble() ??
           (json['depositeAmount'] as num?)?.toDouble() ??
           0,
       paymentMethod: json['payment'] as String? ?? 'cash',
       createdAt: json['createdAt'] != null
-          ? DateTime.tryParse(json['createdAt'] as String)
-              ?.add(const Duration(hours: 3))
+          ? DateTime.tryParse(
+              json['createdAt'] as String,
+            )?.add(const Duration(hours: 3))
           : null,
       items: (json['items'] as List? ?? [])
           .whereType<Map>()
@@ -67,7 +69,9 @@ class OrderModel {
           : null,
       userName: user is Map ? user['name']?.toString() : null,
       userImage: user is Map ? user['image']?.toString() : null,
-      userId: user is Map ? (user['_id']?.toString() ?? user['id']?.toString()) : null,
+      userId: user is Map
+          ? (user['_id']?.toString() ?? user['id']?.toString())
+          : null,
     );
   }
 

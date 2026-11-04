@@ -22,7 +22,12 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
+      emit(
+        state.copyWith(
+          status: AdminStatus.error,
+          error: _extractErrorMessage(e),
+        ),
+      );
     }
   }
 
@@ -37,7 +42,12 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
+      emit(
+        state.copyWith(
+          status: AdminStatus.error,
+          error: _extractErrorMessage(e),
+        ),
+      );
     }
   }
 
@@ -52,7 +62,12 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
+      emit(
+        state.copyWith(
+          status: AdminStatus.error,
+          error: _extractErrorMessage(e),
+        ),
+      );
     }
   }
 
@@ -69,7 +84,12 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
+      emit(
+        state.copyWith(
+          status: AdminStatus.error,
+          error: _extractErrorMessage(e),
+        ),
+      );
     }
   }
 
@@ -84,7 +104,12 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
+      emit(
+        state.copyWith(
+          status: AdminStatus.error,
+          error: _extractErrorMessage(e),
+        ),
+      );
     }
   }
 
@@ -99,7 +124,12 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
+      emit(
+        state.copyWith(
+          status: AdminStatus.error,
+          error: _extractErrorMessage(e),
+        ),
+      );
     }
   }
 
@@ -116,7 +146,12 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
+      emit(
+        state.copyWith(
+          status: AdminStatus.error,
+          error: _extractErrorMessage(e),
+        ),
+      );
     }
   }
 
@@ -131,7 +166,12 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
+      emit(
+        state.copyWith(
+          status: AdminStatus.error,
+          error: _extractErrorMessage(e),
+        ),
+      );
     }
   }
 
@@ -146,7 +186,12 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
+      emit(
+        state.copyWith(
+          status: AdminStatus.error,
+          error: _extractErrorMessage(e),
+        ),
+      );
     }
   }
 
@@ -163,7 +208,12 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
+      emit(
+        state.copyWith(
+          status: AdminStatus.error,
+          error: _extractErrorMessage(e),
+        ),
+      );
     }
   }
 
@@ -178,7 +228,12 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
+      emit(
+        state.copyWith(
+          status: AdminStatus.error,
+          error: _extractErrorMessage(e),
+        ),
+      );
     }
   }
 
@@ -193,10 +248,14 @@ class AdminCubit extends Cubit<AdminState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: AdminStatus.error, error: _extractErrorMessage(e)));
+      emit(
+        state.copyWith(
+          status: AdminStatus.error,
+          error: _extractErrorMessage(e),
+        ),
+      );
     }
   }
-
 
   String _extractErrorMessage(dynamic e) {
     if (e is ApiException) {

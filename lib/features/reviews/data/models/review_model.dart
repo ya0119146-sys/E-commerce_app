@@ -29,17 +29,9 @@ class ReviewModel extends Equatable {
     if (productData is Map) {
       product = ProductModel.fromJson(Map<String, dynamic>.from(productData));
     } else if (productData is String) {
-      product = ProductModel(
-        id: productData,
-        name: '',
-        price: 0,
-      );
+      product = ProductModel(id: productData, name: '', price: 0);
     } else {
-      product = const ProductModel(
-        id: '',
-        name: '',
-        price: 0,
-      );
+      product = const ProductModel(id: '', name: '', price: 0);
     }
 
     return ReviewModel(
@@ -55,8 +47,9 @@ class ReviewModel extends Equatable {
           : (json['user'] as String?),
       product: product,
       createdAt: json['createdAt'] != null
-          ? DateTime.tryParse(json['createdAt'] as String)
-              ?.add(const Duration(hours: 3))
+          ? DateTime.tryParse(
+              json['createdAt'] as String,
+            )?.add(const Duration(hours: 3))
           : null,
     );
   }
@@ -66,6 +59,13 @@ class ReviewModel extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [id, comment, rate, name, userEmail, userId, product];
+  List<Object?> get props => [
+    id,
+    comment,
+    rate,
+    name,
+    userEmail,
+    userId,
+    product,
+  ];
 }

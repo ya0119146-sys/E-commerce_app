@@ -14,11 +14,19 @@ class ProductGridDelegate {
     final int crossAxisCount = width < 280 ? 1 : (width >= 600 ? 3 : 2);
     const double spacing = 14.0;
     const double horizontalPadding = AppDimensions.screenPadding * 2;
-    final double availableWidth = width - horizontalPadding - ((crossAxisCount - 1) * spacing);
-    final double itemWidth = (availableWidth / crossAxisCount).clamp(60.0, 500.0);
-    // 1:1 square image + 146px content area (padding, title, rating, price, button)
-    final double itemHeight = itemWidth + 146.0;
-    final double aspectRatio = (itemWidth / itemHeight).clamp(0.48, 0.65);
+    final double availableWidth =
+        width - horizontalPadding - ((crossAxisCount - 1) * spacing);
+    final double itemWidth = (availableWidth / crossAxisCount).clamp(
+      60.0,
+      500.0,
+    );
+    final textScale = MediaQuery.textScalerOf(
+      context,
+    ).scale(1.0).clamp(1.0, 1.3);
+    // 1:1 square image + content area (padding, title 2-lines, rating/badge, price, button)
+    final double contentHeight = 158.0 * textScale;
+    final double itemHeight = itemWidth + contentHeight;
+    final double aspectRatio = (itemWidth / itemHeight).clamp(0.45, 0.65);
 
     return SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: crossAxisCount,
@@ -28,4 +36,3 @@ class ProductGridDelegate {
     );
   }
 }
-

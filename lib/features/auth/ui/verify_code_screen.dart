@@ -56,12 +56,14 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message.tr(context))),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message.tr(context))));
           } else if (state is AuthResetCodeVerified) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Code verified successfully!'.tr(context))),
+              SnackBar(
+                content: Text('Code verified successfully!'.tr(context)),
+              ),
             );
             Navigator.pushReplacement(
               context,
@@ -90,9 +92,12 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                   ).animate().fade(duration: 600.ms).scale(),
                   const SizedBox(height: 12),
                   Text(
-                    'Verify Code'.tr(context),
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ).animate().fade(duration: 500.ms, delay: 200.ms).moveY(begin: 15, end: 0),
+                        'Verify Code'.tr(context),
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      )
+                      .animate()
+                      .fade(duration: 500.ms, delay: 200.ms)
+                      .moveY(begin: 15, end: 0),
                   const SizedBox(height: 8),
                   Text(
                     context.isArabic
@@ -104,60 +109,73 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                   SizedBox(height: size.height * 0.06),
 
                   Container(
-                    padding: const EdgeInsets.all(AppDimensions.spacingLg),
-                    decoration: BoxDecoration(
-                      color: AppColors.card(brightness).withValues(alpha: 0.85),
-                      borderRadius: BorderRadius.circular(AppDimensions.radiusXl),
-                      border: Border.all(
-                        color: AppColors.border(brightness).withValues(alpha: 0.5),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.secondary(brightness).withValues(alpha: 0.08),
-                          blurRadius: 30,
-                          offset: const Offset(0, 10),
+                        padding: const EdgeInsets.all(AppDimensions.spacingLg),
+                        decoration: BoxDecoration(
+                          color: AppColors.card(
+                            brightness,
+                          ).withValues(alpha: 0.85),
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.radiusXl,
+                          ),
+                          border: Border.all(
+                            color: AppColors.border(
+                              brightness,
+                            ).withValues(alpha: 0.5),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.secondary(
+                                brightness,
+                              ).withValues(alpha: 0.08),
+                              blurRadius: 30,
+                              offset: const Offset(0, 10),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      autovalidateMode: _autovalidateMode,
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            controller: _codeController,
-                            keyboardType: TextInputType.number,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 8,
-                            ),
-                            decoration: InputDecoration(
-                              labelText: 'Reset Code'.tr(context),
-                              hintText: '000000',
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return context.isArabic ? 'يرجى إدخال الرمز' : 'Please enter the code';
-                              }
-                              return null;
-                            },
+                        child: Form(
+                          key: _formKey,
+                          autovalidateMode: _autovalidateMode,
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                controller: _codeController,
+                                keyboardType: TextInputType.number,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 8,
+                                ),
+                                decoration: InputDecoration(
+                                  labelText: 'Reset Code'.tr(context),
+                                  hintText: '000000',
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return context.isArabic
+                                        ? 'يرجى إدخال الرمز'
+                                        : 'Please enter the code';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: AppDimensions.spacingLg),
+                              BlocBuilder<AuthCubit, AuthState>(
+                                builder: (context, state) {
+                                  return HeroButton(
+                                    text: 'Confirm'.tr(context),
+                                    isLoading: state is AuthLoading,
+                                    onPressed: _onVerify,
+                                  );
+                                },
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: AppDimensions.spacingLg),
-                          BlocBuilder<AuthCubit, AuthState>(
-                            builder: (context, state) {
-                              return HeroButton(
-                                text: 'Confirm'.tr(context),
-                                isLoading: state is AuthLoading,
-                                onPressed: _onVerify,
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ).animate().fade(duration: 600.ms, delay: 400.ms).moveY(begin: 30, end: 0),
+                        ),
+                      )
+                      .animate()
+                      .fade(duration: 600.ms, delay: 400.ms)
+                      .moveY(begin: 30, end: 0),
                 ],
               ),
             ),

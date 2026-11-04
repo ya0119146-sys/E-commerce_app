@@ -29,13 +29,19 @@ class CartState extends Equatable {
       status: status ?? this.status,
       cart: nextCart,
       cartItemCount:
-          cartItemCount ?? (cart != null ? nextCart.itemCount : this.cartItemCount),
+          cartItemCount ??
+          (cart != null ? nextCart.itemCount : this.cartItemCount),
       cartPulse: cartPulse ?? this.cartPulse,
       errorMessage: errorMessage,
     );
   }
 
   @override
-  List<Object?> get props =>
-      [status, cart.items.length, cartItemCount, cartPulse, errorMessage];
+  List<Object?> get props => [
+    status,
+    cart.items.length,
+    cartItemCount,
+    cartPulse,
+    errorMessage,
+  ];
 }

@@ -26,7 +26,9 @@ class CartItemModel {
           ? ProductModel.fromJson(Map<String, dynamic>.from(productData))
           : null,
       productId: productData is Map
-          ? (productData['_id']?.toString() ?? productData['id']?.toString() ?? '')
+          ? (productData['_id']?.toString() ??
+                productData['id']?.toString() ??
+                '')
           : (productData?.toString() ?? ''),
       quantity: (json['quantity'] as num?)?.toInt() ?? 1,
       price: (json['price'] as num?)?.toDouble() ?? 0.0,
@@ -71,12 +73,13 @@ class CartModel {
       id: json['_id'] as String? ?? json['id'] as String?,
       items: cartItems,
       // Backend uses 'totelPrice' (typo — not 'totalCartPrice' or 'totalPrice').
-      totalPrice: (json['totelPrice'] as num?)?.toDouble() ??
+      totalPrice:
+          (json['totelPrice'] as num?)?.toDouble() ??
           cartItems.fold(0.0, (sum, item) => sum + item.totalPrice),
       taxPrice: (json['taxPrice'] as num?)?.toDouble(),
       // Backend uses 'totelPriceAfterDiscount' (may be null).
-      totalPriceAfterDiscount:
-          (json['totelPriceAfterDiscount'] as num?)?.toDouble(),
+      totalPriceAfterDiscount: (json['totelPriceAfterDiscount'] as num?)
+          ?.toDouble(),
     );
   }
 

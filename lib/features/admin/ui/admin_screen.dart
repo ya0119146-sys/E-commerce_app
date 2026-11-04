@@ -98,7 +98,11 @@ class _AdminScreenState extends State<AdminScreen>
       listener: (context, state) {
         if (state.status == AdminStatus.success) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text((state.message ?? 'Operation successful').tr(context))),
+            SnackBar(
+              content: Text(
+                (state.message ?? 'Operation successful').tr(context),
+              ),
+            ),
           );
           _refreshData();
         } else if (state.status == AdminStatus.error) {
@@ -124,11 +128,26 @@ class _AdminScreenState extends State<AdminScreen>
             tabAlignment: isScrollable ? TabAlignment.start : TabAlignment.fill,
             controller: _tabController,
             tabs: [
-              Tab(text: 'Products'.tr(context), icon: const Icon(Icons.inventory_2_outlined)),
-              Tab(text: 'Orders'.tr(context), icon: const Icon(Icons.receipt_long_outlined)),
-              Tab(text: 'Users'.tr(context), icon: const Icon(Icons.people_outline)),
-              Tab(text: 'Categories'.tr(context), icon: const Icon(Icons.category_outlined)),
-              Tab(text: 'Subcategories'.tr(context), icon: const Icon(Icons.subtitles_outlined)),
+              Tab(
+                text: 'Products'.tr(context),
+                icon: const Icon(Icons.inventory_2_outlined),
+              ),
+              Tab(
+                text: 'Orders'.tr(context),
+                icon: const Icon(Icons.receipt_long_outlined),
+              ),
+              Tab(
+                text: 'Users'.tr(context),
+                icon: const Icon(Icons.people_outline),
+              ),
+              Tab(
+                text: 'Categories'.tr(context),
+                icon: const Icon(Icons.category_outlined),
+              ),
+              Tab(
+                text: 'Subcategories'.tr(context),
+                icon: const Icon(Icons.subtitles_outlined),
+              ),
             ],
           ),
         ),
@@ -148,50 +167,51 @@ class _AdminScreenState extends State<AdminScreen>
             : Padding(
                 padding: const EdgeInsets.only(bottom: 84),
                 child: FloatingActionButton(
-                onPressed: () {
-                  final index = _tabController.index;
-                  if (index == 0) {
-                    _showForm(
-                      ProductForm(
-                        categories: context
-                            .read<CategoriesCubit>()
-                            .state
-                            .categories,
-                        subcategories: _allSubcategories,
-                        onSubmit: (data) =>
-                            context.read<AdminCubit>().createProduct(data),
-                      ),
-                    );
-                  } else if (index == 2) {
-                    _showForm(
-                      UserForm(
-                        onSubmit: (data) =>
-                            context.read<AdminCubit>().createUser(data),
-                      ),
-                    );
-                  } else if (index == 3) {
-                    _showForm(
-                      CategoryForm(
-                        onSubmit: (data) =>
-                            context.read<AdminCubit>().createCategory(data),
-                      ),
-                    );
-                  } else if (index == 4) {
-                    _showForm(
-                      SubcategoryForm(
-                        categories: context
-                            .read<CategoriesCubit>()
-                            .state
-                            .categories,
-                        onSubmit: (data) =>
-                            context.read<AdminCubit>().createSubcategory(data),
-                      ),
-                    );
-                  }
-                },
-                child: const Icon(Icons.add),
+                  onPressed: () {
+                    final index = _tabController.index;
+                    if (index == 0) {
+                      _showForm(
+                        ProductForm(
+                          categories: context
+                              .read<CategoriesCubit>()
+                              .state
+                              .categories,
+                          subcategories: _allSubcategories,
+                          onSubmit: (data) =>
+                              context.read<AdminCubit>().createProduct(data),
+                        ),
+                      );
+                    } else if (index == 2) {
+                      _showForm(
+                        UserForm(
+                          onSubmit: (data) =>
+                              context.read<AdminCubit>().createUser(data),
+                        ),
+                      );
+                    } else if (index == 3) {
+                      _showForm(
+                        CategoryForm(
+                          onSubmit: (data) =>
+                              context.read<AdminCubit>().createCategory(data),
+                        ),
+                      );
+                    } else if (index == 4) {
+                      _showForm(
+                        SubcategoryForm(
+                          categories: context
+                              .read<CategoriesCubit>()
+                              .state
+                              .categories,
+                          onSubmit: (data) => context
+                              .read<AdminCubit>()
+                              .createSubcategory(data),
+                        ),
+                      );
+                    }
+                  },
+                  child: const Icon(Icons.add),
+                ),
               ),
-            ),
       ),
     );
   }
@@ -203,7 +223,12 @@ class _AdminScreenState extends State<AdminScreen>
           return const Center(child: CircularProgressIndicator());
         }
         return ListView.builder(
-          padding: const EdgeInsets.fromLTRB(AppDimensions.screenPadding, AppDimensions.screenPadding, AppDimensions.screenPadding, 100),
+          padding: const EdgeInsets.fromLTRB(
+            AppDimensions.screenPadding,
+            AppDimensions.screenPadding,
+            AppDimensions.screenPadding,
+            100,
+          ),
           itemCount: state.products.length,
           itemBuilder: (context, index) {
             final product = state.products[index];
@@ -280,7 +305,12 @@ class _AdminScreenState extends State<AdminScreen>
           return const Center(child: CircularProgressIndicator());
         }
         return ListView.builder(
-          padding: const EdgeInsets.fromLTRB(AppDimensions.screenPadding, AppDimensions.screenPadding, AppDimensions.screenPadding, 100),
+          padding: const EdgeInsets.fromLTRB(
+            AppDimensions.screenPadding,
+            AppDimensions.screenPadding,
+            AppDimensions.screenPadding,
+            100,
+          ),
           itemCount: state.categories.length,
           itemBuilder: (context, index) {
             final category = state.categories[index];
@@ -345,7 +375,12 @@ class _AdminScreenState extends State<AdminScreen>
       return const Center(child: CircularProgressIndicator());
     }
     return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(AppDimensions.screenPadding, AppDimensions.screenPadding, AppDimensions.screenPadding, 100),
+      padding: const EdgeInsets.fromLTRB(
+        AppDimensions.screenPadding,
+        AppDimensions.screenPadding,
+        AppDimensions.screenPadding,
+        100,
+      ),
       itemCount: _allSubcategories.length,
       itemBuilder: (context, index) {
         final subcat = _allSubcategories[index];
@@ -417,12 +452,19 @@ class _AdminScreenState extends State<AdminScreen>
           return Center(child: Text('No orders found'.tr(context)));
         }
         return ListView.separated(
-          padding: const EdgeInsets.fromLTRB(AppDimensions.screenPadding, AppDimensions.screenPadding, AppDimensions.screenPadding, 100),
+          padding: const EdgeInsets.fromLTRB(
+            AppDimensions.screenPadding,
+            AppDimensions.screenPadding,
+            AppDimensions.screenPadding,
+            100,
+          ),
           itemCount: state.orders.length,
           separatorBuilder: (_, __) => const SizedBox(height: 12),
           itemBuilder: (context, index) {
             final order = state.orders[index];
-            final orderIdSnippet = order.id.substring(order.id.length > 8 ? order.id.length - 8 : 0);
+            final orderIdSnippet = order.id.substring(
+              order.id.length > 8 ? order.id.length - 8 : 0,
+            );
             return Card(
               child: ListTile(
                 contentPadding: const EdgeInsets.only(left: 12, right: 8),
@@ -505,7 +547,12 @@ class _AdminScreenState extends State<AdminScreen>
           return Center(child: Text('No users found'.tr(context)));
         }
         return ListView.builder(
-          padding: const EdgeInsets.fromLTRB(AppDimensions.screenPadding, AppDimensions.screenPadding, AppDimensions.screenPadding, 100),
+          padding: const EdgeInsets.fromLTRB(
+            AppDimensions.screenPadding,
+            AppDimensions.screenPadding,
+            AppDimensions.screenPadding,
+            100,
+          ),
           itemCount: state.users.length,
           itemBuilder: (context, index) {
             final user = state.users[index];
