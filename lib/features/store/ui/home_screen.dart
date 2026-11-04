@@ -90,53 +90,84 @@ class _HomeScreenState extends State<HomeScreen> {
               snap: true,
               pinned: true,
               elevation: 0,
+              centerTitle: true,
               surfaceTintColor: Colors.transparent,
               backgroundColor: AppColors.background(brightness),
+              leading: context.isArabic
+                  ? IconButton(
+                      tooltip: 'Contact on WhatsApp'.tr(context),
+                      icon: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.asset(
+                          'assets/icons/whatsapp_icon.png',
+                          width: 26,
+                          height: 26,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      onPressed: () => WhatsAppHelper.launchWhatsApp(
+                        text: context.isArabic
+                            ? 'مرحباً، أود التواصل مع متجر لابيلا'
+                            : 'Hello, I would like to contact Labella store',
+                      ),
+                    )
+                  : IconButton(
+                      tooltip: 'Search'.tr(context),
+                      icon: const Icon(Icons.search),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => SearchScreen(role: widget.role),
+                          ),
+                        );
+                      },
+                    ),
               title: Text(
                 'Labella',
                 style: GoogleFonts.greatVibes(
-                  fontSize: 30,
+                  fontSize: 32,
                   color: AppColors.secondary(brightness),
                 ),
               ),
               actions: [
-                IconButton(
-                  tooltip: 'Contact on WhatsApp'.tr(context),
-                  icon: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(
-                      'assets/icons/whatsapp_icon.png',
-                      width: 26,
-                      height: 26,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  onPressed: () => WhatsAppHelper.launchWhatsApp(
-                    text: context.isArabic
-                        ? 'مرحباً، أود التواصل مع متجر لابيلا'
-                        : 'Hello, I would like to contact Labella store',
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => SearchScreen(role: widget.role),
+                context.isArabic
+                    ? IconButton(
+                        tooltip: 'Search'.tr(context),
+                        icon: const Icon(Icons.search),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => SearchScreen(role: widget.role),
+                            ),
+                          );
+                        },
+                      )
+                    : IconButton(
+                        tooltip: 'Contact on WhatsApp'.tr(context),
+                        icon: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.asset(
+                            'assets/icons/whatsapp_icon.png',
+                            width: 26,
+                            height: 26,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        onPressed: () => WhatsAppHelper.launchWhatsApp(
+                          text: context.isArabic
+                              ? 'مرحباً، أود التواصل مع متجر لابيلا'
+                              : 'Hello, I would like to contact Labella store',
+                        ),
                       ),
-                    );
-                  },
-                ),
               ],
             ),
 
             // ─── Hero Banner (Concept 1: Auto-Scrolling Editorial Carousel) ───
             SliverToBoxAdapter(
               child: RepaintBoundary(
-                child: _EditorialHeroCarousel(
-                  onShopNow: _scrollToProducts,
-                ),
+                child: _EditorialHeroCarousel(onShopNow: _scrollToProducts),
               ),
             ),
 
@@ -158,53 +189,54 @@ class _HomeScreenState extends State<HomeScreen> {
             SliverToBoxAdapter(
               child: RepaintBoundary(
                 child: BlocBuilder<CategoriesCubit, CategoriesState>(
-                builder: (context, state) {
-                  if (state.status == CategoriesStatus.loading) {
-                    return SizedBox(
-                      height: 114,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppDimensions.screenPadding,
-                        ),
-                        itemCount: 5,
-                        separatorBuilder: (_, __) => const SizedBox(width: 12),
-                        itemBuilder: (_, __) => const SizedBox(
-                          width: 78,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              ShimmerLoading(
-                                width: 60,
-                                height: 60,
-                                borderRadius: 30,
-                              ),
-                              SizedBox(height: 6),
-                              ShimmerLoading(
-                                width: 56,
-                                height: 14,
-                                borderRadius: 6,
-                              ),
-                            ],
+                  builder: (context, state) {
+                    if (state.status == CategoriesStatus.loading) {
+                      return SizedBox(
+                        height: 114,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppDimensions.screenPadding,
+                          ),
+                          itemCount: 5,
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(width: 12),
+                          itemBuilder: (_, __) => const SizedBox(
+                            width: 78,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ShimmerLoading(
+                                  width: 60,
+                                  height: 60,
+                                  borderRadius: 30,
+                                ),
+                                SizedBox(height: 6),
+                                ShimmerLoading(
+                                  width: 56,
+                                  height: 14,
+                                  borderRadius: 6,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  }
-                  return CategoryGrid(
-                    categories: state.categories,
-                    selectedId: state.selectedCategoryId,
-                    onSelected: (id) {
-                      context.read<CategoriesCubit>().selectCategory(id);
-                      context.read<ProductsCubit>().fetchProducts(
-                        category: id,
-                        clearCategory: id == null || id.isEmpty,
-                        refresh: true,
                       );
-                    },
-                  );
-                },
-              ),
+                    }
+                    return CategoryGrid(
+                      categories: state.categories,
+                      selectedId: state.selectedCategoryId,
+                      onSelected: (id) {
+                        context.read<CategoriesCubit>().selectCategory(id);
+                        context.read<ProductsCubit>().fetchProducts(
+                          category: id,
+                          clearCategory: id == null || id.isEmpty,
+                          refresh: true,
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
             ),
 
@@ -448,8 +480,10 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
     ];
 
     final textScale = MediaQuery.textScalerOf(context).scale(1.0);
-    final bannerHeight =
-        (152.0 * (textScale > 1.0 ? textScale : 1.0)).clamp(148.0, 180.0);
+    final bannerHeight = (152.0 * (textScale > 1.0 ? textScale : 1.0)).clamp(
+      148.0,
+      180.0,
+    );
 
     return Container(
       margin: const EdgeInsets.symmetric(
@@ -501,7 +535,9 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
                           height: 160,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: const Color(0xFFE8A598).withValues(alpha: 0.12),
+                            color: const Color(
+                              0xFFE8A598,
+                            ).withValues(alpha: 0.12),
                           ),
                         ),
                       ),
@@ -614,7 +650,9 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
                                       ),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.black.withValues(alpha: 0.12),
+                                          color: Colors.black.withValues(
+                                            alpha: 0.12,
+                                          ),
                                           blurRadius: 10,
                                           offset: const Offset(0, 3),
                                         ),
@@ -633,7 +671,8 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
                                         ),
                                         const SizedBox(width: 4),
                                         Icon(
-                                          Directionality.of(context) == TextDirection.rtl
+                                          Directionality.of(context) ==
+                                                  TextDirection.rtl
                                               ? Icons.arrow_back_rounded
                                               : Icons.arrow_forward_rounded,
                                           size: 12,
@@ -647,26 +686,38 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
                                 // Interactive Carousel Indicator Dots
                                 Row(
                                   mainAxisSize: MainAxisSize.min,
-                                  children: List.generate(slides.length, (dotIdx) {
+                                  children: List.generate(slides.length, (
+                                    dotIdx,
+                                  ) {
                                     final isActive = _currentPage == dotIdx;
                                     return GestureDetector(
                                       onTap: () {
                                         _pageController.animateToPage(
                                           dotIdx,
-                                          duration: const Duration(milliseconds: 400),
+                                          duration: const Duration(
+                                            milliseconds: 400,
+                                          ),
                                           curve: Curves.easeInOut,
                                         );
                                       },
                                       child: AnimatedContainer(
-                                        duration: const Duration(milliseconds: 300),
-                                        margin: const EdgeInsets.symmetric(horizontal: 2.5),
+                                        duration: const Duration(
+                                          milliseconds: 300,
+                                        ),
+                                        margin: const EdgeInsets.symmetric(
+                                          horizontal: 2.5,
+                                        ),
                                         width: isActive ? 16 : 5.5,
                                         height: 4.5,
                                         decoration: BoxDecoration(
                                           color: isActive
                                               ? const Color(0xFFFFD194)
-                                              : Colors.white.withValues(alpha: 0.4),
-                                          borderRadius: BorderRadius.circular(3),
+                                              : Colors.white.withValues(
+                                                  alpha: 0.4,
+                                                ),
+                                          borderRadius: BorderRadius.circular(
+                                            3,
+                                          ),
                                         ),
                                       ),
                                     );

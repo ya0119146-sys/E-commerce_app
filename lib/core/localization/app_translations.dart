@@ -428,6 +428,7 @@ class AppTranslations {
         'Sign in to continue your luxury experience',
 
     'luxury_tagline': 'Join the world of luxury beauty',
+    'Press back again to exit': 'Press back again to exit',
 
     'Join the world of luxury beauty': 'Join the world of luxury beauty',
 
@@ -1628,6 +1629,7 @@ class AppTranslations {
         'سجل الدخول لمواصلة تجربة التسوق الفاخرة',
 
     'luxury_tagline': 'انضم إلى عالم الجمال والفخامة',
+    'Press back again to exit': 'اضغط مرة أخرى للخروج من التطبيق',
 
     'Join the world of luxury beauty': 'انضم إلى عالم الجمال والفخامة',
 

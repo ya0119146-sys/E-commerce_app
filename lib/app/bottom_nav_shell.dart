@@ -20,16 +20,29 @@ import '../core/localization/app_translations.dart';
 /// - Enlarged comfortable touch targets and icons
 /// - Frosted glass backdrop blur with illuminated active pill
 class BottomNavShell extends StatefulWidget {
-  const BottomNavShell({super.key, required this.role});
+  const BottomNavShell({
+    super.key,
+    required this.role,
+    this.initialIndex = 0,
+  });
 
   final String role;
+  final int initialIndex;
+
   @override
   State<BottomNavShell> createState() => _BottomNavShellState();
 }
 
 class _BottomNavShellState extends State<BottomNavShell> {
-  int _currentIndex = 0;
+  late int _currentIndex;
   bool _isNavVisible = true;
+  DateTime? _lastBackPressTime;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex;
+  }
 
   List<Widget> get _screens => [
     HomeScreen(role: widget.role),
@@ -47,15 +60,37 @@ class _BottomNavShellState extends State<BottomNavShell> {
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
     return PopScope(
-      canPop: _currentIndex == 0,
+      canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
+
+        // If on another tab, return to Home tab first
         if (_currentIndex != 0) {
           setState(() {
             _currentIndex = 0;
             _isNavVisible = true;
           });
+          return;
         }
+
+        // On Home tab: double-tap back to exit
+        final now = DateTime.now();
+        if (_lastBackPressTime == null ||
+            now.difference(_lastBackPressTime!) > const Duration(seconds: 2)) {
+          _lastBackPressTime = now;
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Press back again to exit'.tr(context)),
+              duration: const Duration(seconds: 2),
+              behavior: SnackBarBehavior.floating,
+              margin: const EdgeInsets.fromLTRB(20, 0, 20, 80),
+            ),
+          );
+          return;
+        }
+
+        SystemNavigator.pop();
       },
       child: Scaffold(
         backgroundColor: AppColors.background(brightness),

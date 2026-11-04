@@ -1,4 +1,4 @@
-import 'package:e_commerce/features/store/ui/home_screen.dart';
+import '../../../app/bottom_nav_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -152,11 +152,15 @@ class _CartScreenState extends State<CartScreen> {
                       text: 'Start Shopping'.tr(context),
                       icon: Icons.shopping_bag_outlined,
                       onPressed: () {
-                        Navigator.push(
+                        Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => HomeScreen(role: widget.role),
+                            builder: (_) => BottomNavShell(
+                              role: widget.role,
+                              initialIndex: 0,
+                            ),
                           ),
+                          (route) => false,
                         );
                       },
                     ),

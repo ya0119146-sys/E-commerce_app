@@ -1,4 +1,4 @@
-import 'package:e_commerce/features/store/ui/home_screen.dart';
+import '../../../app/bottom_nav_shell.dart';
 
 import 'package:flutter/material.dart';
 
@@ -313,16 +313,16 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
                       onPressed: () {
 
-                        // Navigate back or to store
-
-                        Navigator.of(context).push(
-
+                        // Navigate to store home with full navigation shell
+                        Navigator.pushAndRemoveUntil(
+                          context,
                           MaterialPageRoute(
-
-                            builder: (context) => HomeScreen(role: widget.role),
-
+                            builder: (context) => BottomNavShell(
+                              role: widget.role,
+                              initialIndex: 0,
+                            ),
                           ),
-
+                          (route) => false,
                         );
 
                       },

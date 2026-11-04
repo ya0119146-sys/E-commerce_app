@@ -13,6 +13,7 @@ import 'package:e_commerce/features/cart/data/models/cart_model.dart';
 import 'package:e_commerce/features/cart/data/repos/cart_repository.dart';
 import 'package:e_commerce/features/checkout/data/models/order_model.dart';
 import 'package:e_commerce/features/checkout/data/repos/checkout_repository.dart';
+import 'package:e_commerce/core/localization/app_translations.dart';
 import 'package:e_commerce/features/reviews/data/models/review_model.dart';
 
 void main() {
@@ -394,6 +395,13 @@ void main() {
           ),
         ),
       );
+    });
+  });
+
+  group('Double-tap Exit Localization & Shell Routing', () {
+    test('Translation map contains double-tap exit prompt in AR and EN', () {
+      expect(AppTranslations.en['Press back again to exit'], equals('Press back again to exit'));
+      expect(AppTranslations.ar['Press back again to exit'], equals('اضغط مرة أخرى للخروج من التطبيق'));
     });
   });
 }
