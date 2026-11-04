@@ -51,7 +51,7 @@ class ProductsState extends Equatable {
   @override
   List<Object?> get props => [
     status,
-    products.length,
+    products,
     page,
     hasMore,
     keyword,

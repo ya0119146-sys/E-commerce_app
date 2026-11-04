@@ -86,11 +86,10 @@ class CategoryGrid extends StatelessWidget {
       end: Alignment.bottomRight,
     );
 
-    return RepaintBoundary(
-      child: GestureDetector(
-        onTap: onTap,
-        child: SizedBox(
-          width: 78,
+    return GestureDetector(
+      onTap: onTap,
+      child: SizedBox(
+        width: 78,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -173,7 +172,6 @@ class CategoryGrid extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 

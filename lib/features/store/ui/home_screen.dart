@@ -79,15 +79,17 @@ class _HomeScreenState extends State<HomeScreen> {
             context.read<CategoriesCubit>().fetchCategories(),
           ]);
         },
-        child: CustomScrollView(
+        child: ColoredBox(
+          color: AppColors.background(brightness),
+          child: CustomScrollView(
           controller: _scrollController,
           cacheExtent: 600.0,
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             // ─── App Bar ───
             SliverAppBar(
-              floating: true,
-              snap: true,
+              floating: false,
+              snap: false,
               pinned: true,
               elevation: 0,
               centerTitle: true,
@@ -166,9 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // ─── Hero Banner (Concept 1: Auto-Scrolling Editorial Carousel) ───
             SliverToBoxAdapter(
-              child: RepaintBoundary(
-                child: _EditorialHeroCarousel(onShopNow: _scrollToProducts),
-              ),
+              child: _EditorialHeroCarousel(onShopNow: _scrollToProducts),
             ),
 
             // ─── Section: Categories (Concept 1: Story Avatars) ───
@@ -187,9 +187,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             SliverToBoxAdapter(
-              child: RepaintBoundary(
-                child: BlocBuilder<CategoriesCubit, CategoriesState>(
-                  builder: (context, state) {
+              child: BlocBuilder<CategoriesCubit, CategoriesState>(
+                buildWhen: (prev, next) =>
+                    prev.status != next.status ||
+                    prev.categories != next.categories ||
+                    prev.selectedCategoryId != next.selectedCategoryId,
+                builder: (context, state) {
                     if (state.status == CategoriesStatus.loading) {
                       return SizedBox(
                         height: 114,
@@ -237,7 +240,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   },
                 ),
-              ),
             ),
 
             // ─── Section: Trending Products ───
@@ -258,6 +260,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // ─── Product Grid (Dynamic-Height Content-Driven Cards) ───
             BlocBuilder<ProductsCubit, ProductsState>(
+              // ⚡ Skip rebuild when only status flips to loadingMore — the product
+              // list hasn't changed, so rebuilding the entire SliverGrid causes visible
+              // layout thrash in the banner, categories, and "Trending Now" sections.
+              buildWhen: (prev, next) {
+                if (prev.products.length != next.products.length) return true;
+                if (next.status == ProductsStatus.loadingMore) return false;
+                if (prev.status != next.status) return true;
+                return prev.category != next.category ||
+                    prev.keyword != next.keyword;
+              },
               builder: (context, state) {
                 if (state.status == ProductsStatus.loading) {
                   return SliverPadding(
@@ -377,6 +389,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SliverToBoxAdapter(child: SizedBox(height: 100)),
           ],
         ),
+        ),
       ),
     );
   }
@@ -412,6 +425,7 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
   late PageController _pageController;
   Timer? _timer;
   int _currentPage = 0;
+  bool _isProgrammaticScroll = false;
 
   @override
   void initState() {
@@ -423,14 +437,18 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
   void _startTimer() {
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 4), (_) {
-      if (_pageController.hasClients) {
-        _currentPage = (_currentPage + 1) % 3;
-        _pageController.animateToPage(
-          _currentPage,
-          duration: const Duration(milliseconds: 650),
-          curve: Curves.easeInOutCubic,
-        );
-      }
+      if (!mounted || !_pageController.hasClients) return;
+      _isProgrammaticScroll = true;
+      _currentPage = (_currentPage + 1) % 3;
+      _pageController
+          .animateToPage(
+            _currentPage,
+            duration: const Duration(milliseconds: 650),
+            curve: Curves.easeInOutCubic,
+          )
+          .then((_) {
+            if (mounted) _isProgrammaticScroll = false;
+          });
     });
   }
 
@@ -497,7 +515,9 @@ class _EditorialHeroCarouselState extends State<_EditorialHeroCarousel> {
             controller: _pageController,
             onPageChanged: (idx) {
               setState(() => _currentPage = idx);
-              _startTimer(); // reset auto-scroll timer on user interaction
+              if (!_isProgrammaticScroll) {
+                _startTimer();
+              }
             },
             itemCount: slides.length,
             itemBuilder: (context, index) {

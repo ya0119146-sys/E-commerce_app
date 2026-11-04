@@ -180,11 +180,9 @@ class _ProductCardState extends State<ProductCard>
                       PositionedDirectional(
                         top: 8,
                         end: 8,
-                        child: RepaintBoundary(
-                          child: _FrostedWishlistHeart(
-                            productId: product.id,
-                            isDark: isDark,
-                          ),
+                        child: _FrostedWishlistHeart(
+                          productId: product.id,
+                          isDark: isDark,
                         ),
                       ),
                     ],
