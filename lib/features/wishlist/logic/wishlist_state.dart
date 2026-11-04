@@ -32,5 +32,5 @@ class WishlistState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [status, products.length, wishlistIds.length];
+  List<Object?> get props => [status, wishlistIds];
 }

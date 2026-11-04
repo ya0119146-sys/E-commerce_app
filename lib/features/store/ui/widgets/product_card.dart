@@ -180,9 +180,11 @@ class _ProductCardState extends State<ProductCard>
                       PositionedDirectional(
                         top: 8,
                         end: 8,
-                        child: _FrostedWishlistHeart(
-                          productId: product.id,
-                          isDark: isDark,
+                        child: RepaintBoundary(
+                          child: _FrostedWishlistHeart(
+                            productId: product.id,
+                            isDark: isDark,
+                          ),
                         ),
                       ),
                     ],
@@ -451,6 +453,12 @@ class _FrostedWishlistHeartState extends State<_FrostedWishlistHeart>
     final brightness = Theme.of(context).brightness;
 
     return BlocBuilder<WishlistCubit, WishlistState>(
+      // ⚡ Only rebuild when THIS product's wishlist status changes.
+      // Without this, every ProductCard rebuilds on any wishlist event
+      // (e.g. fetch, toggle of ANY product) causing heavy jank during scroll.
+      buildWhen: (prev, next) =>
+          prev.isInWishlist(widget.productId) !=
+          next.isInWishlist(widget.productId),
       builder: (context, state) {
         final isFav = state.isInWishlist(widget.productId);
 
