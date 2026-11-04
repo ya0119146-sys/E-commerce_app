@@ -652,7 +652,51 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ],
                   ).animate().fade(duration: 400.ms, delay: 250.ms),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
+
+                  // Product Size / Volume Luxury Badge
+                  if (product.size != null && product.size!.trim().isNotEmpty) ...[
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 7,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.secondary(
+                          brightness,
+                        ).withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(
+                          AppDimensions.radiusRound,
+                        ),
+                        border: Border.all(
+                          color: AppColors.secondary(
+                            brightness,
+                          ).withValues(alpha: 0.25),
+                          width: 1.0,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.opacity_rounded,
+                            size: 16,
+                            color: AppColors.secondary(brightness),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            '${'Size'.tr(context)}: ${product.size}',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.secondary(brightness),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 18),
+                  ],
 
                   // Stock status
                   Row(
@@ -718,64 +762,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                 ),
               ),
-              child: Row(
-                children: [
-                  // WhatsApp Direct Inquire Button
-                  Tooltip(
-                    message: 'Contact on WhatsApp'.tr(context),
-                    child: InkWell(
-                      onTap: () => _launchProductWhatsApp(context),
-                      borderRadius: BorderRadius.circular(
-                        AppDimensions.radiusDefault,
-                      ),
-                      child: Container(
-                        height: 52,
-                        width: 52,
-                        decoration: BoxDecoration(
-                          color: const Color(
-                            0xFF25D366,
-                          ).withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(
-                            AppDimensions.radiusDefault,
-                          ),
-                          border: Border.all(
-                            color: const Color(
-                              0xFF25D366,
-                            ).withValues(alpha: 0.35),
-                            width: 1.2,
-                          ),
-                        ),
-                        child: Center(
-                          child: Image.asset(
-                            'assets/icons/whatsapp_icon.png',
-                            width: 28,
-                            height: 28,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  // Add to Cart Button
-                  Expanded(
-                    child: HeroButton(
-                      text: product.inStock
-                          ? 'add_to_cart'.tr(context)
-                          : 'out_of_stock'.tr(context),
-                      icon: Icons.shopping_bag_outlined,
-                      onPressed: product.inStock
-                          ? () {
-                              context.read<CartCubit>().addToCart(product.id);
-                              CustomSnackBar.showCart(
-                                context,
-                                '${'added_to_cart'.tr(context)} ✨',
-                              );
-                            }
-                          : null,
-                    ),
-                  ),
-                ],
+              child: HeroButton(
+                text: product.inStock
+                    ? 'add_to_cart'.tr(context)
+                    : 'out_of_stock'.tr(context),
+                icon: Icons.shopping_bag_outlined,
+                onPressed: product.inStock
+                    ? () {
+                        context.read<CartCubit>().addToCart(product.id);
+                        CustomSnackBar.showCart(
+                          context,
+                          '${'added_to_cart'.tr(context)} ✨',
+                        );
+                      }
+                    : null,
               ),
             )
           : Container(
@@ -788,83 +788,41 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                 ),
               ),
-              child: Row(
-                children: [
-                  Tooltip(
-                    message: 'Contact on WhatsApp'.tr(context),
-                    child: InkWell(
-                      onTap: () => _launchProductWhatsApp(context),
-                      borderRadius: BorderRadius.circular(
-                        AppDimensions.radiusDefault,
-                      ),
-                      child: Container(
-                        height: 52,
-                        width: 52,
-                        decoration: BoxDecoration(
-                          color: const Color(
-                            0xFF25D366,
-                          ).withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(
-                            AppDimensions.radiusDefault,
-                          ),
-                          border: Border.all(
-                            color: const Color(
-                              0xFF25D366,
-                            ).withValues(alpha: 0.35),
-                            width: 1.2,
-                          ),
-                        ),
-                        child: Center(
-                          child: Image.asset(
-                            'assets/icons/whatsapp_icon.png',
-                            width: 28,
-                            height: 28,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
+              child: HeroButton(
+                text: 'Edit Product'.tr(context),
+                icon: Icons.edit_outlined,
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Theme.of(context).cardColor,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: HeroButton(
-                      text: 'Edit Product'.tr(context),
-                      icon: Icons.edit_outlined,
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: Theme.of(context).cardColor,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(20),
-                            ),
-                          ),
-                          builder: (_) => ProductForm(
-                            product: product,
-                            categories: context
-                                .read<CategoriesCubit>()
-                                .state
-                                .categories,
-                            subcategories: const [],
-                            onSubmit: (data) async {
-                              await context.read<AdminCubit>().updateProduct(
-                                product.id,
-                                data,
-                              );
-                              if (context.mounted) {
-                                context.read<ProductsCubit>().fetchProducts(
-                                  refresh: true,
-                                );
-                                Navigator.pop(context);
-                              }
-                            },
-                          ),
+                    builder: (_) => ProductForm(
+                      product: product,
+                      categories: context
+                          .read<CategoriesCubit>()
+                          .state
+                          .categories,
+                      subcategories: const [],
+                      onSubmit: (data) async {
+                        await context.read<AdminCubit>().updateProduct(
+                          product.id,
+                          data,
                         );
+                        if (context.mounted) {
+                          context.read<ProductsCubit>().fetchProducts(
+                            refresh: true,
+                          );
+                          Navigator.pop(context);
+                        }
                       },
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
             ),
     );

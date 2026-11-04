@@ -1076,6 +1076,7 @@ class AppTranslations {
 
     'Pick multiple images': 'Pick multiple images',
 
+    'Size': 'Size',
     'Size (e.g. S, M, L, XL, Standard)': 'Size (e.g. S, M, L, XL, Standard)',
 
     'Category': 'Category',
@@ -2279,6 +2280,7 @@ class AppTranslations {
 
     'Pick multiple images': 'اختر عدة صور',
 
+    'Size': 'الحجم',
     'Size (e.g. S, M, L, XL, Standard)': 'المقاس (مثال: S, M, L, XL)',
 
     'Category': 'التصنيف',
