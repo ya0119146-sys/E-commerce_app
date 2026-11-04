@@ -46,10 +46,21 @@ class _BottomNavShellState extends State<BottomNavShell> {
     final isDark = brightness == Brightness.dark;
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
-    return Scaffold(
-      backgroundColor: AppColors.background(brightness),
-      extendBody: true,
-      body: NotificationListener<UserScrollNotification>(
+    return PopScope(
+      canPop: _currentIndex == 0,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        if (_currentIndex != 0) {
+          setState(() {
+            _currentIndex = 0;
+            _isNavVisible = true;
+          });
+        }
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.background(brightness),
+        extendBody: true,
+        body: NotificationListener<UserScrollNotification>(
         onNotification: (notification) {
           if (notification.metrics.axis != Axis.vertical) return false;
           if (notification.direction == ScrollDirection.reverse) {
@@ -243,6 +254,7 @@ class _BottomNavShellState extends State<BottomNavShell> {
           );
         },
       ),
+    ),
     );
   }
 }

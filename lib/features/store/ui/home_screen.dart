@@ -2,11 +2,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/widgets/shimmer_loading.dart';
+import '../../../core/widgets/product_grid_delegate.dart';
 import '../logic/products_cubit.dart';
 import '../logic/categories_cubit.dart';
 import 'widgets/product_card.dart';
@@ -53,11 +53,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _scrollToProducts() {
-    _scrollController.animateTo(
-      380,
-      duration: const Duration(milliseconds: 650),
-      curve: Curves.easeInOutCubic,
-    );
+    if (!_scrollController.hasClients) return;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final target = (320.0).clamp(0.0, maxScroll);
+    if (target > 0) {
+      _scrollController.animateTo(
+        target,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeOutCubic,
+      );
+    }
   }
 
   @override
@@ -227,12 +232,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppDimensions.screenPadding,
                     ),
-                    sliver: SliverMasonryGrid.count(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 14,
-                      mainAxisSpacing: 14,
-                      itemBuilder: (_, __) => const ShimmerProductCard(),
-                      childCount: 6,
+                    sliver: SliverGrid(
+                      gridDelegate: ProductGridDelegate.create(context),
+                      delegate: SliverChildBuilderDelegate(
+                        (_, __) => const ShimmerProductCard(),
+                        childCount: 6,
+                      ),
                     ),
                   );
                 }
@@ -296,16 +301,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppDimensions.screenPadding,
                   ),
-                  sliver: SliverMasonryGrid.count(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 14,
-                    mainAxisSpacing: 14,
-                    itemBuilder: (_, index) => ProductCard(
-                      role: widget.role,
-                      product: state.products[index],
-                      index: index,
+                  sliver: SliverGrid(
+                    gridDelegate: ProductGridDelegate.create(context),
+                    delegate: SliverChildBuilderDelegate(
+                      (_, index) => ProductCard(
+                        key: ValueKey(state.products[index].id),
+                        role: widget.role,
+                        product: state.products[index],
+                        index: index,
+                      ),
+                      childCount: state.products.length,
                     ),
-                    childCount: state.products.length,
                   ),
                 );
               },

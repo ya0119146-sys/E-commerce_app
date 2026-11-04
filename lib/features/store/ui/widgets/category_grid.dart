@@ -106,13 +106,17 @@ class CategoryGrid extends StatelessWidget {
                   border: isSelected
                       ? null
                       : Border.all(
-                          color: AppColors.border(brightness).withValues(alpha: 0.6),
+                          color: AppColors.border(
+                            brightness,
+                          ).withValues(alpha: 0.6),
                           width: 1.5,
                         ),
                   boxShadow: isSelected
                       ? [
                           BoxShadow(
-                            color: AppColors.secondary(brightness).withValues(alpha: 0.28),
+                            color: AppColors.secondary(
+                              brightness,
+                            ).withValues(alpha: 0.28),
                             blurRadius: 10,
                             offset: const Offset(0, 3),
                           ),
@@ -153,11 +157,15 @@ class CategoryGrid extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 11.5,
-                      height: 1.25,
-                      fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                      height: 1.15,
+                      fontWeight: isSelected
+                          ? FontWeight.w700
+                          : FontWeight.w500,
                       color: isSelected
                           ? AppColors.secondary(brightness)
-                          : AppColors.foreground(brightness).withValues(alpha: 0.85),
+                          : AppColors.foreground(
+                              brightness,
+                            ).withValues(alpha: 0.85),
                     ),
                   ),
                 ),
@@ -191,22 +199,30 @@ class CategoryGrid extends StatelessWidget {
 
   IconData _getCategoryIcon(String name) {
     final lower = name.toLowerCase();
-    if (lower.contains('عطر') || lower.contains('perfume') || lower.contains('fragrance')) {
+    if (lower.contains('عطر') ||
+        lower.contains('perfume') ||
+        lower.contains('fragrance')) {
       return Icons.opacity_rounded;
     }
-    if (lower.contains('بشرة') || lower.contains('skin') || lower.contains('care')) {
+    if (lower.contains('بشرة') ||
+        lower.contains('skin') ||
+        lower.contains('care')) {
       return Icons.spa_outlined;
     }
     if (lower.contains('شعر') || lower.contains('hair')) {
       return Icons.face_retouching_natural_rounded;
     }
-    if (lower.contains('مكياج') || lower.contains('makeup') || lower.contains('beauty')) {
+    if (lower.contains('مكياج') ||
+        lower.contains('makeup') ||
+        lower.contains('beauty')) {
       return Icons.brush_outlined;
     }
     if (lower.contains('أظافر') || lower.contains('nail')) {
       return Icons.favorite_border_rounded;
     }
-    if (lower.contains('حقائب') || lower.contains('bag') || lower.contains('accessories')) {
+    if (lower.contains('حقائب') ||
+        lower.contains('bag') ||
+        lower.contains('accessories')) {
       return Icons.shopping_bag_outlined;
     }
     return Icons.diamond_outlined;

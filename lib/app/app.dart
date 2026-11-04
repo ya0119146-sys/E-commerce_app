@@ -1,3 +1,4 @@
+import 'package:e_commerce/app/splash_veiw.dart';
 import 'package:e_commerce/core/network/dio_client.dart';
 import 'package:e_commerce/features/profile/data/repos/profile_repo.dart';
 import 'package:e_commerce/features/profile/logic/cubit/cubit/get_profile_cubit.dart';
@@ -74,10 +75,7 @@ class ECommerceApp extends StatelessWidget {
                 title: 'Labella',
                 debugShowCheckedModeBanner: false,
                 locale: localeState.locale,
-                supportedLocales: const [
-                  Locale('en'),
-                  Locale('ar'),
-                ],
+                supportedLocales: const [Locale('en'), Locale('ar')],
                 localizationsDelegates: const [
                   GlobalMaterialLocalizations.delegate,
                   GlobalWidgetsLocalizations.delegate,
@@ -96,7 +94,7 @@ class ECommerceApp extends StatelessWidget {
                 home: BlocBuilder<AuthCubit, AuthState>(
                   builder: (context, authState) {
                     if (authState is AuthInitial) {
-                      return const _SplashView();
+                      return const SplashView();
                     }
                     if (authState is AuthAuthenticated) {
                       return BottomNavShell(role: authState.user.role);
@@ -108,43 +106,6 @@ class ECommerceApp extends StatelessWidget {
             },
           );
         },
-      ),
-    );
-  }
-}
-
-/// Simple branded splash while checking auth status.
-class _SplashView extends StatelessWidget {
-  const _SplashView();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Labella',
-              style: TextStyle(
-                fontFamily: 'GreatVibes',
-                fontSize: 48,
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-            ),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: 28,
-              height: 28,
-              child: CircularProgressIndicator(
-                strokeWidth: 2.5,
-                valueColor: AlwaysStoppedAnimation(
-                  Theme.of(context).colorScheme.primary,
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

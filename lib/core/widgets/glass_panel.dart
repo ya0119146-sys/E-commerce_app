@@ -24,11 +24,13 @@ class GlassPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bgColor = backgroundColor ??
+    final bgColor =
+        backgroundColor ??
         (isDark
             ? Colors.white.withValues(alpha: 0.06)
             : Colors.white.withValues(alpha: 0.55));
-    final border = borderColor ??
+    final border =
+        borderColor ??
         (isDark
             ? Colors.white.withValues(alpha: 0.08)
             : Colors.white.withValues(alpha: 0.3));
@@ -40,7 +42,8 @@ class GlassPanel extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
         child: Container(
-          padding: padding ?? const EdgeInsets.all(AppDimensions.spacingDefault),
+          padding:
+              padding ?? const EdgeInsets.all(AppDimensions.spacingDefault),
           decoration: BoxDecoration(
             color: bgColor,
             borderRadius: BorderRadius.circular(

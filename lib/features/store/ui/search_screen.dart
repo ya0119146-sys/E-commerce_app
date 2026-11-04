@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/widgets/shimmer_loading.dart';
+import '../../../core/widgets/product_grid_delegate.dart';
 import '../logic/products_cubit.dart';
 import 'widgets/product_card.dart';
 import '../../../core/localization/app_translations.dart';
@@ -160,12 +160,12 @@ class _SearchScreenState extends State<SearchScreen> {
               padding: const EdgeInsets.all(AppDimensions.screenPadding),
               child: CustomScrollView(
                 slivers: [
-                  SliverMasonryGrid.count(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 14,
-                    mainAxisSpacing: 14,
-                    childCount: 6,
-                    itemBuilder: (_, __) => const ShimmerProductCard(),
+                  SliverGrid(
+                    gridDelegate: ProductGridDelegate.create(context),
+                    delegate: SliverChildBuilderDelegate(
+                      (_, __) => const ShimmerProductCard(),
+                      childCount: 6,
+                    ),
                   ),
                 ],
               ),
@@ -207,16 +207,16 @@ class _SearchScreenState extends State<SearchScreen> {
             slivers: [
               SliverPadding(
                 padding: const EdgeInsets.all(AppDimensions.screenPadding),
-                sliver: SliverMasonryGrid.count(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 14,
-                  mainAxisSpacing: 14,
-                  childCount: state.products.length,
-                  itemBuilder: (_, index) => ProductCard(
-                    key: ValueKey(state.products[index].id),
-                    role: widget.role,
-                    product: state.products[index],
-                    index: index,
+                sliver: SliverGrid(
+                  gridDelegate: ProductGridDelegate.create(context),
+                  delegate: SliverChildBuilderDelegate(
+                    (_, index) => ProductCard(
+                      key: ValueKey(state.products[index].id),
+                      role: widget.role,
+                      product: state.products[index],
+                      index: index,
+                    ),
+                    childCount: state.products.length,
                   ),
                 ),
               ),

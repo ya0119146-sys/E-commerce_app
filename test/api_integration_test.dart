@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:e_commerce/core/constants/egypt_governorates.dart';
 import 'package:e_commerce/core/utils/whatsapp_helper.dart';
+import 'package:e_commerce/core/widgets/product_grid_delegate.dart';
+import 'package:flutter/material.dart';
 import 'package:e_commerce/core/network/api_constants.dart';
 import 'package:e_commerce/core/network/api_exception.dart';
 import 'package:e_commerce/core/network/dio_client.dart';
@@ -332,6 +334,66 @@ void main() {
     test('Merchant phone format is correct', () {
       expect(WhatsAppHelper.merchantPhone, equals('201093727578'));
       expect(WhatsAppHelper.displayPhone, equals('01093727578'));
+    });
+  });
+
+  group('ProductGridDelegate Responsive Layout', () {
+    testWidgets('Calculates 3 columns for tablet/desktop viewports', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              final delegate = ProductGridDelegate.create(context);
+              expect(delegate, isA<SliverGridDelegateWithFixedCrossAxisCount>());
+              final fixed = delegate as SliverGridDelegateWithFixedCrossAxisCount;
+              expect(fixed.crossAxisCount, equals(3));
+              expect(fixed.childAspectRatio, greaterThan(0.4));
+              expect(fixed.childAspectRatio, lessThan(0.7));
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+    });
+
+    testWidgets('Calculates 2 columns for standard mobile viewports', (tester) async {
+      tester.view.physicalSize = const Size(390 * 3, 844 * 3);
+      tester.view.devicePixelRatio = 3.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              final delegate = ProductGridDelegate.create(context);
+              final fixed = delegate as SliverGridDelegateWithFixedCrossAxisCount;
+              expect(fixed.crossAxisCount, equals(2));
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+    });
+
+    testWidgets('Calculates 1 column for ultra-compact mini-windows', (tester) async {
+      tester.view.physicalSize = const Size(240 * 2, 400 * 2);
+      tester.view.devicePixelRatio = 2.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              final delegate = ProductGridDelegate.create(context);
+              final fixed = delegate as SliverGridDelegateWithFixedCrossAxisCount;
+              expect(fixed.crossAxisCount, equals(1));
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
     });
   });
 }

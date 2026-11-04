@@ -56,14 +56,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Add Address'.tr(ctx), style: Theme.of(ctx).textTheme.headlineSmall),
+                Text(
+                  'Add Address'.tr(ctx),
+                  style: Theme.of(ctx).textTheme.headlineSmall,
+                ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
                   value: selectedGov,
                   isExpanded: true,
                   decoration: InputDecoration(
                     labelText: 'Governorate'.tr(ctx),
-                    prefixIcon: const Icon(Icons.location_city_outlined, size: 20),
+                    prefixIcon: const Icon(
+                      Icons.location_city_outlined,
+                      size: 20,
+                    ),
                   ),
                   items: EgyptGovernorates.governorates.map((gov) {
                     final isFree = EgyptGovernorates.isSharqia(gov);
@@ -81,7 +87,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           ),
                           if (isFree)
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 2,
+                              ),
                               decoration: BoxDecoration(
                                 color: Colors.green.withValues(alpha: 0.15),
                                 borderRadius: BorderRadius.circular(4),
@@ -122,7 +131,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     labelText: 'Street'.tr(ctx),
                     prefixIcon: const Icon(Icons.signpost_outlined, size: 20),
                   ),
-                  validator: (v) => v == null || v.isEmpty ? 'Required'.tr(ctx) : null,
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Required'.tr(ctx) : null,
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
@@ -132,7 +142,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     prefixIcon: const Icon(Icons.pin_outlined, size: 20),
                   ),
                   keyboardType: TextInputType.number,
-                  validator: (v) => v == null || v.isEmpty ? 'Required'.tr(ctx) : null,
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Required'.tr(ctx) : null,
                 ),
                 const SizedBox(height: 20),
                 HeroButton(
@@ -177,9 +188,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           }
           if (state.status == CheckoutStatus.error &&
               state.errorMessage != null) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.errorMessage!.tr(context))));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.errorMessage!.tr(context))),
+            );
           }
         },
         builder: (context, state) {
@@ -192,8 +203,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           final cart = context.watch<CartCubit>().state.cart;
           final double subtotal = cart.totalPrice;
           final bool hasAddress = selectedAddress != null;
-          final bool isSharqia = hasAddress && EgyptGovernorates.isSharqia(selectedAddress.state);
-          final double shippingFee = hasAddress ? EgyptGovernorates.getShippingFee(selectedAddress.state) : 0.0;
+          final bool isSharqia =
+              hasAddress && EgyptGovernorates.isSharqia(selectedAddress.state);
+          final double shippingFee = hasAddress
+              ? EgyptGovernorates.getShippingFee(selectedAddress.state)
+              : 0.0;
           final double finalTotal = subtotal + (hasAddress ? shippingFee : 0.0);
 
           if (state.status == CheckoutStatus.loading &&
@@ -352,32 +366,55 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Subtotal'.tr(context), style: Theme.of(context).textTheme.bodyMedium),
-                        Text('\$${subtotal.toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.w600)),
+                        Text(
+                          'Subtotal'.tr(context),
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        Text(
+                          '\$${subtotal.toStringAsFixed(2)}',
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 6),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('delivery_fee'.tr(context), style: Theme.of(context).textTheme.bodyMedium),
+                        Text(
+                          'delivery_fee'.tr(context),
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
                         if (!hasAddress)
                           Text(
-                            context.isArabic ? 'اختر عنواناً لحساب الشحن' : 'Select address',
+                            context.isArabic
+                                ? 'اختر عنواناً لحساب الشحن'
+                                : 'Select address',
                             style: TextStyle(
                               fontSize: 12,
-                              color: AppColors.foreground(brightness).withValues(alpha: 0.5),
+                              color: AppColors.foreground(
+                                brightness,
+                              ).withValues(alpha: 0.5),
                             ),
                           )
                         else if (isSharqia)
                           Row(
                             children: [
                               Text(
-                                context.isArabic ? 'مجاني (محافظة الشرقية)' : 'Free (Sharqia)',
-                                style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 13),
+                                context.isArabic
+                                    ? 'مجاني (محافظة الشرقية)'
+                                    : 'Free (Sharqia)',
+                                style: const TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
                               ),
                               const SizedBox(width: 4),
-                              const Icon(Icons.check_circle, color: Colors.green, size: 16),
+                              const Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                                size: 16,
+                              ),
                             ],
                           )
                         else
@@ -391,7 +428,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Total'.tr(context), style: Theme.of(context).textTheme.titleLarge),
+                        Text(
+                          'Total'.tr(context),
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
                         Text(
                           '\$${finalTotal.toStringAsFixed(2)}',
                           style: TextStyle(

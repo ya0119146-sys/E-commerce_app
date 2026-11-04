@@ -11,8 +11,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 
 import '../../../core/widgets/shimmer_loading.dart';
-
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import '../../../core/widgets/product_grid_delegate.dart';
 import '../../store/ui/widgets/product_card.dart';
 
 import '../logic/wishlist_cubit.dart';
@@ -165,17 +164,18 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
                     padding: const EdgeInsets.all(AppDimensions.screenPadding),
 
-                    sliver: SliverMasonryGrid.count(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 16,
-                      crossAxisSpacing: 16,
-                      itemBuilder: (context, index) => ProductCard(
+                    sliver: SliverGrid(
+                    gridDelegate: ProductGridDelegate.create(context),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) => ProductCard(
+                        key: ValueKey(state.products[index].id),
                         role: widget.role,
                         product: state.products[index],
                         index: index,
                       ),
                       childCount: state.products.length,
                     ),
+                  ),
 
                   ),
 
@@ -203,12 +203,16 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
       padding: const EdgeInsets.all(AppDimensions.screenPadding),
 
-      child: MasonryGridView.count(
-        crossAxisCount: 2,
-        crossAxisSpacing: 14,
-        mainAxisSpacing: 14,
-        itemCount: 6,
-        itemBuilder: (_, __) => const ShimmerProductCard(),
+      child: CustomScrollView(
+        slivers: [
+          SliverGrid(
+            gridDelegate: ProductGridDelegate.create(context),
+            delegate: SliverChildBuilderDelegate(
+              (_, __) => const ShimmerProductCard(),
+              childCount: 6,
+            ),
+          ),
+        ],
       ),
 
     );

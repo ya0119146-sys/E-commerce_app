@@ -196,16 +196,19 @@ class _ProductCardState extends State<ProductCard>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Product Title (2 lines max with safe line-height)
-                      Text(
-                        product.name,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              fontSize: 12.5,
-                              fontWeight: FontWeight.w600,
-                              height: 1.25,
-                            ),
+                      // Product Title (2 lines max with fixed height for straight row alignment)
+                      SizedBox(
+                        height: 34,
+                        child: Text(
+                          product.name,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                fontSize: 12.5,
+                                fontWeight: FontWeight.w600,
+                                height: 1.25,
+                              ),
+                        ),
                       ),
                       const SizedBox(height: 5),
 
