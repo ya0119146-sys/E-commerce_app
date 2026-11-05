@@ -290,6 +290,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 onAuthenticated: () {
                                   context.read<WishlistCubit>().toggleWishlist(
                                     product.id,
+                                    product,
                                   );
                                 },
                               );

@@ -182,7 +182,7 @@ class _ProductCardState extends State<ProductCard>
                         top: 8,
                         end: 8,
                         child: _FrostedWishlistHeart(
-                          productId: product.id,
+                          product: product,
                           isDark: isDark,
                         ),
                       ),
@@ -414,10 +414,10 @@ class _ProductCardState extends State<ProductCard>
 
 /// Floating Frosted Glass Wishlist Heart with smooth scale-bounce animation.
 class _FrostedWishlistHeart extends StatefulWidget {
-  final String productId;
+  final ProductModel product;
   final bool isDark;
 
-  const _FrostedWishlistHeart({required this.productId, required this.isDark});
+  const _FrostedWishlistHeart({required this.product, required this.isDark});
 
   @override
   State<_FrostedWishlistHeart> createState() => _FrostedWishlistHeartState();
@@ -456,10 +456,10 @@ class _FrostedWishlistHeartState extends State<_FrostedWishlistHeart>
       // Without this, every ProductCard rebuilds on any wishlist event
       // (e.g. fetch, toggle of ANY product) causing heavy jank during scroll.
       buildWhen: (prev, next) =>
-          prev.isInWishlist(widget.productId) !=
-          next.isInWishlist(widget.productId),
+          prev.isInWishlist(widget.product.id) !=
+          next.isInWishlist(widget.product.id),
       builder: (context, state) {
-        final isFav = state.isInWishlist(widget.productId);
+        final isFav = state.isInWishlist(widget.product.id);
 
         return ScaleTransition(
           scale: _scaleAnimation,
@@ -471,7 +471,8 @@ class _FrostedWishlistHeartState extends State<_FrostedWishlistHeart>
                 onAuthenticated: () {
                   _controller.forward(from: 0);
                   context.read<WishlistCubit>().toggleWishlist(
-                    widget.productId,
+                    widget.product.id,
+                    widget.product,
                   );
                 },
               );

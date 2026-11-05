@@ -33,8 +33,12 @@ class WishlistRepository {
         data: {'productId': productId},
       );
       final data = response.data['data'] as List? ?? [];
+      if (data.isEmpty || data.first is! Map) {
+        return [];
+      }
       return data
-          .map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
+          .whereType<Map>()
+          .map((e) => ProductModel.fromJson(Map<String, dynamic>.from(e)))
           .toList();
     } on DioException catch (e) {
       throw e.error as ApiException? ??
@@ -50,8 +54,12 @@ class WishlistRepository {
         ApiConstants.deleteWishlist(productId),
       );
       final data = response.data['data'] as List? ?? [];
+      if (data.isEmpty || data.first is! Map) {
+        return [];
+      }
       return data
-          .map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
+          .whereType<Map>()
+          .map((e) => ProductModel.fromJson(Map<String, dynamic>.from(e)))
           .toList();
     } on DioException catch (e) {
       throw e.error as ApiException? ??

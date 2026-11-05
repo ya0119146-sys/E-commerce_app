@@ -237,6 +237,30 @@ void main() {
         expect(cubit.state.products, isEmpty);
       },
     );
+
+    test(
+      'toggleWishlist with ProductModel optimistically adds product to products list and wishlistIds',
+      () async {
+        final cubit = WishlistCubit(_FakeWishlistRepository());
+        const testProduct = ProductModel(
+          id: 'prod123',
+          name: 'Luxury Serum',
+          price: 250.0,
+        );
+
+        await cubit.toggleWishlist('prod123', testProduct);
+
+        expect(cubit.state.isInWishlist('prod123'), isTrue);
+        expect(cubit.state.products.length, equals(1));
+        expect(cubit.state.products.first.id, equals('prod123'));
+
+        // Toggling again removes it
+        await cubit.toggleWishlist('prod123', testProduct);
+
+        expect(cubit.state.isInWishlist('prod123'), isFalse);
+        expect(cubit.state.products, isEmpty);
+      },
+    );
   });
 }
 

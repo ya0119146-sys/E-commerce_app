@@ -40,7 +40,7 @@ class WishlistCubit extends Cubit<WishlistState> {
   }
 
   /// Optimistic toggle — update UI immediately, then sync with server.
-  Future<void> toggleWishlist(String productId) async {
+  Future<void> toggleWishlist(String productId, [ProductModel? product]) async {
     final currentIds = Set<String>.from(state.wishlistIds);
     final currentProducts = List<ProductModel>.from(state.products);
     final wasInWishlist = currentIds.contains(productId);
@@ -51,29 +51,40 @@ class WishlistCubit extends Cubit<WishlistState> {
       currentProducts.removeWhere((p) => p.id == productId);
     } else {
       currentIds.add(productId);
-      // Note: If we are adding back an item we just removed, we don't have the full ProductModel
-      // unless we store it. But usually, adding happens from Home/Detail.
-      // If we are in Wishlist screen, we only care about removals.
+      if (product != null && !currentProducts.any((p) => p.id == productId)) {
+        currentProducts.insert(0, product);
+      }
     }
 
-    emit(state.copyWith(wishlistIds: currentIds, products: currentProducts));
+    emit(
+      state.copyWith(
+        wishlistIds: currentIds,
+        products: currentProducts,
+        status: WishlistStatus.loaded,
+      ),
+    );
 
     try {
       final updatedProducts = await _repository.toggleWishlist(
         productId,
         isInWishlist: wasInWishlist,
       );
-      final newIds = updatedProducts.map((p) => p.id).toSet();
-      emit(state.copyWith(products: updatedProducts, wishlistIds: newIds));
+      if (updatedProducts.isNotEmpty) {
+        final newIds = updatedProducts.map((p) => p.id).toSet();
+        emit(state.copyWith(products: updatedProducts, wishlistIds: newIds));
+      }
     } catch (_) {
       // Revert on error
       if (wasInWishlist) {
-        // Re-fetching is safer if we need to revert a removal
-        fetchWishlist();
+        if (product != null && !currentProducts.any((p) => p.id == productId)) {
+          currentProducts.add(product);
+        }
+        currentIds.add(productId);
       } else {
         currentIds.remove(productId);
-        emit(state.copyWith(wishlistIds: currentIds));
+        currentProducts.removeWhere((p) => p.id == productId);
       }
+      emit(state.copyWith(wishlistIds: currentIds, products: currentProducts));
     }
   }
 
