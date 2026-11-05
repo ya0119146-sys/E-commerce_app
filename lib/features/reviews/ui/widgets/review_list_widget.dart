@@ -9,6 +9,7 @@ import '../../../../core/localization/app_translations.dart';
 import '../../../../core/widgets/glass_panel.dart';
 import '../../../../core/widgets/shimmer_loading.dart';
 import '../../../../core/widgets/star_rating.dart';
+import '../../../../core/utils/auth_guard.dart';
 import '../../data/models/review_model.dart';
 import '../../logic/review_cubit.dart';
 import '../../logic/review_state.dart';
@@ -49,7 +50,7 @@ class _ReviewListWidgetState extends State<ReviewListWidget> {
               isAdmin: widget.role == 'admin',
               onAddReview: () => _showAddReview(context),
             ),
-            const SizedBox(height: AppDimensions.spacingDefault),
+            const SizedBox(height: 10),
             _buildReviewContent(context, state, brightness),
           ],
         );
@@ -139,9 +140,8 @@ class _ReviewListWidgetState extends State<ReviewListWidget> {
               const SizedBox(height: 6),
               Text(
                 widget.role == 'admin'
-                    ? 'Reviews will appear here when customers share feedback.'.tr(
-                        context,
-                      )
+                    ? 'Reviews will appear here when customers share feedback.'
+                          .tr(context)
                     : 'Be the first to share your experience.'.tr(context),
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -184,9 +184,10 @@ class _ReviewListWidgetState extends State<ReviewListWidget> {
       return ListView.separated(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.zero,
         itemCount: state.reviews.length,
         separatorBuilder: (_, __) {
-          return const SizedBox(height: AppDimensions.spacingMd);
+          return const SizedBox(height: 10);
         },
         itemBuilder: (context, index) {
           final review = state.reviews[index];
@@ -216,9 +217,15 @@ class _ReviewListWidgetState extends State<ReviewListWidget> {
   }
 
   void _showAddReview(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AddReviewDialog(productId: widget.productId),
+    AuthGuard.requireAuth(
+      context,
+      action: AuthActionType.generic,
+      onAuthenticated: () {
+        showDialog(
+          context: context,
+          builder: (context) => AddReviewDialog(productId: widget.productId),
+        );
+      },
     );
   }
 
@@ -264,14 +271,22 @@ class _ReviewHeader extends StatelessWidget {
     final brightness = Theme.of(context).brightness;
     final title = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           'Customer Reviews'.tr(context),
-          style: Theme.of(context).textTheme.titleLarge,
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
         ),
         if (countLabel != null) ...[
-          const SizedBox(height: AppDimensions.spacingXs),
-          Text(countLabel!, style: Theme.of(context).textTheme.bodySmall),
+          const SizedBox(height: 2),
+          Text(
+            countLabel!,
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(fontSize: 12),
+          ),
         ],
       ],
     );
@@ -280,40 +295,26 @@ class _ReviewHeader extends StatelessWidget {
 
     final addButton = TextButton.icon(
       onPressed: onAddReview,
-      icon: const Icon(Icons.add_rounded, size: 18),
-      label: Text('Add Review'.tr(context)),
+      icon: const Icon(Icons.add_rounded, size: 16),
+      label: Text(
+        'Add Review'.tr(context),
+        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+      ),
       style: TextButton.styleFrom(
         foregroundColor: AppColors.secondary(brightness),
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimensions.spacingSm,
-          vertical: AppDimensions.spacingXs,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        minimumSize: Size.zero,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
     );
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxWidth < 360) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              title,
-              const SizedBox(height: AppDimensions.spacingSm),
-              Align(alignment: Alignment.centerLeft, child: addButton),
-            ],
-          );
-        }
-
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(child: title),
-            const SizedBox(width: AppDimensions.spacingMd),
-            addButton,
-          ],
-        );
-      },
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(child: title),
+        const SizedBox(width: 8),
+        addButton,
+      ],
     );
   }
 }
