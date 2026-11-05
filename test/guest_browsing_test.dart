@@ -103,6 +103,9 @@ void main() {
       'Explore Store',
       'Guest',
       'Guest Account',
+      'checkout_now',
+      'in_cart',
+      'max_stock_reached',
     ];
 
     test('All guest browsing keys exist and are non-empty in English', () {

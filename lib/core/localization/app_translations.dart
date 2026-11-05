@@ -752,6 +752,12 @@ class AppTranslations {
 
     'view_cart': 'View Cart',
 
+    'checkout_now': 'Checkout',
+
+    'in_cart': 'in cart',
+
+    'max_stock_reached': 'Maximum stock reached',
+
     'rating': 'Rating',
 
     'reviews': 'Reviews',
@@ -1997,6 +2003,12 @@ class AppTranslations {
     'Added to cart ✨': 'تمت الإضافة إلى السلة ✨',
 
     'view_cart': 'عرض السلة',
+
+    'checkout_now': 'إتمام الشراء',
+
+    'in_cart': 'في السلة',
+
+    'max_stock_reached': 'تم الوصول للحد الأقصى للكمية المتاحة',
 
     'rating': 'التقييم',
 

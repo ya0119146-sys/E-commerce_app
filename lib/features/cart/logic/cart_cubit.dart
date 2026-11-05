@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../data/models/cart_model.dart';
 import '../data/repos/cart_repository.dart';
+import '../../store/data/models/product_model.dart';
 import '../../../core/network/api_exception.dart';
 
 part 'cart_state.dart';
@@ -42,10 +43,51 @@ class CartCubit extends Cubit<CartState> {
   }
 
   /// Add a product to cart (optimistic).
-  Future<void> addToCart(String productId) async {
-    // Optimistic: increment badge count immediately
+  Future<void> addToCart(String productId, [ProductModel? product]) async {
+    final oldCart = state.cart;
+    final exists = oldCart.items.any(
+      (i) => i.productId == productId || i.product?.id == productId,
+    );
+    final updatedItems = exists
+        ? oldCart.items.map((i) {
+            if (i.productId == productId || i.product?.id == productId) {
+              return CartItemModel(
+                id: i.id,
+                product: product ?? i.product,
+                productId: i.productId,
+                quantity: i.quantity + 1,
+                price: i.price,
+              );
+            }
+            return i;
+          }).toList()
+        : [
+            ...oldCart.items,
+            CartItemModel(
+              id: '',
+              product: product,
+              productId: productId,
+              quantity: 1,
+              price: product?.displayPrice ?? 0.0,
+            ),
+          ];
+
+    final newTotalPrice = updatedItems.fold(0.0, (s, i) => s + i.totalPrice);
+
+    // Optimistic: increment badge count and cart items immediately
     emit(
-      state.copyWith(cartItemCount: state.cartItemCount + 1, cartPulse: true),
+      state.copyWith(
+        cart: CartModel(
+          id: oldCart.id,
+          items: updatedItems,
+          totalPrice: newTotalPrice,
+          taxPrice: updatedItems.isEmpty
+              ? 0.0
+              : (newTotalPrice >= 1000 ? 0.0 : 100.0),
+        ),
+        cartItemCount: state.cartItemCount + 1,
+        cartPulse: true,
+      ),
     );
 
     try {
@@ -63,7 +105,8 @@ class CartCubit extends Cubit<CartState> {
       // Revert optimistic update
       emit(
         state.copyWith(
-          cartItemCount: state.cartItemCount - 1,
+          cart: oldCart,
+          cartItemCount: oldCart.itemCount,
           cartPulse: false,
           errorMessage: e.message,
         ),
