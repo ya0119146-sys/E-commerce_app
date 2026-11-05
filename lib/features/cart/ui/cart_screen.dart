@@ -403,7 +403,7 @@ class _CartScreenState extends State<CartScreen> {
                     SizedBox(
                       width: double.infinity,
                       height: 50,
-                      child: OutlinedButton(
+                      child: OutlinedButton.icon(
                         onPressed: () {
                           Navigator.pushAndRemoveUntil(
                             context,
@@ -416,22 +416,33 @@ class _CartScreenState extends State<CartScreen> {
                             (route) => false,
                           );
                         },
+                        icon: Icon(
+                          Icons.storefront_outlined,
+                          size: 20,
+                          color: AppColors.secondary(brightness),
+                        ),
+                        label: Text(
+                          'Explore Store'.tr(context),
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.secondary(brightness),
+                          ),
+                        ),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.secondary(brightness),
+                          backgroundColor: AppColors.secondary(
+                            brightness,
+                          ).withValues(alpha: 0.08),
                           side: BorderSide(
-                            color: AppColors.secondary(
-                              brightness,
-                            ).withValues(alpha: 0.35),
+                            color: AppColors.secondary(brightness),
+                            width: 1.5,
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
-                              AppDimensions.radiusMd,
+                              AppDimensions.radiusDefault,
                             ),
                           ),
-                        ),
-                        child: Text(
-                          'Explore Store'.tr(context),
-                          style: const TextStyle(fontWeight: FontWeight.w700),
                         ),
                       ),
                     ),

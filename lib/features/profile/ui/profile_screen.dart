@@ -785,7 +785,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const SizedBox(height: 20),
                 HeroButton(
-                  text: 'login'.tr(context),
+                  text: 'Sign In'.tr(context),
                   onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const LoginScreen()),
@@ -801,7 +801,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(
-                        color: AppColors.primary(brightness),
+                        color: AppColors.secondary(
+                          brightness,
+                        ).withValues(alpha: 0.6),
                         width: 1.5,
                       ),
                       shape: RoundedRectangleBorder(
@@ -815,7 +817,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       'create_account'.tr(context),
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
-                        color: AppColors.primary(brightness),
+                        color: AppColors.secondary(brightness),
                       ),
                     ),
                   ),
@@ -824,11 +826,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ).animate().fade(duration: 400.ms).moveY(begin: 15, end: 0),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 18),
 
           // ─── Member Benefits Card ───
           Container(
-                padding: const EdgeInsets.all(AppDimensions.spacingMd),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.card(brightness),
                   borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
@@ -840,19 +845,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0, top: 4.0),
+                      padding: const EdgeInsets.only(bottom: 4.0, top: 2.0),
                       child: Row(
                         children: [
                           Icon(
                             Icons.workspace_premium_outlined,
-                            size: 20,
+                            size: 18,
                             color: AppColors.secondary(brightness),
                           ),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 6),
                           Text(
                             'Member Benefits'.tr(context),
                             style: Theme.of(context).textTheme.titleSmall
                                 ?.copyWith(
+                                  fontSize: 13,
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: 0.3,
                                 ),
@@ -860,7 +866,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                     ),
-                    const Divider(),
+                    const Divider(height: 12),
                     _buildBenefitTile(
                       context: context,
                       brightness: brightness,
@@ -976,37 +982,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required String description,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 4.5),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: AppColors.primary(brightness).withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(8),
+              color: AppColors.secondary(brightness).withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(6),
             ),
-            child: Icon(icon, size: 20, color: AppColors.primary(brightness)),
+            child: Icon(icon, size: 16, color: AppColors.secondary(brightness)),
           ),
-          const SizedBox(width: 14),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   title,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                  style: TextStyle(
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.foreground(brightness),
+                  ),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 1),
                 Text(
                   description,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  style: TextStyle(
+                    fontSize: 10.5,
                     color: AppColors.foreground(
                       brightness,
-                    ).withValues(alpha: 0.65),
-                    height: 1.3,
+                    ).withValues(alpha: 0.6),
+                    height: 1.25,
                   ),
                 ),
               ],

@@ -571,6 +571,10 @@ class AppTranslations {
 
     'Sign In': 'Sign In',
 
+    'login': 'Sign In',
+
+    'Login': 'Sign In',
+
     'sign_up': 'Sign Up',
 
     'Sign Up': 'Sign Up',
@@ -1811,6 +1815,10 @@ class AppTranslations {
     'sign_in': 'تسجيل الدخول',
 
     'Sign In': 'تسجيل الدخول',
+
+    'login': 'تسجيل الدخول',
+
+    'Login': 'تسجيل الدخول',
 
     'sign_up': 'إنشاء حساب جديد',
 
