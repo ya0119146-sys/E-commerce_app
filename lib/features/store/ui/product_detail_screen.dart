@@ -143,7 +143,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         slivers: [
           // ─── Image Header ───
           SliverAppBar(
-            expandedHeight: 310.0 + MediaQuery.of(context).padding.top,
+            expandedHeight: 245.0 + MediaQuery.of(context).padding.top,
             pinned: true,
             backgroundColor: AppColors.background(brightness),
             leading: Padding(
@@ -504,9 +504,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           if (allImages.length > 1)
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 2),
+                padding: const EdgeInsets.only(top: 8, bottom: 0),
                 child: SizedBox(
-                  height: 48,
+                  height: 42,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(
@@ -526,8 +526,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         },
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
-                          width: 48,
-                          height: 48,
+                          width: 42,
+                          height: 42,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(
                               AppDimensions.radiusSm + 2,
@@ -573,7 +573,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           // ─── Product Info ───
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(AppDimensions.screenPadding),
+              padding: const EdgeInsets.fromLTRB(
+                AppDimensions.screenPadding,
+                10,
+                AppDimensions.screenPadding,
+                AppDimensions.screenPadding,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -587,7 +592,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       subcategoryName: subcategoryName,
                       isSame: isSameCategory,
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 6),
                   ],
 
                   // Title
@@ -599,10 +604,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       .fade(duration: 500.ms)
                       .moveY(begin: 15, end: 0, duration: 500.ms),
 
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 6),
 
                   // Rating
-                  if (product.ratingAvg > 0)
+                  if (product.ratingAvg > 0) ...[
                     Row(
                       children: [
                         StarRating(rating: product.ratingAvg),
@@ -613,8 +618,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                       ],
                     ).animate().fade(duration: 400.ms, delay: 150.ms),
-
-                  const SizedBox(height: 16),
+                    const SizedBox(height: 8),
+                  ] else
+                    const SizedBox(height: 4),
 
                   // Price Section with Discount Badge & Savings
                   Column(
@@ -676,7 +682,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ],
                       ),
                       if (product.onSale && product.savingsAmount > 0) ...[
-                        const SizedBox(height: 6),
+                        const SizedBox(height: 4),
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 10,
@@ -718,7 +724,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ],
                   ).animate().fade(duration: 400.ms, delay: 250.ms),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
 
                   // ─── Product Size / Volume Luxury Capsule ───
                   if (product.size != null &&
@@ -726,12 +732,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
+                        horizontal: 14,
+                        vertical: 8,
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.card(brightness),
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(12),
                         border: Border.all(
                           color: AppColors.secondary(
                             brightness,
@@ -755,14 +761,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             children: [
                               Icon(
                                 Icons.science_outlined,
-                                size: 18,
+                                size: 16,
                                 color: AppColors.secondary(brightness),
                               ),
                               const SizedBox(width: 8),
                               Text(
                                 '${'Size'.tr(context)}: ${product.size}',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.w700,
                                   color: AppColors.foreground(brightness),
                                 ),
@@ -792,7 +798,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 8),
                   ],
 
                   // Stock status
@@ -825,13 +831,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   // ─── Luxury Porcelain Description Card ───
                   if (product.description != null &&
                       product.description!.trim().isNotEmpty) ...[
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 10),
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(18),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 12,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.card(brightness),
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(14),
                         border: Border.all(
                           color: AppColors.border(
                             brightness,
@@ -843,8 +852,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             color: Colors.black.withValues(
                               alpha: brightness == Brightness.dark ? 0.2 : 0.03,
                             ),
-                            blurRadius: 12,
-                            offset: const Offset(0, 4),
+                            blurRadius: 10,
+                            offset: const Offset(0, 3),
                           ),
                         ],
                       ),
@@ -861,7 +870,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               const SizedBox(width: 8),
                               Text(
                                 'description'.tr(context),
-                                style: Theme.of(context).textTheme.titleMedium
+                                style: Theme.of(context).textTheme.titleSmall
                                     ?.copyWith(
                                       fontWeight: FontWeight.w700,
                                       color: AppColors.secondary(brightness),
@@ -869,7 +878,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 8),
                           _ExpandableDescription(
                             description: product.description!,
                           ),
@@ -878,9 +887,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ),
                   ],
 
-                  const SizedBox(height: 32),
-                  const Divider(),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 14),
+                  const Divider(height: 16),
+                  const SizedBox(height: 8),
                   ReviewListWidget(productId: product.id, role: widget.role),
 
                   const SizedBox(height: 100),

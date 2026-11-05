@@ -424,6 +424,7 @@ class _CartScreenState extends State<CartScreen> {
                         label: Text(
                           'Explore Store'.tr(context),
                           style: TextStyle(
+                            height: 1.2,
                             fontSize: 15,
                             fontWeight: FontWeight.w700,
                             color: AppColors.secondary(brightness),

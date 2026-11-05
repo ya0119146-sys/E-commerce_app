@@ -358,6 +358,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                           'Explore Store'.tr(context),
                           style: TextStyle(
                             fontSize: 15,
+                            height: 1.2,
                             fontWeight: FontWeight.w700,
                             color: AppColors.secondary(brightness),
                           ),

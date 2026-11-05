@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.e_commerce"
+    namespace = "com.youssefahmed.labella"
 
     compileSdk = flutter.compileSdkVersion
 
@@ -26,7 +26,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID before production release.
-        applicationId = "com.example.e_commerce"
+        applicationId = "com.youssefahmed.labella"
 
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
