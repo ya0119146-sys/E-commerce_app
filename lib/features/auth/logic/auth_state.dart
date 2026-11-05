@@ -4,6 +4,9 @@ part of 'auth_cubit.dart';
 abstract class AuthState extends Equatable {
   const AuthState();
 
+  bool get isAuthenticated => this is AuthAuthenticated;
+  bool get isGuest => this is AuthUnauthenticated;
+
   @override
   List<Object?> get props => [];
 }

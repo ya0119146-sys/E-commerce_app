@@ -11,6 +11,9 @@ import '../../../core/widgets/shimmer_loading.dart';
 import '../../checkout/ui/checkout_screen.dart';
 import '../data/models/cart_model.dart';
 import '../logic/cart_cubit.dart';
+import '../../auth/logic/auth_cubit.dart';
+import '../../auth/ui/login_screen.dart';
+import '../../../core/utils/auth_guard.dart';
 import '../../../core/localization/app_translations.dart';
 
 /// Cart screen showing all cart items with quantity controls.
@@ -25,7 +28,9 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<CartCubit>().fetchCart();
+    if (context.read<AuthCubit>().isAuthenticated) {
+      context.read<CartCubit>().fetchCart();
+    }
   }
 
   @override
@@ -36,62 +41,80 @@ class _CartScreenState extends State<CartScreen> {
       appBar: AppBar(
         title: Text('My Cart'.tr(context)),
         actions: [
-          BlocBuilder<CartCubit, CartState>(
-            builder: (context, state) {
-              if (state.cart.items.isEmpty) return const SizedBox.shrink();
-              return TextButton(
-                onPressed: () => _showClearCartDialog(context),
-                child: Text(
-                  'Clear All'.tr(context),
-                  style: const TextStyle(color: AppColors.error),
-                ),
+          BlocBuilder<AuthCubit, AuthState>(
+            builder: (context, authState) {
+              if (!authState.isAuthenticated) return const SizedBox.shrink();
+              return BlocBuilder<CartCubit, CartState>(
+                builder: (context, state) {
+                  if (state.cart.items.isEmpty) return const SizedBox.shrink();
+                  return TextButton(
+                    onPressed: () => _showClearCartDialog(context),
+                    child: Text(
+                      'Clear All'.tr(context),
+                      style: const TextStyle(color: AppColors.error),
+                    ),
+                  );
+                },
               );
             },
           ),
         ],
       ),
-      body: BlocListener<CartCubit, CartState>(
-        listenWhen: (prev, curr) =>
-            prev.errorMessage != curr.errorMessage && curr.errorMessage != null,
-        listener: (context, state) {
-          CustomSnackBar.showError(context, state.errorMessage!.tr(context));
-        },
-        child: BlocBuilder<CartCubit, CartState>(
-          builder: (context, state) {
-            if (state.status == CartStatus.loading &&
-                state.cart.items.isEmpty) {
-              return _buildLoadingList();
-            }
+      body: BlocBuilder<AuthCubit, AuthState>(
+        builder: (context, authState) {
+          if (!authState.isAuthenticated) {
+            return _buildGuestCartState(context, brightness);
+          }
 
-            if (state.cart.items.isEmpty) {
-              return _buildEmptyState(context, brightness);
-            }
+          return BlocListener<CartCubit, CartState>(
+            listenWhen: (prev, curr) =>
+                prev.errorMessage != curr.errorMessage &&
+                curr.errorMessage != null,
+            listener: (context, state) {
+              CustomSnackBar.showError(
+                context,
+                state.errorMessage!.tr(context),
+              );
+            },
+            child: BlocBuilder<CartCubit, CartState>(
+              builder: (context, state) {
+                if (state.status == CartStatus.loading &&
+                    state.cart.items.isEmpty) {
+                  return _buildLoadingList();
+                }
 
-            return Column(
-              children: [
-                Expanded(
-                  child: RefreshIndicator(
-                    onRefresh: () => context.read<CartCubit>().fetchCart(),
-                    color: AppColors.primary(brightness),
-                    child: ListView.separated(
-                      padding: const EdgeInsets.all(
-                        AppDimensions.screenPadding,
+                if (state.cart.items.isEmpty) {
+                  return _buildEmptyState(context, brightness);
+                }
+
+                return Column(
+                  children: [
+                    Expanded(
+                      child: RefreshIndicator(
+                        onRefresh: () => context.read<CartCubit>().fetchCart(),
+                        color: AppColors.primary(brightness),
+                        child: ListView.separated(
+                          padding: const EdgeInsets.all(
+                            AppDimensions.screenPadding,
+                          ),
+                          itemCount: state.cart.items.length,
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(height: 12),
+                          itemBuilder: (context, index) {
+                            final item = state.cart.items[index];
+                            return _CartItemCard(item: item, index: index);
+                          },
+                        ),
                       ),
-                      itemCount: state.cart.items.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 12),
-                      itemBuilder: (context, index) {
-                        final item = state.cart.items[index];
-                        return _CartItemCard(item: item, index: index);
-                      },
                     ),
-                  ),
-                ),
-                // ─── Bottom Total & Checkout ───
-                _buildCheckoutBar(context, state, brightness),
-              ],
-            );
-          },
-        ),
+                    // ─── Bottom Total & Checkout ───
+                    _buildCheckoutBar(context, state, brightness),
+                  ],
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }
@@ -290,9 +313,15 @@ class _CartScreenState extends State<CartScreen> {
             text: 'checkout'.tr(context),
             icon: Icons.arrow_forward_rounded,
             onPressed: () {
-              Navigator.push(
+              AuthGuard.requireAuth(
                 context,
-                MaterialPageRoute(builder: (_) => const CheckoutScreen()),
+                action: AuthActionType.checkout,
+                onAuthenticated: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const CheckoutScreen()),
+                  );
+                },
               );
             },
           ),
@@ -303,6 +332,115 @@ class _CartScreenState extends State<CartScreen> {
       end: 0,
       duration: 400.ms,
       curve: Curves.easeOut,
+    );
+  }
+
+  Widget _buildGuestCartState(BuildContext context, Brightness brightness) {
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(AppDimensions.screenPadding),
+        child:
+            Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 96,
+                      height: 96,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.secondary(
+                          brightness,
+                        ).withValues(alpha: 0.10),
+                        border: Border.all(
+                          color: AppColors.secondary(
+                            brightness,
+                          ).withValues(alpha: 0.28),
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.shopping_bag_outlined,
+                          size: 46,
+                          color: AppColors.secondary(brightness),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      'Your cart is waiting'.tr(context),
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Please sign in to view your cart and start shopping.'.tr(
+                        context,
+                      ),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.foreground(
+                          brightness,
+                        ).withValues(alpha: 0.65),
+                        height: 1.45,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 28),
+                    HeroButton(
+                      text: 'Sign In'.tr(context),
+                      icon: Icons.login_rounded,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const LoginScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: OutlinedButton(
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => BottomNavShell(
+                                role: widget.role,
+                                initialIndex: 0,
+                              ),
+                            ),
+                            (route) => false,
+                          );
+                        },
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.secondary(brightness),
+                          side: BorderSide(
+                            color: AppColors.secondary(
+                              brightness,
+                            ).withValues(alpha: 0.35),
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.radiusMd,
+                            ),
+                          ),
+                        ),
+                        child: Text(
+                          'Explore Store'.tr(context),
+                          style: const TextStyle(fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+                .animate()
+                .fade(duration: 400.ms)
+                .scale(begin: const Offset(0.92, 0.92)),
+      ),
     );
   }
 

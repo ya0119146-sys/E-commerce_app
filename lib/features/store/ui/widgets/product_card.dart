@@ -12,6 +12,7 @@ import '../../logic/categories_cubit.dart';
 import '../../logic/products_cubit.dart';
 import '../../data/models/product_model.dart';
 import '../product_detail_screen.dart';
+import '../../../../core/utils/auth_guard.dart';
 import '../../../../core/localization/app_translations.dart';
 
 /// Concept 2: Minimalist High-Fashion / Luxury Farfetch & Zara Style Product Card.
@@ -464,8 +465,16 @@ class _FrostedWishlistHeartState extends State<_FrostedWishlistHeart>
           scale: _scaleAnimation,
           child: GestureDetector(
             onTap: () {
-              _controller.forward(from: 0);
-              context.read<WishlistCubit>().toggleWishlist(widget.productId);
+              AuthGuard.requireAuth(
+                context,
+                action: AuthActionType.wishlist,
+                onAuthenticated: () {
+                  _controller.forward(from: 0);
+                  context.read<WishlistCubit>().toggleWishlist(
+                    widget.productId,
+                  );
+                },
+              );
             },
             child: Container(
               width: 32,
@@ -543,9 +552,18 @@ class _SleekAddToCartPillState extends State<_SleekAddToCartPill>
       scale: _scaleAnimation,
       child: GestureDetector(
         onTap: () {
-          _controller.forward(from: 0);
-          context.read<CartCubit>().addToCart(widget.product.id);
-          CustomSnackBar.showCart(context, '${'add_to_cart'.tr(context)} ✨');
+          AuthGuard.requireAuth(
+            context,
+            action: AuthActionType.cart,
+            onAuthenticated: () {
+              _controller.forward(from: 0);
+              context.read<CartCubit>().addToCart(widget.product.id);
+              CustomSnackBar.showCart(
+                context,
+                '${'add_to_cart'.tr(context)} ✨',
+              );
+            },
+          );
         },
         child: Container(
           width: double.infinity,

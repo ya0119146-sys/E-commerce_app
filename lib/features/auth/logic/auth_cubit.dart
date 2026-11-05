@@ -12,6 +12,16 @@ class AuthCubit extends Cubit<AuthState> {
 
   AuthCubit(this._repository) : super(AuthInitial());
 
+  /// Whether the user has an active authenticated session.
+  bool get isAuthenticated => state is AuthAuthenticated;
+
+  /// Whether the user is currently browsing as an unauthenticated guest.
+  bool get isGuest => state is AuthUnauthenticated;
+
+  /// Returns the current authenticated user or null for guests.
+  UserModel? get currentUser =>
+      state is AuthAuthenticated ? (state as AuthAuthenticated).user : null;
+
   /// Check if user is already logged in.
   Future<void> checkAuthStatus() async {
     try {

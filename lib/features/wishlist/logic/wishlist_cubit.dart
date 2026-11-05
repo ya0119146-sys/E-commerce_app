@@ -76,4 +76,9 @@ class WishlistCubit extends Cubit<WishlistState> {
       }
     }
   }
+
+  /// Reset wishlist state to empty (e.g. on logout).
+  void clearWishlist() {
+    emit(const WishlistState());
+  }
 }

@@ -1,4 +1,7 @@
 import '../../../core/widgets/custom_snackbar.dart';
+import '../../../core/widgets/hero_button.dart';
+import '../../../core/utils/auth_guard.dart';
+import '../../auth/ui/signup_screen.dart';
 import 'dart:io';
 
 import 'package:e_commerce/features/auth/ui/login_screen.dart';
@@ -102,138 +105,112 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('nav_profile'.tr(context)),
-
         actions: [
-          if (_isEditing)
-            BlocConsumer<ProfileCubit, ProfileState>(
-              listener: (context, state) {
-                if (state is ProfileSuccess) {
-                  CustomSnackBar.showSuccess(
-                    context,
-                    (state.message ?? 'success').tr(context),
-                  );
+          BlocBuilder<AuthCubit, AuthState>(
+            builder: (context, authState) {
+              if (authState is! AuthAuthenticated) {
+                return const SizedBox.shrink();
+              }
+              if (_isEditing) {
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    BlocConsumer<ProfileCubit, ProfileState>(
+                      listener: (context, state) {
+                        if (state is ProfileSuccess) {
+                          CustomSnackBar.showSuccess(
+                            context,
+                            (state.message ?? 'success').tr(context),
+                          );
 
-                  // Cache updated values locally so UI reflects immediately
+                          // Cache updated values locally so UI reflects immediately
+                          setState(() {
+                            _localName = _nameController.text.isNotEmpty
+                                ? _nameController.text
+                                : null;
+                            _isEditing = false;
+                            _selectedImage = null;
+                          });
 
-                  setState(() {
-                    _localName = _nameController.text.isNotEmpty
-                        ? _nameController.text
-                        : null;
+                          // Refresh profile cubit to sync backend data
+                          context.read<GetProfileCubit>().getProfile();
+                        } else if (state is ProfileError) {
+                          CustomSnackBar.showError(
+                            context,
+                            state.message.tr(context),
+                          );
+                        }
+                      },
+                      builder: (context, state) {
+                        if (state is ProfileLoading) {
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Center(
+                              child: SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            ),
+                          );
+                        }
 
-                    _isEditing = false;
-
-                    _selectedImage = null;
-                  });
-
-                  // Refresh profile cubit to sync backend data
-
-                  context.read<GetProfileCubit>().getProfile();
-                } else if (state is ProfileError) {
-                  CustomSnackBar.showError(context, state.message.tr(context));
-                }
-              },
-
-              builder: (context, state) {
-                if (state is ProfileLoading) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-
-                    child: Center(
-                      child: SizedBox(
-                        width: 20,
-
-                        height: 20,
-
-                        child: CircularProgressIndicator(strokeWidth: 2),
+                        return TextButton(
+                          onPressed: _onSave,
+                          child: Text(
+                            'save'.tr(context),
+                            style: TextStyle(
+                              color: AppColors.primary(brightness),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          _isEditing = false;
+                          _selectedImage = null;
+                          // Reset name field to current displayed name
+                          _nameController.text = _localName ?? '';
+                        });
+                      },
+                      child: Text(
+                        'cancel'.tr(context),
+                        style: TextStyle(
+                          color: AppColors.primary(brightness),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  );
-                }
-
-                return TextButton(
-                  onPressed: _onSave,
-
-                  child: Text(
-                    'save'.tr(context),
-
-                    style: TextStyle(
-                      color: AppColors.primary(brightness),
-
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                    const SizedBox(width: 8),
+                  ],
                 );
-              },
-            ),
+              }
 
-          if (_isEditing)
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  _isEditing = false;
-
-                  _selectedImage = null;
-
-                  // Reset name field to current displayed name
-
-                  _nameController.text = _localName ?? '';
-                });
-              },
-
-              child: Text(
-                'cancel'.tr(context),
-
-                style: TextStyle(
-                  color: AppColors.primary(brightness),
-
-                  fontWeight: FontWeight.bold,
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: GestureDetector(
+                  onTap: () => setState(() => _isEditing = true),
+                  child: Icon(
+                    Icons.edit,
+                    size: 18,
+                    color: AppColors.secondary(brightness),
+                  ),
                 ),
-              ),
-            ),
-
-          if (!_isEditing)
-            GestureDetector(
-              onTap: () => setState(() => _isEditing = true),
-
-              child: Icon(
-                Icons.edit,
-
-                size: 18,
-
-                color: AppColors.secondary(brightness),
-              ),
-            ),
-
-          const SizedBox(width: 16),
+              );
+            },
+          ),
         ],
       ),
 
       body: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, state) {
           if (state is! AuthAuthenticated) {
-            return Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-
-                children: [
-                  Icon(
-                    Icons.person_outline,
-
-                    size: 64,
-
-                    color: AppColors.primary(brightness).withValues(alpha: 0.3),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  Text(
-                    'not_logged_in'.tr(context),
-
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                ],
-              ),
-            );
+            return _buildGuestProfile(context, brightness);
           }
 
           final user = state.user;
@@ -521,168 +498,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
 
                 // ─── Dark Mode Toggle ───
-                BlocBuilder<ThemeCubit, ThemeState>(
-                      builder: (context, themeState) {
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 10),
-
-                          decoration: BoxDecoration(
-                            color: AppColors.card(brightness),
-
-                            borderRadius: BorderRadius.circular(
-                              AppDimensions.radiusDefault,
-                            ),
-
-                            border: Border.all(
-                              color: AppColors.border(
-                                brightness,
-                              ).withValues(alpha: 0.4),
-                            ),
-                          ),
-
-                          child: ListTile(
-                            leading: Icon(
-                              themeState.themeMode == ThemeMode.dark
-                                  ? Icons.dark_mode
-                                  : Icons.light_mode,
-
-                              color: AppColors.secondary(brightness),
-                            ),
-
-                            title: Text(
-                              'dark_mode'.tr(context),
-
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-
-                            trailing: Switch(
-                              value: themeState.themeMode == ThemeMode.dark,
-
-                              activeColor: AppColors.primary(brightness),
-
-                              onChanged: (_) =>
-                                  context.read<ThemeCubit>().toggleTheme(),
-                            ),
-                          ),
-                        );
-                      },
-                    )
+                _buildDarkModeTile(context, brightness)
                     .animate()
                     .fade(duration: 300.ms, delay: 400.ms)
                     .moveY(begin: 15, end: 0),
 
                 // ─── Language Switch ───
-                BlocBuilder<LocaleCubit, LocaleState>(
-                      builder: (context, localeState) {
-                        final isAr = localeState.locale.languageCode == 'ar';
-
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 10),
-
-                          decoration: BoxDecoration(
-                            color: AppColors.card(brightness),
-
-                            borderRadius: BorderRadius.circular(
-                              AppDimensions.radiusDefault,
-                            ),
-
-                            border: Border.all(
-                              color: AppColors.border(
-                                brightness,
-                              ).withValues(alpha: 0.4),
-                            ),
-                          ),
-
-                          child: ListTile(
-                            leading: Icon(
-                              Icons.language,
-
-                              color: AppColors.secondary(brightness),
-                            ),
-
-                            title: Text(
-                              'language'.tr(context),
-
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-
-                            subtitle: Text(
-                              isAr ? 'العربية' : 'English',
-
-                              style: Theme.of(context).textTheme.bodySmall
-                                  ?.copyWith(
-                                    color: AppColors.primary(brightness),
-
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                            ),
-
-                            trailing: Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.background(brightness),
-
-                                borderRadius: BorderRadius.circular(
-                                  AppDimensions.radiusLg,
-                                ),
-
-                                border: Border.all(
-                                  color: AppColors.border(
-                                    brightness,
-                                  ).withValues(alpha: 0.5),
-                                ),
-                              ),
-
-                              child: InkWell(
-                                onTap: () =>
-                                    context.read<LocaleCubit>().toggleLocale(),
-
-                                borderRadius: BorderRadius.circular(
-                                  AppDimensions.radiusLg,
-                                ),
-
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-
-                                    vertical: 6,
-                                  ),
-
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-
-                                    children: [
-                                      Text(
-                                        isAr ? 'EN' : 'عربي',
-
-                                        style: TextStyle(
-                                          fontSize: 13,
-
-                                          fontWeight: FontWeight.w700,
-
-                                          color: AppColors.secondary(
-                                            brightness,
-                                          ),
-                                        ),
-                                      ),
-
-                                      const SizedBox(width: 4),
-
-                                      Icon(
-                                        Icons.swap_horiz,
-
-                                        size: 16,
-
-                                        color: AppColors.secondary(brightness),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    )
+                _buildLanguageTile(context, brightness)
                     .animate()
                     .fade(duration: 300.ms, delay: 450.ms)
                     .moveY(begin: 15, end: 0),
@@ -875,5 +697,430 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
           delay: Duration(milliseconds: 80 * (index + 2)),
         );
+  }
+
+  Widget _buildGuestProfile(BuildContext context, Brightness brightness) {
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
+      ),
+      padding: const EdgeInsets.fromLTRB(
+        AppDimensions.screenPadding,
+        12,
+        AppDimensions.screenPadding,
+        120,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // ─── Guest Welcome Card ───
+          Container(
+            padding: const EdgeInsets.all(AppDimensions.spacingLg),
+            decoration: BoxDecoration(
+              color: AppColors.card(brightness),
+              borderRadius: BorderRadius.circular(AppDimensions.radiusXl),
+              border: Border.all(
+                color: AppColors.border(brightness).withValues(alpha: 0.5),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary(brightness).withValues(alpha: 0.08),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: [
+                        AppColors.secondary(brightness),
+                        AppColors.primary(brightness),
+                      ],
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primary(
+                          brightness,
+                        ).withValues(alpha: 0.25),
+                        blurRadius: 16,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.person_outline_rounded,
+                      size: 42,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Welcome to Labella'.tr(context),
+                  style: GoogleFonts.playfairDisplay(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.foreground(brightness),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Sign in or create an account to enjoy your complete shopping experience.'
+                      .tr(context),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: AppColors.foreground(
+                      brightness,
+                    ).withValues(alpha: 0.7),
+                    height: 1.4,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                HeroButton(
+                  text: 'login'.tr(context),
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const SignupScreen()),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(
+                        color: AppColors.primary(brightness),
+                        width: 1.5,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          AppDimensions.radiusDefault,
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    child: Text(
+                      'create_account'.tr(context),
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primary(brightness),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ).animate().fade(duration: 400.ms).moveY(begin: 15, end: 0),
+
+          const SizedBox(height: 24),
+
+          // ─── Member Benefits Card ───
+          Container(
+                padding: const EdgeInsets.all(AppDimensions.spacingMd),
+                decoration: BoxDecoration(
+                  color: AppColors.card(brightness),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+                  border: Border.all(
+                    color: AppColors.border(brightness).withValues(alpha: 0.4),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0, top: 4.0),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.workspace_premium_outlined,
+                            size: 20,
+                            color: AppColors.secondary(brightness),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Member Benefits'.tr(context),
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.3,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Divider(),
+                    _buildBenefitTile(
+                      context: context,
+                      brightness: brightness,
+                      icon: Icons.local_shipping_outlined,
+                      title: 'Order Tracking'.tr(context),
+                      description:
+                          'Track your orders and follow their delivery status.'
+                              .tr(context),
+                    ),
+                    _buildBenefitTile(
+                      context: context,
+                      brightness: brightness,
+                      icon: Icons.favorite_border_rounded,
+                      title: 'nav_wishlist'.tr(context),
+                      description:
+                          'Save your favorite products and access them anytime.'
+                              .tr(context),
+                    ),
+                    _buildBenefitTile(
+                      context: context,
+                      brightness: brightness,
+                      icon: Icons.bolt_rounded,
+                      title: 'Faster Checkout'.tr(context),
+                      description:
+                          'Save your delivery information for a smoother shopping experience.'
+                              .tr(context),
+                    ),
+                    _buildBenefitTile(
+                      context: context,
+                      brightness: brightness,
+                      icon: Icons.person_outline_rounded,
+                      title: 'Personal Account'.tr(context),
+                      description:
+                          'Manage your profile and view your shopping history.'
+                              .tr(context),
+                    ),
+                  ],
+                ),
+              )
+              .animate()
+              .fade(duration: 400.ms, delay: 150.ms)
+              .moveY(begin: 15, end: 0),
+
+          const SizedBox(height: 24),
+
+          // ─── Settings & Actions ───
+          _profileTile(
+            context,
+            icon: Icons.receipt_long_outlined,
+            title: 'my_orders'.tr(context),
+            onTap: () => AuthGuard.requireAuth(
+              context,
+              action: AuthActionType.profile,
+              onAuthenticated: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const OrderHistoryScreen()),
+              ),
+            ),
+            index: 0,
+          ),
+          _profileTile(
+            context,
+            icon: Icons.location_on_outlined,
+            title: 'shipping_address'.tr(context),
+            onTap: () => AuthGuard.requireAuth(
+              context,
+              action: AuthActionType.profile,
+              onAuthenticated: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const AddressScreen()),
+              ),
+            ),
+            index: 1,
+          ),
+          _profileTile(
+            context,
+            customLeading: ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: Image.asset(
+                'assets/icons/whatsapp_icon.png',
+                width: 26,
+                height: 26,
+                fit: BoxFit.contain,
+              ),
+            ),
+            title: 'Contact Us on WhatsApp'.tr(context),
+            subtitle: WhatsAppHelper.displayPhone,
+            onTap: () => WhatsAppHelper.launchWhatsApp(
+              text: context.isArabic
+                  ? 'مرحباً، أود التواصل مع متجر لابيلا'
+                  : 'Hello, I would like to contact Labella store',
+            ),
+            index: 2,
+          ),
+          _buildDarkModeTile(context, brightness)
+              .animate()
+              .fade(duration: 300.ms, delay: 350.ms)
+              .moveY(begin: 15, end: 0),
+          _buildLanguageTile(context, brightness)
+              .animate()
+              .fade(duration: 300.ms, delay: 400.ms)
+              .moveY(begin: 15, end: 0),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBenefitTile({
+    required BuildContext context,
+    required Brightness brightness,
+    required IconData icon,
+    required String title,
+    required String description,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: AppColors.primary(brightness).withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, size: 20, color: AppColors.primary(brightness)),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  description,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: AppColors.foreground(
+                      brightness,
+                    ).withValues(alpha: 0.65),
+                    height: 1.3,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDarkModeTile(BuildContext context, Brightness brightness) {
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, themeState) {
+        return Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          decoration: BoxDecoration(
+            color: AppColors.card(brightness),
+            borderRadius: BorderRadius.circular(AppDimensions.radiusDefault),
+            border: Border.all(
+              color: AppColors.border(brightness).withValues(alpha: 0.4),
+            ),
+          ),
+          child: ListTile(
+            leading: Icon(
+              themeState.themeMode == ThemeMode.dark
+                  ? Icons.dark_mode
+                  : Icons.light_mode,
+              color: AppColors.secondary(brightness),
+            ),
+            title: Text(
+              'dark_mode'.tr(context),
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            trailing: Switch(
+              value: themeState.themeMode == ThemeMode.dark,
+              activeColor: AppColors.primary(brightness),
+              onChanged: (_) => context.read<ThemeCubit>().toggleTheme(),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildLanguageTile(BuildContext context, Brightness brightness) {
+    return BlocBuilder<LocaleCubit, LocaleState>(
+      builder: (context, localeState) {
+        final isAr = localeState.locale.languageCode == 'ar';
+        return Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          decoration: BoxDecoration(
+            color: AppColors.card(brightness),
+            borderRadius: BorderRadius.circular(AppDimensions.radiusDefault),
+            border: Border.all(
+              color: AppColors.border(brightness).withValues(alpha: 0.4),
+            ),
+          ),
+          child: ListTile(
+            leading: Icon(
+              Icons.language,
+              color: AppColors.secondary(brightness),
+            ),
+            title: Text(
+              'language'.tr(context),
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            subtitle: Text(
+              isAr ? 'العربية' : 'English',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: AppColors.primary(brightness),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            trailing: Container(
+              decoration: BoxDecoration(
+                color: AppColors.background(brightness),
+                borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+                border: Border.all(
+                  color: AppColors.border(brightness).withValues(alpha: 0.5),
+                ),
+              ),
+              child: InkWell(
+                onTap: () => context.read<LocaleCubit>().toggleLocale(),
+                borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        isAr ? 'EN' : 'عربي',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.secondary(brightness),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Icon(
+                        Icons.swap_horiz,
+                        size: 16,
+                        color: AppColors.secondary(brightness),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

@@ -1213,6 +1213,43 @@ class AppTranslations {
     'Radiant Beauty': 'Radiant Beauty',
     'Selected from world-class luxury beauty brands':
         'Selected from world-class luxury beauty brands',
+
+    // ─── Guest Browsing & Auth Protection ───
+    'Sign in required': 'Sign in required',
+    'Please sign in to add products to your wishlist.':
+        'Please sign in to add products to your wishlist.',
+    'Please sign in to add products to your cart.':
+        'Please sign in to add products to your cart.',
+    'Please sign in to complete your purchase.':
+        'Please sign in to complete your purchase.',
+    'Please sign in to access your personal account.':
+        'Please sign in to access your personal account.',
+    'Not Now': 'Not Now',
+    'Welcome to Labella': 'Welcome to Labella',
+    'Sign in or create an account to enjoy your complete shopping experience.':
+        'Sign in or create an account to enjoy your complete shopping experience.',
+    'Member Benefits': 'Member Benefits',
+    'Order Tracking': 'Order Tracking',
+    'Track your orders and follow their delivery status.':
+        'Track your orders and follow their delivery status.',
+    'Save your favorite products and access them anytime.':
+        'Save your favorite products and access them anytime.',
+    'Faster Checkout': 'Faster Checkout',
+    'Save your delivery information for a smoother shopping experience.':
+        'Save your delivery information for a smoother shopping experience.',
+    'Personal Account': 'Personal Account',
+    'Manage your profile and view your shopping history.':
+        'Manage your profile and view your shopping history.',
+    'Your cart is waiting': 'Your cart is waiting',
+    'Please sign in to view your cart and start shopping.':
+        'Please sign in to view your cart and start shopping.',
+    'Your wishlist is waiting': 'Your wishlist is waiting',
+    'Please sign in to view and save your favorite items.':
+        'Please sign in to view and save your favorite items.',
+    'Explore Store': 'Explore Store',
+    'Guest': 'Guest',
+    'Guest Account': 'Guest Account',
+    'guest': 'Guest',
   };
 
   /// Arabic Dictionary
@@ -2417,6 +2454,43 @@ class AppTranslations {
     'Radiant Beauty': 'إشراقة لا مثيل لها',
     'Selected from world-class luxury beauty brands':
         'مختارة بعناية من أفخم العلامات العالمية',
+
+    // ─── Guest Browsing & Auth Protection ───
+    'Sign in required': 'تسجيل الدخول مطلوب',
+    'Please sign in to add products to your wishlist.':
+        'يجب عليك تسجيل الدخول لإضافة المنتجات إلى المفضلة.',
+    'Please sign in to add products to your cart.':
+        'يجب عليك تسجيل الدخول لإضافة المنتجات إلى السلة.',
+    'Please sign in to complete your purchase.':
+        'يجب عليك تسجيل الدخول لإتمام عملية الشراء.',
+    'Please sign in to access your personal account.':
+        'يجب عليك تسجيل الدخول للوصول إلى حسابك الشخصي.',
+    'Not Now': 'ليس الآن',
+    'Welcome to Labella': 'أهلاً بك في Labella',
+    'Sign in or create an account to enjoy your complete shopping experience.':
+        'سجّل الدخول أو أنشئ حسابك للاستمتاع بتجربة تسوق متكاملة.',
+    'Member Benefits': 'مميزات الحساب',
+    'Order Tracking': 'تتبع الطلبات',
+    'Track your orders and follow their delivery status.':
+        'تتبع طلباتك ومتابعة حالة التوصيل أولاً بأول.',
+    'Save your favorite products and access them anytime.':
+        'احفظ منتجاتك المفضلة للوصول إليها في أي وقت.',
+    'Faster Checkout': 'شراء أسرع',
+    'Save your delivery information for a smoother shopping experience.':
+        'احفظ معلومات التوصيل لتجربة تسوق أسرع وأسهل.',
+    'Personal Account': 'حساب مخصص',
+    'Manage your profile and view your shopping history.':
+        'إدارة ملفك الشخصي ومتابعة سجل مشترياتك بسهولة.',
+    'Your cart is waiting': 'سلتك في انتظارك',
+    'Please sign in to view your cart and start shopping.':
+        'سجل دخولك لعرض سلتك وإتمام مشترياتك.',
+    'Your wishlist is waiting': 'قائمة أمنياتك في انتظارك',
+    'Please sign in to view and save your favorite items.':
+        'سجل دخولك لحفظ منتجاتك المفضلة والرجوع إليها في أي وقت.',
+    'Explore Store': 'تصفح المتجر',
+    'Guest': 'زائر',
+    'Guest Account': 'حساب زائر',
+    'guest': 'زائر',
   };
 
   /// Translate key or English phrase according to current locale

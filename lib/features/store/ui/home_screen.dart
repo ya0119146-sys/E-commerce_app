@@ -12,8 +12,8 @@ import '../logic/categories_cubit.dart';
 import 'widgets/product_card.dart';
 import 'widgets/category_grid.dart';
 import 'search_screen.dart';
+import '../../profile/ui/profile_screen.dart';
 import '../../../core/localization/app_translations.dart';
-import '../../../core/utils/whatsapp_helper.dart';
 
 /// Home screen with Concept 1 auto-scrolling hero banner,
 /// Concept 1 story categories, and Concept 2 trending products.
@@ -82,59 +82,33 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ColoredBox(
           color: AppColors.background(brightness),
           child: CustomScrollView(
-          controller: _scrollController,
-          cacheExtent: 600.0,
-          physics: const AlwaysScrollableScrollPhysics(),
-          slivers: [
-            // ─── App Bar ───
-            SliverAppBar(
-              floating: false,
-              snap: false,
-              pinned: true,
-              elevation: 0,
-              centerTitle: true,
-              surfaceTintColor: Colors.transparent,
-              backgroundColor: AppColors.background(brightness),
-              leading: context.isArabic
-                  ? IconButton(
-                      tooltip: 'Contact on WhatsApp'.tr(context),
-                      icon: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.asset(
-                          'assets/icons/whatsapp_icon.png',
-                          width: 26,
-                          height: 26,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      onPressed: () => WhatsAppHelper.launchWhatsApp(
-                        text: context.isArabic
-                            ? 'مرحباً، أود التواصل مع متجر لابيلا'
-                            : 'Hello, I would like to contact Labella store',
-                      ),
-                    )
-                  : IconButton(
-                      tooltip: 'Search'.tr(context),
-                      icon: const Icon(Icons.search),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => SearchScreen(role: widget.role),
-                          ),
-                        );
-                      },
-                    ),
-              title: Text(
-                'Labella',
-                style: GoogleFonts.greatVibes(
-                  fontSize: 32,
-                  color: AppColors.secondary(brightness),
-                ),
-              ),
-              actions: [
-                context.isArabic
+            controller: _scrollController,
+            cacheExtent: 600.0,
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              // ─── App Bar ───
+              SliverAppBar(
+                floating: false,
+                snap: false,
+                pinned: true,
+                elevation: 0,
+                centerTitle: true,
+                surfaceTintColor: Colors.transparent,
+                backgroundColor: AppColors.background(brightness),
+                leading: context.isArabic
                     ? IconButton(
+                        tooltip: 'nav_profile'.tr(context),
+                        icon: const Icon(Icons.person_outline_rounded),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const ProfileScreen(),
+                            ),
+                          );
+                        },
+                      )
+                    : IconButton(
                         tooltip: 'Search'.tr(context),
                         icon: const Icon(Icons.search),
                         onPressed: () {
@@ -145,54 +119,70 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           );
                         },
-                      )
-                    : IconButton(
-                        tooltip: 'Contact on WhatsApp'.tr(context),
-                        icon: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.asset(
-                            'assets/icons/whatsapp_icon.png',
-                            width: 26,
-                            height: 26,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        onPressed: () => WhatsAppHelper.launchWhatsApp(
-                          text: context.isArabic
-                              ? 'مرحباً، أود التواصل مع متجر لابيلا'
-                              : 'Hello, I would like to contact Labella store',
-                        ),
                       ),
-              ],
-            ),
-
-            // ─── Hero Banner (Concept 1: Auto-Scrolling Editorial Carousel) ───
-            SliverToBoxAdapter(
-              child: _EditorialHeroCarousel(onShopNow: _scrollToProducts),
-            ),
-
-            // ─── Section: Categories (Concept 1: Story Avatars) ───
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: AppDimensions.screenPadding,
-                  right: AppDimensions.screenPadding,
-                  top: 8,
-                  bottom: 12,
+                title: Text(
+                  'Labella',
+                  style: GoogleFonts.greatVibes(
+                    fontSize: 32,
+                    color: AppColors.secondary(brightness),
+                  ),
                 ),
-                child: Text(
-                  'Categories'.tr(context),
-                  style: Theme.of(context).textTheme.headlineSmall,
+                actions: [
+                  context.isArabic
+                      ? IconButton(
+                          tooltip: 'Search'.tr(context),
+                          icon: const Icon(Icons.search),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => SearchScreen(role: widget.role),
+                              ),
+                            );
+                          },
+                        )
+                      : IconButton(
+                          tooltip: 'nav_profile'.tr(context),
+                          icon: const Icon(Icons.person_outline_rounded),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const ProfileScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                ],
+              ),
+
+              // ─── Hero Banner (Concept 1: Auto-Scrolling Editorial Carousel) ───
+              SliverToBoxAdapter(
+                child: _EditorialHeroCarousel(onShopNow: _scrollToProducts),
+              ),
+
+              // ─── Section: Categories (Concept 1: Story Avatars) ───
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: AppDimensions.screenPadding,
+                    right: AppDimensions.screenPadding,
+                    top: 8,
+                    bottom: 12,
+                  ),
+                  child: Text(
+                    'Categories'.tr(context),
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
                 ),
               ),
-            ),
-            SliverToBoxAdapter(
-              child: BlocBuilder<CategoriesCubit, CategoriesState>(
-                buildWhen: (prev, next) =>
-                    prev.status != next.status ||
-                    prev.categories != next.categories ||
-                    prev.selectedCategoryId != next.selectedCategoryId,
-                builder: (context, state) {
+              SliverToBoxAdapter(
+                child: BlocBuilder<CategoriesCubit, CategoriesState>(
+                  buildWhen: (prev, next) =>
+                      prev.status != next.status ||
+                      prev.categories != next.categories ||
+                      prev.selectedCategoryId != next.selectedCategoryId,
+                  builder: (context, state) {
                     if (state.status == CategoriesStatus.loading) {
                       return SizedBox(
                         height: 114,
@@ -240,38 +230,107 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   },
                 ),
-            ),
+              ),
 
-            // ─── Section: Trending Products ───
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: AppDimensions.screenPadding,
-                  right: AppDimensions.screenPadding,
-                  top: 24,
-                  bottom: 12,
-                ),
-                child: Text(
-                  'Trending Now'.tr(context),
-                  style: Theme.of(context).textTheme.headlineSmall,
+              // ─── Section: Trending Products ───
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: AppDimensions.screenPadding,
+                    right: AppDimensions.screenPadding,
+                    top: 24,
+                    bottom: 12,
+                  ),
+                  child: Text(
+                    'Trending Now'.tr(context),
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
                 ),
               ),
-            ),
 
-            // ─── Product Grid (Dynamic-Height Content-Driven Cards) ───
-            BlocBuilder<ProductsCubit, ProductsState>(
-              // ⚡ Skip rebuild when only status flips to loadingMore — the product
-              // list hasn't changed, so rebuilding the entire SliverGrid causes visible
-              // layout thrash in the banner, categories, and "Trending Now" sections.
-              buildWhen: (prev, next) {
-                if (prev.products.length != next.products.length) return true;
-                if (next.status == ProductsStatus.loadingMore) return false;
-                if (prev.status != next.status) return true;
-                return prev.category != next.category ||
-                    prev.keyword != next.keyword;
-              },
-              builder: (context, state) {
-                if (state.status == ProductsStatus.loading) {
+              // ─── Product Grid (Dynamic-Height Content-Driven Cards) ───
+              BlocBuilder<ProductsCubit, ProductsState>(
+                // ⚡ Skip rebuild when only status flips to loadingMore — the product
+                // list hasn't changed, so rebuilding the entire SliverGrid causes visible
+                // layout thrash in the banner, categories, and "Trending Now" sections.
+                buildWhen: (prev, next) {
+                  if (prev.products.length != next.products.length) return true;
+                  if (next.status == ProductsStatus.loadingMore) return false;
+                  if (prev.status != next.status) return true;
+                  return prev.category != next.category ||
+                      prev.keyword != next.keyword;
+                },
+                builder: (context, state) {
+                  if (state.status == ProductsStatus.loading) {
+                    return SliverPadding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppDimensions.screenPadding,
+                      ),
+                      sliver: SliverGrid(
+                        gridDelegate: ProductGridDelegate.create(context),
+                        delegate: SliverChildBuilderDelegate(
+                          (_, __) => const ShimmerProductCard(),
+                          childCount: 6,
+                        ),
+                      ),
+                    );
+                  }
+
+                  if (state.status == ProductsStatus.error) {
+                    return SliverFillRemaining(
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.cloud_off_outlined,
+                              size: 48,
+                              color: AppColors.foreground(
+                                brightness,
+                              ).withValues(alpha: 0.3),
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              state.errorMessage ?? 'Failed to load products',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            const SizedBox(height: 16),
+                            ElevatedButton(
+                              onPressed: () => context
+                                  .read<ProductsCubit>()
+                                  .fetchProducts(refresh: true),
+                              child: Text('Retry'.tr(context)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+
+                  if (state.products.isEmpty) {
+                    return SliverFillRemaining(
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.shopping_bag_outlined,
+                              size: 56,
+                              color: AppColors.primary(
+                                brightness,
+                              ).withValues(alpha: 0.4),
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              'No products found'.tr(context),
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+
                   return SliverPadding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppDimensions.screenPadding,
@@ -279,116 +338,47 @@ class _HomeScreenState extends State<HomeScreen> {
                     sliver: SliverGrid(
                       gridDelegate: ProductGridDelegate.create(context),
                       delegate: SliverChildBuilderDelegate(
-                        (_, __) => const ShimmerProductCard(),
-                        childCount: 6,
+                        (_, index) => ProductCard(
+                          key: ValueKey(state.products[index].id),
+                          role: widget.role,
+                          product: state.products[index],
+                          index: index,
+                        ),
+                        childCount: state.products.length,
                       ),
                     ),
                   );
-                }
+                },
+              ),
 
-                if (state.status == ProductsStatus.error) {
-                  return SliverFillRemaining(
-                    child: Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.cloud_off_outlined,
-                            size: 48,
-                            color: AppColors.foreground(
-                              brightness,
-                            ).withValues(alpha: 0.3),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            state.errorMessage ?? 'Failed to load products',
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                          const SizedBox(height: 16),
-                          ElevatedButton(
-                            onPressed: () => context
-                                .read<ProductsCubit>()
-                                .fetchProducts(refresh: true),
-                            child: Text('Retry'.tr(context)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }
-
-                if (state.products.isEmpty) {
-                  return SliverFillRemaining(
-                    child: Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.shopping_bag_outlined,
-                            size: 56,
-                            color: AppColors.primary(
-                              brightness,
-                            ).withValues(alpha: 0.4),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            'No products found'.tr(context),
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }
-
-                return SliverPadding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppDimensions.screenPadding,
-                  ),
-                  sliver: SliverGrid(
-                    gridDelegate: ProductGridDelegate.create(context),
-                    delegate: SliverChildBuilderDelegate(
-                      (_, index) => ProductCard(
-                        key: ValueKey(state.products[index].id),
-                        role: widget.role,
-                        product: state.products[index],
-                        index: index,
-                      ),
-                      childCount: state.products.length,
-                    ),
-                  ),
-                );
-              },
-            ),
-
-            // ─── Loading More Indicator (Pagination) ───
-            BlocBuilder<ProductsCubit, ProductsState>(
-              builder: (context, state) {
-                if (state.status == ProductsStatus.loadingMore) {
-                  return SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: Center(
-                        child: SizedBox(
-                          width: 26,
-                          height: 26,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2.5,
-                            color: AppColors.primary(brightness),
+              // ─── Loading More Indicator (Pagination) ───
+              BlocBuilder<ProductsCubit, ProductsState>(
+                builder: (context, state) {
+                  if (state.status == ProductsStatus.loadingMore) {
+                    return SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Center(
+                          child: SizedBox(
+                            width: 26,
+                            height: 26,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.5,
+                              color: AppColors.primary(brightness),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                }
-                return const SliverToBoxAdapter(child: SizedBox.shrink());
-              },
-            ),
+                    );
+                  }
+                  return const SliverToBoxAdapter(child: SizedBox.shrink());
+                },
+              ),
 
-            // Bottom spacing
-            const SliverToBoxAdapter(child: SizedBox(height: 100)),
-          ],
-        ),
+              // Bottom spacing
+              const SliverToBoxAdapter(child: SizedBox(height: 100)),
+            ],
+          ),
         ),
       ),
     );

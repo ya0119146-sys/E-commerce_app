@@ -23,6 +23,7 @@ import '../logic/categories_cubit.dart';
 import '../logic/products_cubit.dart';
 import '../../../core/localization/app_translations.dart';
 import '../../../core/utils/whatsapp_helper.dart';
+import '../../../core/utils/auth_guard.dart';
 
 /// Full-screen product detail with image, info, and Add to Cart.
 class ProductDetailScreen extends StatefulWidget {
@@ -279,9 +280,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   ? AppColors.primary(brightness)
                                   : AppColors.foreground(brightness),
                             ),
-                            onPressed: () => context
-                                .read<WishlistCubit>()
-                                .toggleWishlist(product.id),
+                            onPressed: () {
+                              AuthGuard.requireAuth(
+                                context,
+                                action: AuthActionType.wishlist,
+                                onAuthenticated: () {
+                                  context.read<WishlistCubit>().toggleWishlist(
+                                    product.id,
+                                  );
+                                },
+                              );
+                            },
                           ),
                         ),
                       ),
@@ -900,10 +909,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 icon: Icons.shopping_bag_outlined,
                 onPressed: product.inStock
                     ? () {
-                        context.read<CartCubit>().addToCart(product.id);
-                        CustomSnackBar.showCart(
+                        AuthGuard.requireAuth(
                           context,
-                          '${'added_to_cart'.tr(context)} ✨',
+                          action: AuthActionType.cart,
+                          onAuthenticated: () {
+                            context.read<CartCubit>().addToCart(product.id);
+                            CustomSnackBar.showCart(
+                              context,
+                              '${'added_to_cart'.tr(context)} ✨',
+                            );
+                          },
                         );
                       }
                     : null,

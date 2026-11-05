@@ -14,7 +14,9 @@ import '../../../core/widgets/shimmer_loading.dart';
 import '../../../core/widgets/custom_snackbar.dart';
 import '../../../core/widgets/product_grid_delegate.dart';
 import '../../store/ui/widgets/product_card.dart';
-
+import '../../auth/logic/auth_cubit.dart';
+import '../../auth/ui/login_screen.dart';
+import '../../../core/widgets/hero_button.dart';
 import '../logic/wishlist_cubit.dart';
 
 import '../../../core/localization/app_translations.dart';
@@ -34,8 +36,9 @@ class _WishlistScreenState extends State<WishlistScreen> {
   @override
   void initState() {
     super.initState();
-
-    context.read<WishlistCubit>().fetchWishlist();
+    if (context.read<AuthCubit>().isAuthenticated) {
+      context.read<WishlistCubit>().fetchWishlist();
+    }
   }
 
   @override
@@ -44,86 +47,95 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: BlocBuilder<WishlistCubit, WishlistState>(
-          builder: (context, state) {
-            final count = state.products.length;
+        title: BlocBuilder<AuthCubit, AuthState>(
+          builder: (context, authState) {
+            if (!authState.isAuthenticated) {
+              return Text('Wishlist'.tr(context));
+            }
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            return BlocBuilder<WishlistCubit, WishlistState>(
+              builder: (context, state) {
+                final count = state.products.length;
 
-              children: [
-                Text('Wishlist'.tr(context)),
-
-                if (count > 0)
-                  Text(
-                    context.isArabic
-                        ? '$count ${'items'.tr(context)}'
-                        : '$count ${count == 1 ? 'item' : 'items'}',
-
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.secondary(brightness),
-
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ).animate().fadeIn(),
-              ],
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Wishlist'.tr(context)),
+                    if (count > 0)
+                      Text(
+                        context.isArabic
+                            ? '$count ${'items'.tr(context)}'
+                            : '$count ${count == 1 ? 'item' : 'items'}',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppColors.secondary(brightness),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ).animate().fadeIn(),
+                  ],
+                );
+              },
             );
           },
         ),
       ),
-
-      body: BlocListener<WishlistCubit, WishlistState>(
-        listenWhen: (prev, curr) =>
-            prev.status != curr.status && curr.status == WishlistStatus.error,
-
-        listener: (context, state) {
-          if (state.errorMessage != null) {
-            CustomSnackBar.showError(
-              context,
-              state.errorMessage!.tr(context),
-            );
+      body: BlocBuilder<AuthCubit, AuthState>(
+        builder: (context, authState) {
+          if (!authState.isAuthenticated) {
+            return _buildGuestWishlistState(context, brightness);
           }
-        },
 
-        child: RefreshIndicator(
-          onRefresh: () => context.read<WishlistCubit>().fetchWishlist(),
-
-          color: AppColors.primary(brightness),
-
-          child: BlocBuilder<WishlistCubit, WishlistState>(
-            builder: (context, state) {
-              if (state.status == WishlistStatus.loading &&
-                  state.products.isEmpty) {
-                return _buildLoadingGrid();
+          return BlocListener<WishlistCubit, WishlistState>(
+            listenWhen: (prev, curr) =>
+                prev.status != curr.status &&
+                curr.status == WishlistStatus.error,
+            listener: (context, state) {
+              if (state.errorMessage != null) {
+                CustomSnackBar.showError(
+                  context,
+                  state.errorMessage!.tr(context),
+                );
               }
-
-              if (state.products.isEmpty) {
-                return _buildEmptyState(context, brightness);
-              }
-
-              return CustomScrollView(
-                slivers: [
-                  SliverPadding(
-                    padding: const EdgeInsets.all(AppDimensions.screenPadding),
-
-                    sliver: SliverGrid(
-                      gridDelegate: ProductGridDelegate.create(context),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) => ProductCard(
-                          key: ValueKey(state.products[index].id),
-                          role: widget.role,
-                          product: state.products[index],
-                          index: index,
-                        ),
-                        childCount: state.products.length,
-                      ),
-                    ),
-                  ),
-                ],
-              );
             },
-          ),
-        ),
+            child: RefreshIndicator(
+              onRefresh: () => context.read<WishlistCubit>().fetchWishlist(),
+              color: AppColors.primary(brightness),
+              child: BlocBuilder<WishlistCubit, WishlistState>(
+                builder: (context, state) {
+                  if (state.status == WishlistStatus.loading &&
+                      state.products.isEmpty) {
+                    return _buildLoadingGrid();
+                  }
+
+                  if (state.products.isEmpty) {
+                    return _buildEmptyState(context, brightness);
+                  }
+
+                  return CustomScrollView(
+                    slivers: [
+                      SliverPadding(
+                        padding: const EdgeInsets.all(
+                          AppDimensions.screenPadding,
+                        ),
+                        sliver: SliverGrid(
+                          gridDelegate: ProductGridDelegate.create(context),
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) => ProductCard(
+                              key: ValueKey(state.products[index].id),
+                              role: widget.role,
+                              product: state.products[index],
+                              index: index,
+                            ),
+                            childCount: state.products.length,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -252,6 +264,115 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
                   curve: Curves.easeOutBack,
                 ),
+      ),
+    );
+  }
+
+  Widget _buildGuestWishlistState(BuildContext context, Brightness brightness) {
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(AppDimensions.screenPadding),
+        child:
+            Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 96,
+                      height: 96,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.secondary(
+                          brightness,
+                        ).withValues(alpha: 0.10),
+                        border: Border.all(
+                          color: AppColors.secondary(
+                            brightness,
+                          ).withValues(alpha: 0.28),
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.favorite_border_rounded,
+                          size: 46,
+                          color: AppColors.secondary(brightness),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      'Your wishlist is waiting'.tr(context),
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Please sign in to view and save your favorite items.'.tr(
+                        context,
+                      ),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.foreground(
+                          brightness,
+                        ).withValues(alpha: 0.65),
+                        height: 1.45,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 28),
+                    HeroButton(
+                      text: 'Sign In'.tr(context),
+                      icon: Icons.login_rounded,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const LoginScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: OutlinedButton(
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => BottomNavShell(
+                                role: widget.role,
+                                initialIndex: 0,
+                              ),
+                            ),
+                            (route) => false,
+                          );
+                        },
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.secondary(brightness),
+                          side: BorderSide(
+                            color: AppColors.secondary(
+                              brightness,
+                            ).withValues(alpha: 0.35),
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.radiusMd,
+                            ),
+                          ),
+                        ),
+                        child: Text(
+                          'Explore Store'.tr(context),
+                          style: const TextStyle(fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+                .animate()
+                .fade(duration: 400.ms)
+                .scale(begin: const Offset(0.92, 0.92)),
       ),
     );
   }

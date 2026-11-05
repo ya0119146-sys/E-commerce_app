@@ -28,7 +28,6 @@ import '../features/profile/logic/profile_cubit.dart';
 import '../features/admin/logic/admin_cubit.dart';
 import '../features/admin/logic/users_cubit.dart';
 import '../features/admin/data/repos/admin_repository.dart';
-import '../features/auth/ui/login_screen.dart';
 
 import 'bottom_nav_shell.dart';
 
@@ -99,7 +98,8 @@ class ECommerceApp extends StatelessWidget {
                     if (authState is AuthAuthenticated) {
                       return BottomNavShell(role: authState.user.role);
                     }
-                    return const LoginScreen();
+                    // Guest / Unauthenticated visitor: open store immediately
+                    return const BottomNavShell(role: 'user');
                   },
                 ),
               );
