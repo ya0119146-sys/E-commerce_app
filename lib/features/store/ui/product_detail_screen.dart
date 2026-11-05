@@ -125,7 +125,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     if (subcategoryName != null &&
         (subcategoryName.trim().isEmpty ||
             (subcategoryName.trim().length == 24 &&
-                RegExp(r'^[0-9a-fA-F]{24}$').hasMatch(subcategoryName.trim())))) {
+                RegExp(
+                  r'^[0-9a-fA-F]{24}$',
+                ).hasMatch(subcategoryName.trim())))) {
       subcategoryName = null;
     }
 
@@ -710,7 +712,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   const SizedBox(height: 20),
 
                   // ─── Product Size / Volume Luxury Capsule ───
-                  if (product.size != null && product.size!.trim().isNotEmpty) ...[
+                  if (product.size != null &&
+                      product.size!.trim().isNotEmpty) ...[
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(
@@ -967,41 +970,95 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     final isArabic = context.isArabic;
 
     return Wrap(
-      crossAxisAlignment: WrapCrossAlignment.center,
-      spacing: 6,
-      runSpacing: 6,
-      children: [
-        if (categoryName != null && categoryName.trim().isNotEmpty)
-          Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: () {
-                if (categoryId != null && categoryId.isNotEmpty) {
-                  context.read<CategoriesCubit>().selectCategory(categoryId);
-                  context.read<ProductsCubit>().fetchProducts(
-                    category: categoryId,
-                    refresh: true,
-                  );
-                  Navigator.pop(context);
-                }
-              },
-              borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-              child: Container(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 6,
+          runSpacing: 6,
+          children: [
+            if (categoryName != null && categoryName.trim().isNotEmpty)
+              Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () {
+                    if (categoryId != null && categoryId.isNotEmpty) {
+                      context.read<CategoriesCubit>().selectCategory(
+                        categoryId,
+                      );
+                      context.read<ProductsCubit>().fetchProducts(
+                        category: categoryId,
+                        refresh: true,
+                      );
+                      Navigator.pop(context);
+                    }
+                  },
+                  borderRadius: BorderRadius.circular(
+                    AppDimensions.radiusRound,
+                  ),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.secondary(
+                        brightness,
+                      ).withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.radiusRound,
+                      ),
+                      border: Border.all(
+                        color: AppColors.secondary(
+                          brightness,
+                        ).withValues(alpha: 0.24),
+                        width: 1.0,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.spa_outlined,
+                          size: 14,
+                          color: AppColors.secondary(brightness),
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          categoryName.trim(),
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.secondary(brightness),
+                            letterSpacing: 0.2,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            if (!isSame &&
+                subcategoryName != null &&
+                subcategoryName.trim().isNotEmpty) ...[
+              Icon(
+                isArabic
+                    ? Icons.chevron_left_rounded
+                    : Icons.chevron_right_rounded,
+                size: 15,
+                color: AppColors.foreground(brightness).withValues(alpha: 0.35),
+              ),
+              Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 12,
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.secondary(
-                    brightness,
-                  ).withValues(alpha: 0.08),
+                  color: AppColors.primary(brightness).withValues(alpha: 0.07),
                   borderRadius: BorderRadius.circular(
                     AppDimensions.radiusRound,
                   ),
                   border: Border.all(
-                    color: AppColors.secondary(
+                    color: AppColors.primary(
                       brightness,
-                    ).withValues(alpha: 0.24),
+                    ).withValues(alpha: 0.20),
                     width: 1.0,
                   ),
                 ),
@@ -1009,70 +1066,29 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
-                      Icons.spa_outlined,
-                      size: 14,
-                      color: AppColors.secondary(brightness),
+                      Icons.auto_awesome,
+                      size: 12,
+                      color: AppColors.primary(brightness),
                     ),
-                    const SizedBox(width: 6),
+                    const SizedBox(width: 5),
                     Text(
-                      categoryName.trim(),
+                      subcategoryName.trim(),
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.secondary(brightness),
+                        color: AppColors.primary(brightness),
                         letterSpacing: 0.2,
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
-          ),
-        if (!isSame &&
-            subcategoryName != null &&
-            subcategoryName.trim().isNotEmpty) ...[
-          Icon(
-            isArabic ? Icons.chevron_left_rounded : Icons.chevron_right_rounded,
-            size: 15,
-            color: AppColors.foreground(brightness).withValues(alpha: 0.35),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 6,
-            ),
-            decoration: BoxDecoration(
-              color: AppColors.primary(brightness).withValues(alpha: 0.07),
-              borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
-              border: Border.all(
-                color: AppColors.primary(brightness).withValues(alpha: 0.20),
-                width: 1.0,
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.auto_awesome,
-                  size: 12,
-                  color: AppColors.primary(brightness),
-                ),
-                const SizedBox(width: 5),
-                Text(
-                  subcategoryName.trim(),
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.primary(brightness),
-                    letterSpacing: 0.2,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ],
-    ).animate().fade(duration: 450.ms).moveY(begin: 8, end: 0, duration: 450.ms);
+            ],
+          ],
+        )
+        .animate()
+        .fade(duration: 450.ms)
+        .moveY(begin: 8, end: 0, duration: 450.ms);
   }
 }
 
