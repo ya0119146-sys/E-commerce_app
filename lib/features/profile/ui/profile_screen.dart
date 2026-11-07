@@ -654,31 +654,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
               color: AppColors.border(brightness).withValues(alpha: 0.4),
             ),
           ),
-          child: ListTile(
-            onTap: onTap,
-            leading:
-                customLeading ??
-                (icon != null
-                    ? Icon(
-                        icon,
-                        color: iconColor ?? AppColors.secondary(brightness),
-                      )
-                    : null),
-            title: Text(title, style: Theme.of(context).textTheme.titleSmall),
-            subtitle: subtitle != null
-                ? Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppColors.foreground(
-                        brightness,
-                      ).withValues(alpha: 0.6),
-                    ),
-                  )
-                : null,
-            trailing: Icon(
-              Icons.chevron_right,
-              color: AppColors.foreground(brightness).withValues(alpha: 0.3),
+          child: Material(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(AppDimensions.radiusDefault),
+            clipBehavior: Clip.antiAlias,
+            child: ListTile(
+              onTap: onTap,
+              leading:
+                  customLeading ??
+                  (icon != null
+                      ? Icon(
+                          icon,
+                          color: iconColor ?? AppColors.secondary(brightness),
+                        )
+                      : null),
+              title: Text(title, style: Theme.of(context).textTheme.titleSmall),
+              subtitle: subtitle != null
+                  ? Text(
+                      subtitle,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppColors.foreground(
+                          brightness,
+                        ).withValues(alpha: 0.6),
+                      ),
+                    )
+                  : null,
+              trailing: Icon(
+                Icons.chevron_right,
+                color: AppColors.foreground(brightness).withValues(alpha: 0.3),
+              ),
             ),
           ),
         )
@@ -1039,21 +1044,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
               color: AppColors.border(brightness).withValues(alpha: 0.4),
             ),
           ),
-          child: ListTile(
-            leading: Icon(
-              themeState.themeMode == ThemeMode.dark
-                  ? Icons.dark_mode
-                  : Icons.light_mode,
-              color: AppColors.secondary(brightness),
-            ),
-            title: Text(
-              'dark_mode'.tr(context),
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-            trailing: Switch(
-              value: themeState.themeMode == ThemeMode.dark,
-              activeThumbColor: AppColors.primary(brightness),
-              onChanged: (_) => context.read<ThemeCubit>().toggleTheme(),
+          child: Material(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(AppDimensions.radiusDefault),
+            clipBehavior: Clip.antiAlias,
+            child: ListTile(
+              leading: Icon(
+                themeState.themeMode == ThemeMode.dark
+                    ? Icons.dark_mode
+                    : Icons.light_mode,
+                color: AppColors.secondary(brightness),
+              ),
+              title: Text(
+                'dark_mode'.tr(context),
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              trailing: Switch(
+                value: themeState.themeMode == ThemeMode.dark,
+                activeThumbColor: AppColors.primary(brightness),
+                onChanged: (_) => context.read<ThemeCubit>().toggleTheme(),
+              ),
             ),
           ),
         );
@@ -1074,56 +1084,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
               color: AppColors.border(brightness).withValues(alpha: 0.4),
             ),
           ),
-          child: ListTile(
-            leading: Icon(
-              Icons.language,
-              color: AppColors.secondary(brightness),
-            ),
-            title: Text(
-              'language'.tr(context),
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-            subtitle: Text(
-              isAr ? 'العربية' : 'English',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppColors.primary(brightness),
-                fontWeight: FontWeight.w600,
+          child: Material(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(AppDimensions.radiusDefault),
+            clipBehavior: Clip.antiAlias,
+            child: ListTile(
+              leading: Icon(
+                Icons.language,
+                color: AppColors.secondary(brightness),
               ),
-            ),
-            trailing: Container(
-              decoration: BoxDecoration(
-                color: AppColors.background(brightness),
-                borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
-                border: Border.all(
-                  color: AppColors.border(brightness).withValues(alpha: 0.5),
+              title: Text(
+                'language'.tr(context),
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              subtitle: Text(
+                isAr ? 'العربية' : 'English',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: AppColors.primary(brightness),
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-              child: InkWell(
-                onTap: () => context.read<LocaleCubit>().toggleLocale(),
-                borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
+              trailing: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.background(brightness),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+                  border: Border.all(
+                    color: AppColors.border(brightness).withValues(alpha: 0.5),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        isAr ? 'EN' : 'عربي',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
+                ),
+                child: InkWell(
+                  onTap: () => context.read<LocaleCubit>().toggleLocale(),
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          isAr ? 'EN' : 'عربي',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.secondary(brightness),
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Icon(
+                          Icons.swap_horiz,
+                          size: 16,
                           color: AppColors.secondary(brightness),
                         ),
-                      ),
-                      const SizedBox(width: 4),
-                      Icon(
-                        Icons.swap_horiz,
-                        size: 16,
-                        color: AppColors.secondary(brightness),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

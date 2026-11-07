@@ -13,6 +13,7 @@ import 'forget_password_screen.dart';
 import '../../../app/bottom_nav_shell.dart';
 import '../../../core/widgets/custom_snackbar.dart';
 import '../../../core/localization/app_translations.dart';
+import '../../../core/utils/validators.dart';
 
 /// Login screen with luxury glassmorphism design.
 class LoginScreen extends StatefulWidget {
@@ -201,11 +202,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 context,
                                               );
                                             }
-                                            final emailRegExp = RegExp(
-                                              r'^[\w\.\-]+@[a-zA-Z0-9\-]+(\.[a-zA-Z0-9\-]+)+$',
-                                            );
-                                            if (!emailRegExp.hasMatch(
-                                              value.trim(),
+                                            if (!AppValidators.isValidEmail(
+                                              value,
                                             )) {
                                               return 'please_enter_valid_email'
                                                   .tr(context);

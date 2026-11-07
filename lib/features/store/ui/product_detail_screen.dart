@@ -103,8 +103,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     String? categoryName = product.category;
     if (categoryName == null ||
         categoryName.trim().isEmpty ||
-        (categoryName.trim().length == 24 &&
-            RegExp(r'^[0-9a-fA-F]{24}$').hasMatch(categoryName.trim()))) {
+        ProductModel.isHexObjectId(categoryName.trim())) {
       if (product.categoryId != null && product.categoryId!.isNotEmpty) {
         try {
           final cats = context.read<CategoriesCubit>().state.categories;
@@ -128,10 +127,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     String? subcategoryName = product.subcategory;
     if (subcategoryName != null &&
         (subcategoryName.trim().isEmpty ||
-            (subcategoryName.trim().length == 24 &&
-                RegExp(
-                  r'^[0-9a-fA-F]{24}$',
-                ).hasMatch(subcategoryName.trim())))) {
+            ProductModel.isHexObjectId(subcategoryName.trim()))) {
       subcategoryName = null;
     }
 

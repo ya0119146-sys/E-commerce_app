@@ -53,6 +53,18 @@ class ProductModel {
 
   double get savingsAmount => onSale ? (price - salePrice!) : 0.0;
 
+  static bool isHexObjectId(String? s) {
+    if (s == null || s.length != 24) return false;
+    for (var i = 0; i < 24; i++) {
+      final c = s.codeUnitAt(i);
+      final isHex = (c >= 48 && c <= 57) ||
+          (c >= 97 && c <= 102) ||
+          (c >= 65 && c <= 70);
+      if (!isHex) return false;
+    }
+    return true;
+  }
+
   static String _parseLocalized(dynamic value, [String defaultVal = '']) {
     if (value == null) return defaultVal;
     if (value is String) return value;
@@ -102,9 +114,7 @@ class ProductModel {
           rawCategory['_id']?.toString() ?? rawCategory['id']?.toString();
     } else if (rawCategory is String) {
       final trimmed = rawCategory.trim();
-      final isHexId =
-          trimmed.length == 24 &&
-          RegExp(r'^[0-9a-fA-F]{24}$').hasMatch(trimmed);
+      final isHexId = isHexObjectId(trimmed);
       if (isHexId) {
         categoryId ??= trimmed;
       } else if (trimmed.isNotEmpty) {
@@ -119,8 +129,7 @@ class ProductModel {
     if (rawSubcategory is Map) {
       subcategoryName = _parseLocalized(rawSubcategory['name']);
       subcategoryId ??=
-          rawSubcategory['_id']?.toString() ??
-          rawSubcategory['id']?.toString();
+          rawSubcategory['_id']?.toString() ?? rawSubcategory['id']?.toString();
 
       // If category name was not populated at root level, extract from subcategory's populated parent category
       if (categoryName == null || categoryName.isEmpty) {
@@ -128,17 +137,14 @@ class ProductModel {
         if (subCatParent is Map) {
           categoryName = _parseLocalized(subCatParent['name']);
           categoryId ??=
-              subCatParent['_id']?.toString() ??
-              subCatParent['id']?.toString();
+              subCatParent['_id']?.toString() ?? subCatParent['id']?.toString();
         } else if (subCatParent is String && categoryId == null) {
           categoryId = subCatParent;
         }
       }
     } else if (rawSubcategory is String) {
       final trimmed = rawSubcategory.trim();
-      final isHexId =
-          trimmed.length == 24 &&
-          RegExp(r'^[0-9a-fA-F]{24}$').hasMatch(trimmed);
+      final isHexId = isHexObjectId(trimmed);
       if (isHexId) {
         subcategoryId ??= trimmed;
       } else if (trimmed.isNotEmpty) {

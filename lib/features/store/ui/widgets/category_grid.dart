@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/rendering.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_dimensions.dart';
 import '../../../../core/localization/app_translations.dart';
@@ -25,6 +26,7 @@ class CategoryGrid extends StatelessWidget {
     return SizedBox(
       height: 114,
       child: ListView.separated(
+        scrollCacheExtent: ScrollCacheExtent.pixels(300.0),
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.symmetric(

@@ -11,6 +11,7 @@ import '../../../core/widgets/hero_button.dart';
 import '../../../core/widgets/custom_snackbar.dart';
 import '../logic/auth_cubit.dart';
 import '../../../core/localization/app_translations.dart';
+import '../../../core/utils/validators.dart';
 
 /// Signup screen with luxury glassmorphism design.
 class SignupScreen extends StatefulWidget {
@@ -248,11 +249,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                             context,
                                           );
                                         }
-                                        final emailRegExp = RegExp(
-                                          r'^[\w\.\-]+@[a-zA-Z0-9\-]+(\.[a-zA-Z0-9\-]+)+$',
-                                        );
-                                        if (!emailRegExp.hasMatch(
-                                          value.trim(),
+                                        if (!AppValidators.isValidEmail(
+                                          value,
                                         )) {
                                           return 'please_enter_valid_email'.tr(
                                             context,
@@ -291,10 +289,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                             context,
                                           );
                                         }
-                                        final phoneRegExp = RegExp(
-                                          r'^[0-9]{11,15}$',
-                                        );
-                                        if (!phoneRegExp.hasMatch(value)) {
+                                        if (!AppValidators.isValidPhone(
+                                          value,
+                                        )) {
                                           return 'phone_invalid'.tr(context);
                                         }
                                         return null;

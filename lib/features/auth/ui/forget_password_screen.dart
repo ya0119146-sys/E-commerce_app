@@ -11,6 +11,7 @@ import '../../../core/widgets/custom_snackbar.dart';
 import '../logic/auth_cubit.dart';
 import 'verify_code_screen.dart';
 import '../../../core/localization/app_translations.dart';
+import '../../../core/utils/validators.dart';
 
 /// Forget password screen to request reset code.
 class ForgetPasswordScreen extends StatefulWidget {
@@ -150,10 +151,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                                   if (value == null || value.isEmpty) {
                                     return 'please_enter_email'.tr(context);
                                   }
-                                  final emailRegExp = RegExp(
-                                    r'^[\w\.\-]+@[a-zA-Z0-9\-]+(\.[a-zA-Z0-9\-]+)+$',
-                                  );
-                                  if (!emailRegExp.hasMatch(value.trim())) {
+                                  if (!AppValidators.isValidEmail(value)) {
                                     return 'please_enter_valid_email'.tr(
                                       context,
                                     );

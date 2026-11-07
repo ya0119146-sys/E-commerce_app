@@ -1,18 +1,26 @@
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     id("com.android.application")
     id("kotlin-android")
-
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
+
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("key.properties")
+
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+} else {
+    throw GradleException("key.properties file not found!")
+}
+
 
 android {
     namespace = "com.youssefahmed.labella"
 
     compileSdk = flutter.compileSdkVersion
-
-    // Use the highest Android NDK version required by the plugins.
     ndkVersion = "27.0.12077973"
 
     compileOptions {
@@ -25,7 +33,6 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID before production release.
         applicationId = "com.youssefahmed.labella"
 
         minSdk = flutter.minSdkVersion
@@ -35,11 +42,18 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        create("release") {
+            keyAlias = keystoreProperties["keyAlias"] as String
+            keyPassword = keystoreProperties["keyPassword"] as String
+            storeFile = rootProject.file(keystoreProperties["storeFile"] as String)
+            storePassword = keystoreProperties["storePassword"] as String
+        }
+    }
+
     buildTypes {
         release {
-            // Temporary debug signing configuration.
-            // Replace with production signing before Google Play submission.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 }

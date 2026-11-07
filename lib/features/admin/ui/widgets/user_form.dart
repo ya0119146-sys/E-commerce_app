@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:e_commerce/core/constants/app_colors.dart';
 import 'package:e_commerce/core/constants/app_dimensions.dart';
 import 'package:e_commerce/core/localization/app_translations.dart';
+import 'package:e_commerce/core/utils/validators.dart';
 import 'package:e_commerce/features/auth/data/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -184,9 +185,7 @@ class _UserFormState extends State<UserForm> {
                   keyboardType: TextInputType.emailAddress,
                   validator: (v) {
                     if (v!.isEmpty) return 'Required'.tr(context);
-                    if (!RegExp(
-                      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                    ).hasMatch(v)) {
+                    if (!AppValidators.isValidAdminEmail(v)) {
                       return 'Invalid email'.tr(context);
                     }
                     return null;
@@ -204,7 +203,7 @@ class _UserFormState extends State<UserForm> {
                     if (v == null || v.isEmpty) {
                       return 'Phone is required'.tr(context);
                     }
-                    if (!RegExp(r'^[0-9]{11,15}$').hasMatch(v)) {
+                    if (!AppValidators.isValidPhone(v)) {
                       return 'Must be 11-15 digits'.tr(context);
                     }
                     return null;

@@ -2534,14 +2534,12 @@ class AppTranslations {
 
     // Punctuation-stripped fallback (e.g. trailing periods or exclamation marks)
 
-    final stripped = clean.replaceAll(RegExp(r'[\.\!\:\,\-]+$'), '').trim();
+    final stripped = _stripTrailingPunctuation(clean);
 
     for (final entry in dict.entries) {
-      final entryStripped = entry.key
-          .trim()
-          .toLowerCase()
-          .replaceAll(RegExp(r'[\.\!\:\,\-]+$'), '')
-          .trim();
+      final entryStripped = _stripTrailingPunctuation(
+        entry.key.trim().toLowerCase(),
+      );
 
       if (entryStripped == stripped) {
         return entry.value;
@@ -2557,6 +2555,20 @@ class AppTranslations {
     }
 
     return key;
+  }
+
+  /// Removes trailing punctuation (. ! : , -) cleanly without regex overhead or deprecations
+  static String _stripTrailingPunctuation(String s) {
+    var end = s.length;
+    while (end > 0) {
+      final c = s[end - 1];
+      if (c == '.' || c == '!' || c == ':' || c == ',' || c == '-') {
+        end--;
+      } else {
+        break;
+      }
+    }
+    return s.substring(0, end).trim();
   }
 }
 
