@@ -586,7 +586,7 @@ class _ProductFormState extends State<ProductForm> {
 
                 // Category Dropdown with Luxury Styling & Selection Checkmark (Optional)
                 DropdownButtonFormField<String?>(
-                  value: _selectedCategoryId,
+                  initialValue: _selectedCategoryId,
                   dropdownColor: AppColors.card(brightness),
                   borderRadius: BorderRadius.circular(16),
                   icon: Icon(
@@ -705,7 +705,7 @@ class _ProductFormState extends State<ProductForm> {
                         : null;
 
                     return DropdownButtonFormField<String?>(
-                      value: currentValue,
+                      initialValue: currentValue,
                       dropdownColor: AppColors.card(brightness),
                       borderRadius: BorderRadius.circular(16),
                       icon: Icon(

@@ -148,7 +148,7 @@ class _SubcategoryFormState extends State<SubcategoryForm> {
                 ),
                 const SizedBox(height: 24),
                 DropdownButtonFormField<String>(
-                  value: _selectedCategoryId,
+                  initialValue: _selectedCategoryId,
                   dropdownColor: AppColors.card(brightness),
                   borderRadius: BorderRadius.circular(16),
                   icon: Icon(

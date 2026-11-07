@@ -63,7 +63,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  value: selectedGov,
+                  initialValue: selectedGov,
                   isExpanded: true,
                   decoration: InputDecoration(
                     labelText: 'Governorate'.tr(ctx),

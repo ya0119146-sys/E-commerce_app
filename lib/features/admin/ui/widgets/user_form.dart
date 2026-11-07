@@ -241,7 +241,7 @@ class _UserFormState extends State<UserForm> {
                   const SizedBox(height: 16),
                 ],
                 DropdownButtonFormField<String>(
-                  value: _selectedRole,
+                  initialValue: _selectedRole,
                   dropdownColor: AppColors.card(brightness),
                   borderRadius: BorderRadius.circular(16),
                   icon: Icon(

@@ -57,7 +57,7 @@ class _AddressScreenState extends State<AddressScreen> {
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  value: selectedGovernorate,
+                  initialValue: selectedGovernorate,
                   isExpanded: true,
                   decoration: InputDecoration(
                     labelText: 'Governorate'.tr(context),

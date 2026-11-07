@@ -1052,7 +1052,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             trailing: Switch(
               value: themeState.themeMode == ThemeMode.dark,
-              activeColor: AppColors.primary(brightness),
+              activeThumbColor: AppColors.primary(brightness),
               onChanged: (_) => context.read<ThemeCubit>().toggleTheme(),
             ),
           ),
