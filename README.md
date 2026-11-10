@@ -1,522 +1,212 @@
-﻿<div align="center">
+<div align="center">
+
+<img src="assets/icons/app_icon2.jpg" alt="Labella Logo" width="110" />
 
 # 🛍️ Labella
 
-### Full-Stack E-Commerce Mobile Application
+### Production Luxury Beauty & Fashion E-Commerce Mobile Application
 
-A modern e-commerce mobile application built with **Flutter** and powered by a **Node.js REST API** with **MongoDB**.
-
-Labella provides a complete shopping experience for customers, including authentication, product discovery, cart, wishlist, checkout, orders, reviews, and profile management. It also includes a dedicated admin panel for managing products, categories, users, and orders.
+A full-stack luxury e-commerce mobile application built with **Flutter**, architected with **BLoC/Cubit** and **Feature-First Clean Architecture**, powered by a **Node.js / Express / MongoDB** REST API, and **published on Google Play**.
 
 <br>
 
+[![Google Play](https://img.shields.io/badge/Google%20Play-Published-414141?logo=google-play\&logoColor=white)](https://play.google.com/store/apps/details?id=com.youssefahmed.labella)
 ![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter\&logoColor=white)
 ![Dart](https://img.shields.io/badge/Dart-3.x-0175C2?logo=dart\&logoColor=white)
 ![BLoC](https://img.shields.io/badge/State%20Management-BLoC%2FCubit-7B2FBE)
-![Node.js](https://img.shields.io/badge/Backend-Node.js-339933?logo=node.js\&logoColor=white)
-![Express](https://img.shields.io/badge/Framework-Express-000000?logo=express\&logoColor=white)
-![MongoDB](https://img.shields.io/badge/Database-MongoDB-47A248?logo=mongodb\&logoColor=white)
+![Backend](https://img.shields.io/badge/Backend-Node.js%20%2B%20Express-339933?logo=node.js\&logoColor=white)
+![Database](https://img.shields.io/badge/Database-MongoDB-47A248?logo=mongodb\&logoColor=white)
+![Tests](https://img.shields.io/badge/Tests-47%20Passing-2EA44F)
 
 </div>
 
 ---
 
-## ✨ Highlights
+## ✨ Key Highlights
 
-* 🔐 **Secure Authentication** — JWT authentication with OTP email verification.
-* 🛍️ **Complete Shopping Experience** — Browse, search, filter, and discover products.
-* 🛒 **Cart Management** — Add products, update quantities, and manage cart items.
-* ❤️ **Wishlist** — Save and manage favorite products.
-* 📦 **Complete Order Flow** — Checkout, address selection, order placement, and order history.
-* 🌟 **Reviews & Ratings** — Submit, update, delete, and view product reviews.
-* 👤 **Profile Management** — Manage personal information, passwords, and addresses.
-* 🛠️ **Admin Panel** — Manage products, categories, subcategories, users, and orders.
-* 🎨 **Light & Dark Mode** — Theme switching with persisted user preference.
-* 🌍 **Localization Support** — Internationalization using Flutter localization tools.
-* ⚡ **Performance-Oriented UI** — Shimmer loading states and cached network images.
-* 🧩 **Feature-First Architecture** — Modular and scalable project structure.
+* 📱 **Published on Google Play** — Production-signed Android App Bundle (`.aab`) with Kotlin DSL Gradle release configuration (`com.youssefahmed.labella`).
+* 🧭 **Frictionless Guest Browsing & `AuthGuard`** — Guests can freely explore the catalog, search, and view product details, with an elegant contextual `AuthRequiredSheet` prompt when tapping protected actions (Cart, Wishlist, Checkout, Reviews).
+* 🔍 **Smart Arabic & English Search Relevance** — Client-side scoring engine (`SearchRelevanceHelper`) that normalizes Arabic characters (`أ/إ/آ`, `ة/ه`, `ى/ي`, diacritic stripping), matches cosmetic synonyms (`سيروم`/`سيرم`, `ريتينول`/`ريتنول`), and ranks title matches ahead of description matches.
+* 🛍️ **In-Place PDP Quantity Stepper & Optimistic Wishlist** — Interactive bottom-bar quantity stepper with a direct **"Proceed to Checkout"** CTA on the Product Detail screen, paired with instant optimistic wishlist updates.
+* 🌍 **Full Bilingual Localization (Arabic RTL & English LTR)** — Synchronized startup language loading with dynamic layout switching and full Arabic/English translation coverage (`AppTranslations` & `LocaleCubit`).
+* 🎨 **Luxury Glassmorphism UI & Persistent Theming** — Smooth animations (`flutter_animate`), shimmer placeholders, cached network images, and persistent Light & Dark mode switching.
+* 🚚 **Egyptian Governorates Shipping & Deposit Flow** — Built-in support for all 27 Egyptian governorates with automatic shipping calculation (free delivery in Al Sharqia, 100 EGP elsewhere), deposit tracking, and direct WhatsApp merchant communication.
+* 🛠️ **Integrated Admin Dashboard** — Role-based access control featuring full CRUD management for products, categories, subcategories, users, and paginated order administration.
+* 🧪 **Automated Test Coverage** — **47 passing unit, integration, contract, and responsive viewport tests** verifying API resilience, RTL/LTR rendering, guest interception, and search ranking.
 
 ---
 
-# 🚀 Features
+## 🚀 Feature Breakdown
 
-## 🔐 Authentication & Security
+### 🔐 Authentication & Guest Experience
+* JWT-based authentication with secure device storage (`FlutterSecureStorage`) and automatic token injection via Dio interceptors.
+* User registration, login, admin login, and OTP-based forgot/reset password flows.
+* Centralized `AuthGuard` interception allowing seamless Guest Mode browsing before prompting sign-in.
+* Profile management, password updates, delivery address CRUD, and account deletion.
 
-* User registration.
-* OTP-based email verification.
-* JWT-based authentication.
-* Secure JWT storage using `FlutterSecureStorage`.
-* Automatic JWT injection through Dio interceptors.
-* Forgot password workflow:
+### 🏠 Storefront, Discovery & Search
+* Luxury Home experience with auto-scrolling hero banners, category horizontal grid, paginated product grid, and quick-access profile/search buttons.
+* Backend-powered search & filtering combined with client-side `SearchRelevanceHelper` ranking across all categories.
+* Detailed Product Page with zoomable image gallery (`photo_view`), size badges, category/subcategory breadcrumb resolution, discounted pricing display, and customer reviews.
 
-  * Request password reset.
-  * Verify OTP.
-  * Reset password.
-* Role-based access control.
-* Separate customer and admin flows.
-* Account deletion.
+### 🛒 Cart, Optimistic Wishlist & Checkout
+* In-place PDP quantity stepper (`-` / `+`) with instant sync and direct navigation to the Cart screen.
+* Optimistic wishlist toggling that immediately updates both heart indicators and the local Wishlist view.
+* Checkout flow with Egyptian governorate selection, automatic shipping policy calculation (`EgyptGovernorates`), deposit calculations, order placement success flow, and order detail tracking.
+* Direct WhatsApp integration (`WhatsAppHelper`) for customer support and order inquiries.
 
----
-
-## 🏠 Product Discovery
-
-* Home screen with product listings.
-* Product details with:
-
-  * Product images.
-  * Description.
-  * Price.
-  * Category information.
-  * Reviews and ratings.
-* Search products using backend-powered queries.
-* Browse products by category.
-* Browse products by subcategory.
-* Product filtering.
-* Product sorting.
-* Pagination support.
-* Shimmer skeleton loading states.
+### 🛠️ Admin Panel (Role-Based)
+* Dedicated admin shell inside `BottomNavShell` when authenticated as an admin.
+* Full CRUD operations for Products (with multi-image upload), Categories, Subcategories, and Users.
+* Paginated infinite-scroll product and order management, including payment and delivery status updates.
 
 ---
 
-## 🛒 Cart
+## 🏗️ Architecture & Project Structure
 
-* Add products to cart.
-* Remove products from cart.
-* Increase/decrease product quantity.
-* Display cart items and totals.
-* Proceed directly to checkout.
-
----
-
-## ❤️ Wishlist
-
-* Add products to wishlist.
-* Remove products from wishlist.
-* View saved products.
-* Persistent wishlist state through the backend.
-
----
-
-## 📦 Checkout & Orders
-
-* Select or manage delivery addresses.
-* Place orders from the cart.
-* Order confirmation.
-* Order success screen.
-* View order history.
-* View individual order details.
-* Track order delivery status.
-* Track payment status.
-
----
-
-## 🌟 Reviews & Ratings
-
-* Submit product reviews.
-* Add star ratings.
-* View product reviews.
-* Update personal reviews.
-* Delete personal reviews.
-
----
-
-## 👤 Profile
-
-* View profile information.
-* Update profile information.
-* Change password.
-* Manage delivery addresses.
-* Delete account.
-* Secure logout.
-
----
-
-# 🛠️ Admin Panel
-
-Labella includes a dedicated administration experience within the same application.
-
-### Product Management
-
-* Create products.
-* Update products.
-* Delete products.
-* Manage product information and images.
-
-### Category Management
-
-* Create and manage categories.
-* Create and manage subcategories.
-* Update category information.
-* Delete categories and subcategories.
-
-### User Management
-
-* View registered users.
-* Manage user accounts.
-
-### Order Management
-
-* View orders.
-* Update payment status.
-* Update delivery status.
-* Mark orders as delivered or paid.
-
----
-
-# 🎨 UI & User Experience
-
-* Responsive Flutter UI.
-* Light and Dark themes.
-* Persisted theme preference.
-* Glassmorphism-inspired UI components.
-* Smooth screen transitions and animations.
-* Shimmer loading placeholders.
-* Cached network images.
-* Consistent typography using Google Fonts.
-* Localization-ready interface.
-
----
-
-# 🏗️ Architecture
-
-The application follows a **Feature-First Architecture** to keep features modular, maintainable, and scalable.
-
-```text
-lib/
-│
-├── app/
-│   ├── app.dart
-│   └── bottom_nav_shell.dart
-│
-├── core/
-│   ├── constants/
-│   ├── di/
-│   ├── network/
-│   ├── theme/
-│   └── widgets/
-│
-├── features/
-│   ├── auth/
-│   ├── store/
-│   ├── cart/
-│   ├── wishlist/
-│   ├── checkout/
-│   ├── reviews/
-│   ├── profile/
-│   └── admin/
-│
-└── main.dart
-```
-
-### Architecture Overview
-
-| Layer      | Responsibility                                                            |
-| ---------- | ------------------------------------------------------------------------- |
-| `app`      | Application initialization, global providers, and navigation shell        |
-| `core`     | Shared infrastructure, networking, theme, constants, and reusable widgets |
-| `features` | Independent business features                                             |
-| `auth`     | Authentication and account flows                                          |
-| `store`    | Product discovery and browsing                                            |
-| `cart`     | Shopping cart management                                                  |
-| `wishlist` | Wishlist management                                                       |
-| `checkout` | Checkout and order management                                             |
-| `reviews`  | Product reviews and ratings                                               |
-| `profile`  | Profile and address management                                            |
-| `admin`    | Administrative operations                                                 |
-
----
-
-# 🧠 State Management
-
-The application uses **BLoC/Cubit** for predictable and scalable state management.
-
-Each major feature or operation has its own Cubit responsible for:
-
-* Managing UI state.
-* Handling API requests.
-* Emitting loading, success, and error states.
-* Keeping business logic outside the UI layer.
-
-This separation makes the application easier to maintain, test, and extend.
-
----
-
-# 🔌 Networking
-
-All backend communication is handled through **Dio**.
-
-The networking layer provides:
-
-* REST API communication.
-* Centralized API configuration.
-* JWT authentication.
-* Request interceptors.
-* Error handling.
-* Dynamic query parameters.
-* Search and filtering.
-* Pagination.
-
-The Flutter application communicates with the Node.js backend through RESTful API endpoints.
-
----
-
-# 🔑 Authentication Flow
-
-```text
-User
- │
- ▼
-Register
- │
- ▼
-OTP Verification
- │
- ▼
-Account Activated
- │
- ▼
-Login
- │
- ▼
-JWT Token
- │
- ▼
-Secure Storage
- │
- ▼
-Authenticated API Requests
-```
-
-JWT tokens are stored securely on the device using `FlutterSecureStorage` and automatically attached to authenticated requests through Dio interceptors.
-
----
-
-# 👥 Role-Based Application
-
-Labella supports two application roles:
-
-```text
-                    ┌──────────────┐
-                    │    Login     │
-                    └──────┬───────┘
-                           │
-                    ┌──────▼───────┐
-                    │  User Role   │
-                    └──────┬───────┘
-                           │
-              ┌────────────┴────────────┐
-              │                         │
-         Customer                      Admin
-              │                         │
-              ▼                         ▼
-       Shopping Flow             Admin Panel
-              │                         │
-       ┌──────┴──────┐          ┌───────┴────────┐
-       │             │          │                │
-    Products       Orders    Products          Users
-       │                        │                │
-  Cart/Wishlist           Categories          Orders
-```
-
-The `BottomNavShell` determines the appropriate navigation experience based on the authenticated user's role.
-
----
-
-# 🔍 Backend-Powered Search & Filtering
-
-Product discovery is handled primarily on the backend rather than loading the entire product catalog into the application.
-
-The Flutter client sends parameters such as:
-
-* Search query.
-* Category.
-* Subcategory.
-* Sorting.
-* Filtering.
-* Pagination.
-
-This approach allows the application to efficiently handle larger product catalogs while keeping data processing closer to the backend.
-
----
-
-# 🧰 Tech Stack
-
-| Category                      | Technologies                |
-| ----------------------------- | --------------------------- |
-| **Mobile**                    | Flutter, Dart               |
-| **State Management**          | BLoC / Cubit                |
-| **Architecture**              | Feature-First Architecture  |
-| **Dependency Injection**      | get_it                      |
-| **Networking**                | Dio, REST API               |
-| **Backend**                   | Node.js, Express            |
-| **Database**                  | MongoDB                     |
-| **Authentication**            | JWT                         |
-| **Secure Storage**            | FlutterSecureStorage        |
-| **Local Storage**             | SharedPreferences           |
-| **Animations**                | flutter_animate             |
-| **Image Loading**             | cached_network_image        |
-| **Loading UI**                | shimmer                     |
-| **Typography**                | Google Fonts                |
-| **Localization**              | flutter_localizations, intl |
-| **Environment Configuration** | flutter_dotenv              |
-| **Backend Hosting**           | Railway                     |
-
----
-
-# 📁 Project Structure
+The app uses a **Feature-First Clean Architecture** combined with **BLoC/Cubit** and **GetIt** dependency injection to keep business logic cleanly decoupled from UI and networking.
 
 ```text
 e_commerce/
 │
-├── android/
-├── ios/
-├── assets/
+├── android/                        # Android Kotlin DSL config, release signing & mipmap icons
+├── ios/                            # iOS runner & AppIcon assets
+├── assets/icons/                   # App launcher icon & brand assets
 │
 ├── lib/
 │   ├── app/
+│   │   ├── app.dart                # Root MultiBlocProvider, Theme & Locale wiring
+│   │   ├── bottom_nav_shell.dart   # Role-based navigation shell (Customer / Guest / Admin)
+│   │   └── splash_veiw.dart        # Startup splash screen
 │   │
 │   ├── core/
-│   │   ├── constants/
-│   │   ├── di/
-│   │   ├── network/
-│   │   ├── theme/
-│   │   └── widgets/
+│   │   ├── constants/              # Colors, dimensions, gradients, shadows, Egypt governorates
+│   │   ├── di/                     # GetIt service locator (service_locator.dart)
+│   │   ├── localization/           # LocaleCubit & AppTranslations (AR/EN)
+│   │   ├── network/                # DioClient, JWT interceptors, ApiConstants, ApiException
+│   │   ├── theme/                  # AppTheme (Light/Dark) & ThemeCubit
+│   │   ├── utils/                  # AuthGuard, SearchRelevanceHelper, AppValidators, WhatsAppHelper
+│   │   └── widgets/                # AuthRequiredSheet, CustomSnackBar, GlassPanel, HeroButton, etc.
 │   │
 │   ├── features/
-│   │   ├── auth/
-│   │   ├── store/
-│   │   ├── cart/
-│   │   ├── wishlist/
-│   │   ├── checkout/
-│   │   ├── reviews/
-│   │   ├── profile/
-│   │   └── admin/
+│   │   ├── admin/                  # Admin dashboard, forms & management cubits
+│   │   ├── auth/                   # Login, signup, OTP verification, password reset
+│   │   ├── cart/                   # Cart repository, cubit & screen
+│   │   ├── checkout/               # Checkout, orders, shipping & order details
+│   │   ├── profile/                # Profile, address management & theme/language settings
+│   │   ├── reviews/                # Product ratings & reviews CRUD
+│   │   ├── store/                  # Home, search, categories & product details
+│   │   └── wishlist/               # Wishlist state & optimistic toggle handling
 │   │
-│   └── main.dart
+│   └── main.dart                   # Global error handlers, .env init, portrait lock & DI setup
 │
-├── .env
-├── .gitignore
-├── pubspec.yaml
-└── README.md
+├── test/
+│   ├── api_integration_test.dart   # API error parsing, model contracts, HTTP 404 tolerance & shipping rules
+│   ├── guest_browsing_test.dart    # Auth state classification, AuthGuard & WishlistCubit sanitization
+│   ├── responsive_viewports_test.dart # Multi-screen (320px - 600px) & Arabic RTL overflow checks
+│   ├── search_relevance_test.dart  # Arabic normalization, synonym matching & relevance sorting
+│   └── widget_test.dart
+│
+├── analysis_options.yaml           # Analyzer rules & lints
+└── pubspec.yaml
 ```
 
 ---
 
-# ⚙️ Getting Started
+## 🧰 Tech Stack
 
-## Prerequisites
-
-Make sure you have the following installed:
-
-* Flutter SDK
-* Dart SDK
-* Android Studio or VS Code
-* Android SDK / Emulator or a physical Android device
-* Git
+| Layer | Technologies |
+| :--- | :--- |
+| **Framework & Language** | Flutter 3.x, Dart 3.x |
+| **State Management** | `flutter_bloc` (BLoC / Cubit), `equatable` |
+| **Dependency Injection** | `get_it` |
+| **Networking & Auth** | `dio`, RESTful APIs, JWT Authentication |
+| **Local & Secure Storage** | `flutter_secure_storage`, `shared_preferences` |
+| **UI & Animations** | `google_fonts`, `flutter_animate`, `lucide_icons`, `shimmer`, `cached_network_image`, `photo_view`, `flutter_staggered_grid_view` |
+| **Localization & Config** | `flutter_localizations`, `intl`, `flutter_dotenv` |
+| **Platform Integrations** | `url_launcher` (WhatsApp), `image_picker` |
+| **Backend & Hosting** | Node.js, Express, MongoDB (hosted on **Fly.io**) |
+| **Android Release** | Gradle Kotlin DSL, Keystore Release Signing, Android App Bundle (`.aab`), `flutter_launcher_icons` |
 
 ---
 
-## Installation
+## ⚙️ Getting Started
 
-### 1. Clone the repository
+### Prerequisites
+* **Flutter SDK** (`>= 3.x`, Dart SDK `^3.8.1`)
+* **Android Studio / VS Code** with Android SDK & NDK `27.0.12077973`
+* **Git**
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/ya0119146-sys/E-commerce_app.git
+   cd E-commerce_app
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   flutter pub get
+   ```
+
+3. **Configure environment variables:**
+   Create a `.env` file in the project root *(note: `BASE_URL` must **not** include `/api/v1`)*:
+   ```env
+   BASE_URL=https://backend-gleaming-frost-9826.fly.dev
+   ```
+
+4. **Run the application:**
+   ```bash
+   flutter run
+   ```
+
+---
+
+## 🧪 Testing & Verification
+
+Run the automated test suite and static analyzer to verify everything passes cleanly:
 
 ```bash
-git clone https://github.com/<your-username>/e_commerce.git
+# Run all 47 unit, integration & responsive widget tests
+flutter test
+
+# Run static code analysis
+flutter analyze
 ```
 
-### 2. Navigate to the project
-
+### Android Release Build
+To build a signed release Android App Bundle (`.aab`) or APK (requires local `android/key.properties` and upload keystore):
 ```bash
-cd e_commerce
+flutter build appbundle --release
+# or
+flutter build apk --release
 ```
 
-### 3. Install dependencies
-
-```bash
-flutter pub get
-```
-
-### 4. Configure environment variables
-
-Create a `.env` file in the project root:
-
-```env
-BASE_URL=https://your-backend-url.com/api/v1
-```
-
-### 5. Run the application
-
-```bash
-flutter run
-```
+> **Security Note:** Sensitive files (`.env`, `android/key.properties`, `*.jks`) are strictly excluded from version control via `.gitignore`.
 
 ---
 
-# 🔐 Environment Variables
+## 📊 Project Status
 
-The application uses `flutter_dotenv` to load environment-specific configuration.
-
-Example:
-
-```env
-BASE_URL=https://your-backend-url.com/api/v1
-```
-
-> **Security:** Never commit passwords, JWT secrets, API keys, database credentials, or other sensitive information to the repository.
-
-Make sure `.env` is included in `.gitignore` when it contains sensitive configuration.
+**Status:** Production — **Published on Google Play** (`v1.0.0+1`)
 
 ---
 
-# 📈 What This Project Demonstrates
+## 👨‍💻 Author
 
-This project demonstrates practical experience in:
-
-* Building a complete Flutter e-commerce application.
-* Developing a full-stack mobile application.
-* Feature-first project organization.
-* BLoC/Cubit state management.
-* Dependency injection with `get_it`.
-* REST API integration using Dio.
-* JWT authentication.
-* Secure token storage.
-* Role-based access control.
-* Backend-powered search and filtering.
-* Pagination.
-* CRUD operations.
-* Admin panel development.
-* Cart and wishlist management.
-* Order management.
-* Product reviews and ratings.
-* Light and Dark theme implementation.
-* Persistent local preferences.
-* Image caching.
-* Skeleton loading states.
-* Responsive mobile UI.
-* Localization.
+**Youssef Ahmed Fathy Hamouda** — *Flutter Developer*
+* 📧 Email: [ya0119146@gmail.com](mailto:ya0119146@gmail.com)
+* 🐙 GitHub: [@ya0119146-sys](https://github.com/ya0119146-sys)
 
 ---
 
-# 🚧 Project Status
+## 📄 License
 
-**Status: Completed**
-
-Labella was developed as a personal full-stack portfolio project to demonstrate real-world Flutter application development, backend integration, authentication, state management, and e-commerce workflows.
-
----
-
-# 📄 License
-
-This project is developed as a personal portfolio project.
-
-All rights reserved.
-
-The source code and assets may not be copied, redistributed, or used commercially without permission.
-
----
+This project is developed as a commercial and portfolio production application. All rights reserved. Source code and brand assets may not be redistributed or used commercially without permission.
 
 <div align="center">
 
-### Built with ❤️ using Flutter & Node.js
+### Built with ❤️ using Flutter, BLoC & Node.js
 
 </div>
