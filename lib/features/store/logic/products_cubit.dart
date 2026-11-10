@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../data/models/product_model.dart';
 import '../data/repos/product_repository.dart';
 import '../../../core/network/api_exception.dart';
+import '../../../core/utils/search_relevance_helper.dart';
 
 part 'products_state.dart';
 
@@ -107,10 +108,17 @@ class ProductsCubit extends Cubit<ProductsState> {
         sort: state.sort,
         page: nextPage,
       );
+
+      final combined = [...state.products, ...newProducts];
+      final finalProducts =
+          (state.keyword != null && state.keyword!.trim().isNotEmpty)
+              ? SearchRelevanceHelper.sortByRelevance(combined, state.keyword!)
+              : combined;
+
       emit(
         state.copyWith(
           status: ProductsStatus.loaded,
-          products: [...state.products, ...newProducts],
+          products: finalProducts,
           page: nextPage,
           hasMore: newProducts.length >= 8,
         ),
@@ -122,14 +130,18 @@ class ProductsCubit extends Cubit<ProductsState> {
     }
   }
 
-  /// Search products by keyword.
+  /// Search products by keyword across all categories.
   Future<void> search(String keyword) async {
-    await fetchProducts(keyword: keyword, refresh: true);
+    await fetchProducts(
+      keyword: keyword,
+      clearCategory: true,
+      refresh: true,
+    );
   }
 
   /// Clear search and reload.
   Future<void> clearSearch() async {
     emit(state.copyWith(keyword: ''));
-    await fetchProducts(refresh: true);
+    await fetchProducts(clearKeyword: true, refresh: true);
   }
 }
