@@ -1,4 +1,4 @@
-import '../../../app/bottom_nav_shell.dart';
+import '../../../../app/bottom_nav_shell.dart';
 
 import 'package:flutter/material.dart';
 
@@ -6,20 +6,20 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_colors.dart';
 
-import '../../../core/constants/app_dimensions.dart';
+import '../../../../core/constants/app_dimensions.dart';
 
-import '../../../core/widgets/shimmer_loading.dart';
-import '../../../core/widgets/custom_snackbar.dart';
-import '../../../core/widgets/product_grid_delegate.dart';
-import '../../store/ui/widgets/product_card.dart';
-import '../../auth/logic/auth_cubit.dart';
-import '../../auth/ui/login_screen.dart';
-import '../../../core/widgets/hero_button.dart';
-import '../logic/wishlist_cubit.dart';
+import '../../../../core/widgets/shimmer_loading.dart';
+import '../../../../core/widgets/custom_snackbar.dart';
+import '../../../../core/widgets/product_grid_delegate.dart';
+import '../../../store/ui/widgets/product_card.dart';
+import '../../../auth/logic/auth_cubit.dart';
+import '../../../auth/ui/screens/login_screen.dart';
+import '../../../../core/widgets/hero_button.dart';
+import '../../logic/wishlist_cubit.dart';
 
-import '../../../core/localization/app_translations.dart';
+import '../../../../core/localization/app_translations.dart';
 
 /// Wishlist screen showing all favorited products.
 

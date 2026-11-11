@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/constants/app_dimensions.dart';
-import '../../../core/localization/app_translations.dart';
-import '../../../core/widgets/hero_button.dart';
+import '../../../../core/constants/app_dimensions.dart';
+import '../../../../core/localization/app_translations.dart';
+import '../../../../core/widgets/hero_button.dart';
 
-import '../../../core/widgets/custom_snackbar.dart';
-import '../../auth/logic/auth_cubit.dart';
+import '../../../../core/widgets/custom_snackbar.dart';
+import '../../../auth/logic/auth_cubit.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   final String? userEmail;

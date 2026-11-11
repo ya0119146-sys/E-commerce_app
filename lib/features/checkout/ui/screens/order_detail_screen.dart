@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_dimensions.dart';
-import '../../../core/localization/app_translations.dart';
-import '../../../core/widgets/custom_snackbar.dart';
-import '../data/models/order_model.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_dimensions.dart';
+import '../../../../core/localization/app_translations.dart';
+import '../../../../core/widgets/custom_snackbar.dart';
+import '../../data/models/order_model.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../logic/checkout_cubit.dart';
+import '../../logic/checkout_cubit.dart';
 
 /// Screen showing full details of a single order.
 class OrderDetailScreen extends StatelessWidget {

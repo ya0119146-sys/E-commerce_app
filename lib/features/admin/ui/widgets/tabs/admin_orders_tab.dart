@@ -6,7 +6,7 @@ import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_dimensions.dart';
 import '../../../../../core/localization/app_translations.dart';
 import '../../../../checkout/logic/checkout_cubit.dart';
-import '../../../../checkout/ui/order_detail_screen.dart';
+import '../../../../checkout/ui/screens/order_detail_screen.dart';
 
 /// Admin orders management tab.
 class AdminOrdersTab extends StatelessWidget {

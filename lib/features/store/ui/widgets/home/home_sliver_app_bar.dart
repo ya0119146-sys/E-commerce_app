@@ -7,8 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/localization/app_translations.dart';
 import '../../../../auth/logic/auth_cubit.dart';
-import '../../../../profile/ui/profile_screen.dart';
-import '../../search_screen.dart';
+import '../../../../profile/ui/screens/profile_screen.dart';
+import '../../screens/search_screen.dart';
 
 /// Pinned sliver app bar for the Home screen with symmetrical Profile & Search buttons.
 class HomeSliverAppBar extends StatelessWidget {

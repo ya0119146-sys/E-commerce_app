@@ -3,17 +3,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_dimensions.dart';
-import '../../../core/constants/app_gradients.dart';
-import '../../../core/widgets/hero_button.dart';
-import '../logic/auth_cubit.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_dimensions.dart';
+import '../../../../core/constants/app_gradients.dart';
+import '../../../../core/widgets/hero_button.dart';
+import '../../logic/auth_cubit.dart';
 import 'signup_screen.dart';
 import 'forget_password_screen.dart';
-import '../../../app/bottom_nav_shell.dart';
-import '../../../core/widgets/custom_snackbar.dart';
-import '../../../core/localization/app_translations.dart';
-import '../../../core/utils/validators.dart';
+import '../../../../app/bottom_nav_shell.dart';
+import '../../../../core/widgets/custom_snackbar.dart';
+import '../../../../core/localization/app_translations.dart';
+import '../../../../core/utils/validators.dart';
 
 /// Login screen with luxury glassmorphism design.
 class LoginScreen extends StatefulWidget {

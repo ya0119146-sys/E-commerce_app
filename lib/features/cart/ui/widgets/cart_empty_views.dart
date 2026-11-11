@@ -7,7 +7,7 @@ import '../../../../core/constants/app_dimensions.dart';
 import '../../../../core/localization/app_translations.dart';
 import '../../../../core/widgets/hero_button.dart';
 import '../../../../core/widgets/shimmer_loading.dart';
-import '../../../auth/ui/login_screen.dart';
+import '../../../auth/ui/screens/login_screen.dart';
 
 /// Shimmer loading list for cart items.
 class CartLoadingList extends StatelessWidget {

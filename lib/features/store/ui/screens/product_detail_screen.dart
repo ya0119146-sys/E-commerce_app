@@ -2,24 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_dimensions.dart';
-import '../../../core/localization/app_translations.dart';
-import '../../../core/utils/whatsapp_helper.dart';
-import '../../../core/widgets/star_rating.dart';
-import '../../reviews/logic/review_cubit.dart';
-import '../../reviews/ui/widgets/review_list_widget.dart';
-import '../data/models/category_model.dart';
-import '../data/models/product_model.dart';
-import '../logic/categories_cubit.dart';
-import 'widgets/product_detail/product_bottom_action_bar.dart';
-import 'widgets/product_detail/product_category_breadcrumbs.dart';
-import 'widgets/product_detail/product_description_card.dart';
-import 'widgets/product_detail/product_detail_app_bar.dart';
-import 'widgets/product_detail/product_price_section.dart';
-import 'widgets/product_detail/product_size_capsule.dart';
-import 'widgets/product_detail/product_thumbnail_carousel.dart';
-import 'widgets/product_image_lightbox.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_dimensions.dart';
+import '../../../../core/localization/app_translations.dart';
+import '../../../../core/utils/whatsapp_helper.dart';
+import '../../../../core/widgets/star_rating.dart';
+import '../../../reviews/logic/review_cubit.dart';
+import '../../../reviews/ui/widgets/review_list_widget.dart';
+import '../../data/models/category_model.dart';
+import '../../data/models/product_model.dart';
+import '../../logic/categories_cubit.dart';
+import '../widgets/product_detail/product_bottom_action_bar.dart';
+import '../widgets/product_detail/product_category_breadcrumbs.dart';
+import '../widgets/product_detail/product_description_card.dart';
+import '../widgets/product_detail/product_detail_app_bar.dart';
+import '../widgets/product_detail/product_price_section.dart';
+import '../widgets/product_detail/product_size_capsule.dart';
+import '../widgets/product_detail/product_thumbnail_carousel.dart';
+import '../widgets/product_image_lightbox.dart';
 
 /// Full-screen product detail with image, info, and Add to Cart.
 class ProductDetailScreen extends StatefulWidget {

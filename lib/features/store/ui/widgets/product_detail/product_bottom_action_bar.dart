@@ -12,7 +12,7 @@ import '../../../../admin/logic/admin_cubit.dart';
 import '../../../../admin/ui/widgets/product_form.dart';
 import '../../../../cart/data/models/cart_model.dart';
 import '../../../../cart/logic/cart_cubit.dart';
-import '../../../../cart/ui/cart_screen.dart';
+import '../../../../cart/ui/screens/cart_screen.dart';
 import '../../../data/models/product_model.dart';
 import '../../../logic/categories_cubit.dart';
 import '../../../logic/products_cubit.dart';

@@ -7,10 +7,10 @@ import '../../../../core/constants/app_dimensions.dart';
 import '../../../../core/localization/app_translations.dart';
 import '../../../../core/utils/auth_guard.dart';
 import '../../../../core/widgets/hero_button.dart';
-import '../../../auth/ui/login_screen.dart';
-import '../../../auth/ui/signup_screen.dart';
-import '../../../checkout/ui/order_history_screen.dart';
-import '../address_screen.dart';
+import '../../../auth/ui/screens/login_screen.dart';
+import '../../../auth/ui/screens/signup_screen.dart';
+import '../../../checkout/ui/screens/order_history_screen.dart';
+import '../screens/address_screen.dart';
 import 'profile_settings_tiles.dart';
 
 /// Profile screen body shown when browsing in guest mode.

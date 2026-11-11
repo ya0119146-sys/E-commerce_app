@@ -8,7 +8,7 @@ import '../../../admin/ui/widgets/product_form.dart';
 import '../../logic/categories_cubit.dart';
 import '../../logic/products_cubit.dart';
 import '../../data/models/product_model.dart';
-import '../product_detail_screen.dart';
+import '../screens/product_detail_screen.dart';
 import 'product_card_actions.dart';
 import '../../../../core/localization/app_translations.dart';
 

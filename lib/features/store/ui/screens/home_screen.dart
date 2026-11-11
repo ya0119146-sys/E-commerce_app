@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_dimensions.dart';
-import '../../../core/localization/app_translations.dart';
-import '../logic/categories_cubit.dart';
-import '../logic/products_cubit.dart';
-import 'widgets/home/editorial_hero_carousel.dart';
-import 'widgets/home/home_categories_section.dart';
-import 'widgets/home/home_products_sliver_grid.dart';
-import 'widgets/home/home_sliver_app_bar.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_dimensions.dart';
+import '../../../../core/localization/app_translations.dart';
+import '../../logic/categories_cubit.dart';
+import '../../logic/products_cubit.dart';
+import '../widgets/home/editorial_hero_carousel.dart';
+import '../widgets/home/home_categories_section.dart';
+import '../widgets/home/home_products_sliver_grid.dart';
+import '../widgets/home/home_sliver_app_bar.dart';
 
 /// Home screen with Concept 1 auto-scrolling hero banner,
 /// Concept 1 story categories, and Concept 2 trending products.

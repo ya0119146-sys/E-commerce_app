@@ -5,7 +5,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/localization/app_translations.dart';
 import '../../../../core/widgets/custom_snackbar.dart';
 import '../../../auth/logic/auth_cubit.dart';
-import '../../../auth/ui/login_screen.dart';
+import '../../../auth/ui/screens/login_screen.dart';
 import '../../logic/delete_profile_cubit.dart';
 
 /// Displays confirmation dialog for permanent profile deletion.

@@ -5,8 +5,8 @@ import '../constants/app_colors.dart';
 import '../constants/app_dimensions.dart';
 import '../localization/app_translations.dart';
 import 'hero_button.dart';
-import '../../features/auth/ui/login_screen.dart';
-import '../../features/auth/ui/signup_screen.dart';
+import '../../features/auth/ui/screens/login_screen.dart';
+import '../../features/auth/ui/screens/signup_screen.dart';
 
 /// The action context that triggered the authentication requirement.
 enum AuthActionType { wishlist, cart, checkout, profile, generic }

@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_dimensions.dart';
-import '../../../core/constants/egypt_governorates.dart';
-import '../../../core/localization/app_translations.dart';
-import '../../../core/widgets/custom_snackbar.dart';
-import '../../../core/widgets/shimmer_loading.dart';
-import '../../cart/logic/cart_cubit.dart';
-import '../data/models/address_model.dart';
-import '../logic/checkout_cubit.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_dimensions.dart';
+import '../../../../core/constants/egypt_governorates.dart';
+import '../../../../core/localization/app_translations.dart';
+import '../../../../core/widgets/custom_snackbar.dart';
+import '../../../../core/widgets/shimmer_loading.dart';
+import '../../../cart/logic/cart_cubit.dart';
+import '../../data/models/address_model.dart';
+import '../../logic/checkout_cubit.dart';
 import 'order_success_screen.dart';
-import 'widgets/checkout_add_address_sheet.dart';
-import 'widgets/checkout_summary_bar.dart';
+import '../widgets/checkout_add_address_sheet.dart';
+import '../widgets/checkout_summary_bar.dart';
 
 /// Checkout screen — address selection/addition and order confirmation.
 class CheckoutScreen extends StatefulWidget {

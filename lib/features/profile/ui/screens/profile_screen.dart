@@ -5,22 +5,22 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_dimensions.dart';
-import '../../../core/localization/app_translations.dart';
-import '../../../core/widgets/custom_snackbar.dart';
-import '../../auth/logic/auth_cubit.dart';
-import '../../auth/ui/login_screen.dart';
-import '../../checkout/ui/order_history_screen.dart';
-import '../logic/get_profile_cubit.dart';
-import '../logic/profile_cubit.dart';
-import '../logic/profile_state.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_dimensions.dart';
+import '../../../../core/localization/app_translations.dart';
+import '../../../../core/widgets/custom_snackbar.dart';
+import '../../../auth/logic/auth_cubit.dart';
+import '../../../auth/ui/screens/login_screen.dart';
+import '../../../checkout/ui/screens/order_history_screen.dart';
+import '../../logic/get_profile_cubit.dart';
+import '../../logic/profile_cubit.dart';
+import '../../logic/profile_state.dart';
 import 'address_screen.dart';
 import 'change_password_screen.dart';
-import 'widgets/profile_avatar_header.dart';
-import 'widgets/profile_dialogs.dart';
-import 'widgets/profile_guest_view.dart';
-import 'widgets/profile_settings_tiles.dart';
+import '../widgets/profile_avatar_header.dart';
+import '../widgets/profile_dialogs.dart';
+import '../widgets/profile_guest_view.dart';
+import '../widgets/profile_settings_tiles.dart';
 
 /// Profile screen with user info, order history link, dark mode toggle, and logout.
 class ProfileScreen extends StatefulWidget {

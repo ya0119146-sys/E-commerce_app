@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/di/service_locator.dart';
-import '../../../core/localization/app_translations.dart';
-import '../../../core/widgets/custom_snackbar.dart';
-import '../../checkout/logic/checkout_cubit.dart';
-import '../../store/data/models/sub_category_model.dart';
-import '../../store/logic/categories_cubit.dart';
-import '../../store/logic/products_cubit.dart';
-import '../data/repos/admin_repository.dart';
-import '../logic/admin_cubit.dart';
-import '../logic/admin_state.dart';
-import '../logic/users_cubit.dart';
-import 'widgets/category_form.dart';
-import 'widgets/product_form.dart';
-import 'widgets/subcategory_form.dart';
-import 'widgets/tabs/admin_categories_tab.dart';
-import 'widgets/tabs/admin_orders_tab.dart';
-import 'widgets/tabs/admin_products_tab.dart';
-import 'widgets/tabs/admin_subcategories_tab.dart';
-import 'widgets/tabs/admin_users_tab.dart';
-import 'widgets/user_form.dart';
+import '../../../../core/di/service_locator.dart';
+import '../../../../core/localization/app_translations.dart';
+import '../../../../core/widgets/custom_snackbar.dart';
+import '../../../checkout/logic/checkout_cubit.dart';
+import '../../../store/data/models/sub_category_model.dart';
+import '../../../store/logic/categories_cubit.dart';
+import '../../../store/logic/products_cubit.dart';
+import '../../data/repos/admin_repository.dart';
+import '../../logic/admin_cubit.dart';
+import '../../logic/admin_state.dart';
+import '../../logic/users_cubit.dart';
+import '../widgets/category_form.dart';
+import '../widgets/product_form.dart';
+import '../widgets/subcategory_form.dart';
+import '../widgets/tabs/admin_categories_tab.dart';
+import '../widgets/tabs/admin_orders_tab.dart';
+import '../widgets/tabs/admin_products_tab.dart';
+import '../widgets/tabs/admin_subcategories_tab.dart';
+import '../widgets/tabs/admin_users_tab.dart';
+import '../widgets/user_form.dart';
 
 /// Admin Dashboard for managing products, orders, users, categories, and subcategories.
 class AdminScreen extends StatefulWidget {

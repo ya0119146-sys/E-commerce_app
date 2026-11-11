@@ -5,7 +5,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/localization/app_translations.dart';
 import '../../../../core/utils/auth_guard.dart';
 import '../../../../core/widgets/hero_button.dart';
-import '../../../checkout/ui/checkout_screen.dart';
+import '../../../checkout/ui/screens/checkout_screen.dart';
 import '../../logic/cart_cubit.dart';
 
 /// Bottom summary and checkout action bar for CartScreen.

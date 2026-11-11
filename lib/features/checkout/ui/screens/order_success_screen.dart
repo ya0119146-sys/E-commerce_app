@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../app/bottom_nav_shell.dart';
-import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_dimensions.dart';
-import '../../../core/localization/app_translations.dart';
-import '../../../core/widgets/hero_button.dart';
-import '../../auth/logic/auth_cubit.dart';
+import '../../../../app/bottom_nav_shell.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_dimensions.dart';
+import '../../../../core/localization/app_translations.dart';
+import '../../../../core/widgets/hero_button.dart';
+import '../../../auth/logic/auth_cubit.dart';
 
-import '../data/models/order_model.dart';
+import '../../data/models/order_model.dart';
 import 'order_detail_screen.dart';
 
 /// Order success screen shown after placing an order.

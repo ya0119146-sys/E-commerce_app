@@ -4,14 +4,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_dimensions.dart';
-import '../../../core/constants/app_gradients.dart';
-import '../../../core/widgets/hero_button.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_dimensions.dart';
+import '../../../../core/constants/app_gradients.dart';
+import '../../../../core/widgets/hero_button.dart';
 
-import '../../../core/widgets/custom_snackbar.dart';
-import '../logic/auth_cubit.dart';
-import '../../../core/localization/app_translations.dart';
+import '../../../../core/widgets/custom_snackbar.dart';
+import '../../logic/auth_cubit.dart';
+import '../../../../core/localization/app_translations.dart';
 
 /// Reset password screen for setting a new password after code verification.
 class ResetPasswordScreen extends StatefulWidget {

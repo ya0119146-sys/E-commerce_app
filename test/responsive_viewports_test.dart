@@ -6,7 +6,7 @@ import 'package:e_commerce/features/checkout/data/repos/checkout_repository.dart
 import 'package:e_commerce/features/checkout/logic/checkout_cubit.dart';
 import 'package:e_commerce/features/checkout/data/models/order_model.dart';
 import 'package:e_commerce/features/checkout/data/models/address_model.dart';
-import 'package:e_commerce/features/checkout/ui/order_detail_screen.dart';
+import 'package:e_commerce/features/checkout/ui/screens/order_detail_screen.dart';
 
 void main() {
   const viewports = [

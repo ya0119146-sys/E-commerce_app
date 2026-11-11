@@ -9,7 +9,7 @@ import 'package:e_commerce/core/widgets/product_grid_delegate.dart';
 import 'package:e_commerce/features/admin/data/repos/admin_repository.dart';
 import 'package:e_commerce/features/admin/logic/admin_cubit.dart';
 import 'package:e_commerce/features/admin/logic/users_cubit.dart';
-import 'package:e_commerce/features/admin/ui/admin_screen.dart';
+import 'package:e_commerce/features/admin/ui/screens/admin_screen.dart';
 import 'package:e_commerce/features/admin/ui/widgets/product_form.dart';
 import 'package:e_commerce/features/auth/data/models/user_model.dart';
 import 'package:e_commerce/features/auth/data/repos/auth_repository.dart';
@@ -17,17 +17,17 @@ import 'package:e_commerce/features/auth/logic/auth_cubit.dart';
 import 'package:e_commerce/features/cart/data/models/cart_model.dart';
 import 'package:e_commerce/features/cart/data/repos/cart_repository.dart';
 import 'package:e_commerce/features/cart/logic/cart_cubit.dart';
-import 'package:e_commerce/features/cart/ui/cart_screen.dart';
+import 'package:e_commerce/features/cart/ui/screens/cart_screen.dart';
 import 'package:e_commerce/features/checkout/data/models/address_model.dart';
 import 'package:e_commerce/features/checkout/data/models/order_model.dart';
 import 'package:e_commerce/features/checkout/data/repos/checkout_repository.dart';
 import 'package:e_commerce/features/checkout/logic/checkout_cubit.dart';
-import 'package:e_commerce/features/checkout/ui/checkout_screen.dart';
+import 'package:e_commerce/features/checkout/ui/screens/checkout_screen.dart';
 import 'package:e_commerce/features/profile/data/repos/profile_repository.dart';
 import 'package:e_commerce/features/profile/logic/delete_profile_cubit.dart';
 import 'package:e_commerce/features/profile/logic/get_profile_cubit.dart';
 import 'package:e_commerce/features/profile/logic/profile_cubit.dart';
-import 'package:e_commerce/features/profile/ui/profile_screen.dart';
+import 'package:e_commerce/features/profile/ui/screens/profile_screen.dart';
 import 'package:e_commerce/features/reviews/data/models/review_model.dart';
 import 'package:e_commerce/features/reviews/data/repos/review_repository.dart';
 import 'package:e_commerce/features/reviews/logic/review_cubit.dart';
@@ -38,8 +38,8 @@ import 'package:e_commerce/features/store/data/repos/category_repository.dart';
 import 'package:e_commerce/features/store/data/repos/product_repository.dart';
 import 'package:e_commerce/features/store/logic/categories_cubit.dart';
 import 'package:e_commerce/features/store/logic/products_cubit.dart';
-import 'package:e_commerce/features/store/ui/home_screen.dart';
-import 'package:e_commerce/features/store/ui/product_detail_screen.dart';
+import 'package:e_commerce/features/store/ui/screens/home_screen.dart';
+import 'package:e_commerce/features/store/ui/screens/product_detail_screen.dart';
 import 'package:e_commerce/features/wishlist/data/repos/wishlist_repository.dart';
 import 'package:e_commerce/features/wishlist/logic/wishlist_cubit.dart';
 import 'package:flutter/material.dart';
@@ -276,11 +276,12 @@ void main() {
         BlocProvider<CartCubit>.value(value: cartCubit),
         BlocProvider(create: (_) => WishlistCubit(_FakeWishlistRepository())),
         BlocProvider(
-          create: (_) => CheckoutCubit(
-            _FakeCheckoutRepository(addresses: addresses),
-          ),
+          create: (_) =>
+              CheckoutCubit(_FakeCheckoutRepository(addresses: addresses)),
         ),
-        BlocProvider(create: (_) => ReviewCubit(_FakeReviewRepository(reviews))),
+        BlocProvider(
+          create: (_) => ReviewCubit(_FakeReviewRepository(reviews)),
+        ),
         BlocProvider(
           create: (_) => ProfileCubit(_FakeProfileRepository(sampleUser)),
         ),
@@ -315,90 +316,117 @@ void main() {
   }
 
   group('Refactored Localization Dictionaries Integrity', () {
-    test('en and ar dictionaries preserve keys and translations accurately', () {
-      expect(AppTranslations.en, isNotEmpty);
-      expect(AppTranslations.ar, isNotEmpty);
-      expect(AppTranslations.en.length, greaterThan(400));
-      expect(AppTranslations.ar.length, greaterThan(400));
+    test(
+      'en and ar dictionaries preserve keys and translations accurately',
+      () {
+        expect(AppTranslations.en, isNotEmpty);
+        expect(AppTranslations.ar, isNotEmpty);
+        expect(AppTranslations.en.length, greaterThan(400));
+        expect(AppTranslations.ar.length, greaterThan(400));
 
-      expect(AppTranslations.translate('add_to_cart', 'en'), isNotEmpty);
-      expect(AppTranslations.translate('add_to_cart', 'ar'), isNotEmpty);
-      expect(AppTranslations.translate('ADD_TO_CART', 'en'), equals(AppTranslations.translate('add_to_cart', 'en')));
-      expect(AppTranslations.translate('add_to_cart...', 'ar'), equals(AppTranslations.translate('add_to_cart', 'ar')));
-    });
+        expect(AppTranslations.translate('add_to_cart', 'en'), isNotEmpty);
+        expect(AppTranslations.translate('add_to_cart', 'ar'), isNotEmpty);
+        expect(
+          AppTranslations.translate('ADD_TO_CART', 'en'),
+          equals(AppTranslations.translate('add_to_cart', 'en')),
+        );
+        expect(
+          AppTranslations.translate('add_to_cart...', 'ar'),
+          equals(AppTranslations.translate('add_to_cart', 'ar')),
+        );
+      },
+    );
   });
 
   group('Modular UI Screens Smoke & Regression Verification', () {
-    testWidgets('ProductDetailScreen renders customer Add-to-Cart state, expandable description, and reviews', (tester) async {
-      await tester.pumpWidget(
-        buildAppHarness(
-          home: const ProductDetailScreen(product: sampleProduct, role: 'user'),
-        ),
-      );
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 600));
-
-      expect(find.text('La Bella Retinol Serum'), findsOneWidget);
-      expect(find.byKey(const ValueKey('add_to_cart_state')), findsOneWidget);
-      expect(find.text('Skincare'), findsOneWidget);
-      expect(find.text('Serums'), findsOneWidget);
-      expect(find.text('Nourhan Ali'), findsOneWidget);
-
-      // Expandable description toggle
-      final showMoreFinder = find.text('Show more');
-      expect(showMoreFinder, findsOneWidget);
-      await tester.drag(find.byType(CustomScrollView), const Offset(0, -300));
-      await tester.pump();
-      await tester.ensureVisible(showMoreFinder);
-      await tester.pump();
-      await tester.tap(showMoreFinder);
-      await tester.pump(const Duration(milliseconds: 300));
-      expect(find.text('Show less'), findsOneWidget);
-
-      expect(tester.takeException(), isNull);
-    });
-
-    testWidgets('ProductDetailScreen renders Pattern-2 stepper when item is in cart and Edit button for admin', (tester) async {
-      const cartWithItem = CartModel(
-        id: 'c1',
-        totalPrice: 700,
-        items: [
-          CartItemModel(
-            id: 'ci1',
-            productId: 'prod_1',
-            product: sampleProduct,
-            quantity: 2,
-            price: 350,
+    testWidgets(
+      'ProductDetailScreen renders customer Add-to-Cart state, expandable description, and reviews',
+      (tester) async {
+        await tester.pumpWidget(
+          buildAppHarness(
+            home: const ProductDetailScreen(
+              product: sampleProduct,
+              role: 'user',
+            ),
           ),
-        ],
-      );
+        );
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 600));
 
-      await tester.pumpWidget(
-        buildAppHarness(
-          authenticated: true,
-          initialCart: cartWithItem,
-          home: const ProductDetailScreen(product: sampleProduct, role: 'user'),
-        ),
-      );
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 600));
+        expect(find.text('La Bella Retinol Serum'), findsOneWidget);
+        expect(find.byKey(const ValueKey('add_to_cart_state')), findsOneWidget);
+        expect(find.text('Skincare'), findsOneWidget);
+        expect(find.text('Serums'), findsOneWidget);
+        expect(find.text('Nourhan Ali'), findsOneWidget);
 
-      expect(find.byKey(const ValueKey('in_cart_stepper_state')), findsOneWidget);
-      expect(find.text('2'), findsOneWidget);
-      expect(tester.takeException(), isNull);
+        // Expandable description toggle
+        final showMoreFinder = find.text('Show more');
+        expect(showMoreFinder, findsOneWidget);
+        await tester.drag(find.byType(CustomScrollView), const Offset(0, -300));
+        await tester.pump();
+        await tester.ensureVisible(showMoreFinder);
+        await tester.pump();
+        await tester.tap(showMoreFinder);
+        await tester.pump(const Duration(milliseconds: 300));
+        expect(find.text('Show less'), findsOneWidget);
 
-      // Verify Admin edit CTA renders cleanly
-      await tester.pumpWidget(
-        buildAppHarness(
-          authenticated: true,
-          home: const ProductDetailScreen(product: sampleProduct, role: 'admin'),
-        ),
-      );
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 600));
-      expect(find.text('Edit Product'), findsOneWidget);
-      expect(tester.takeException(), isNull);
-    });
+        expect(tester.takeException(), isNull);
+      },
+    );
+
+    testWidgets(
+      'ProductDetailScreen renders Pattern-2 stepper when item is in cart and Edit button for admin',
+      (tester) async {
+        const cartWithItem = CartModel(
+          id: 'c1',
+          totalPrice: 700,
+          items: [
+            CartItemModel(
+              id: 'ci1',
+              productId: 'prod_1',
+              product: sampleProduct,
+              quantity: 2,
+              price: 350,
+            ),
+          ],
+        );
+
+        await tester.pumpWidget(
+          buildAppHarness(
+            authenticated: true,
+            initialCart: cartWithItem,
+            home: const ProductDetailScreen(
+              product: sampleProduct,
+              role: 'user',
+            ),
+          ),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 600));
+
+        expect(
+          find.byKey(const ValueKey('in_cart_stepper_state')),
+          findsOneWidget,
+        );
+        expect(find.text('2'), findsOneWidget);
+        expect(tester.takeException(), isNull);
+
+        // Verify Admin edit CTA renders cleanly
+        await tester.pumpWidget(
+          buildAppHarness(
+            authenticated: true,
+            home: const ProductDetailScreen(
+              product: sampleProduct,
+              role: 'admin',
+            ),
+          ),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 600));
+        expect(find.text('Edit Product'), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      },
+    );
 
     testWidgets(
       'HomeScreen renders modular sliver app bar, carousel, categories, and product grid',
@@ -430,9 +458,9 @@ void main() {
             products: const [homeProduct],
             home: Builder(
               builder: (context) => MediaQuery(
-                data: MediaQuery.of(context).copyWith(
-                  textScaler: const TextScaler.linear(0.9),
-                ),
+                data: MediaQuery.of(
+                  context,
+                ).copyWith(textScaler: const TextScaler.linear(0.9)),
                 child: const HomeScreen(role: 'user'),
               ),
             ),
@@ -456,126 +484,141 @@ void main() {
       },
     );
 
-    testWidgets('ProfileScreen renders guest & authenticated states without ListTile Material assertion errors', (tester) async {
-      final capturedErrors = <FlutterErrorDetails>[];
-      final originalOnError = FlutterError.onError;
-      FlutterError.onError = (details) {
-        capturedErrors.add(details);
-      };
-      addTearDown(() => FlutterError.onError = originalOnError);
+    testWidgets(
+      'ProfileScreen renders guest & authenticated states without ListTile Material assertion errors',
+      (tester) async {
+        final capturedErrors = <FlutterErrorDetails>[];
+        final originalOnError = FlutterError.onError;
+        FlutterError.onError = (details) {
+          capturedErrors.add(details);
+        };
+        addTearDown(() => FlutterError.onError = originalOnError);
 
-      // Guest view
-      await tester.pumpWidget(
-        buildAppHarness(authenticated: false, home: const ProfileScreen()),
-      );
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 600));
-      expect(find.text('Welcome to Labella'), findsOneWidget);
+        // Guest view
+        await tester.pumpWidget(
+          buildAppHarness(authenticated: false, home: const ProfileScreen()),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 600));
+        expect(find.text('Welcome to Labella'), findsOneWidget);
 
-      // Authenticated view + toggle Dark Mode & Language tiles
-      await tester.pumpWidget(
-        buildAppHarness(authenticated: true, home: const ProfileScreen()),
-      );
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 700));
-      expect(find.text('Youssef Ahmed'), findsOneWidget);
-      expect(find.text('youssef@labella.com'), findsOneWidget);
+        // Authenticated view + toggle Dark Mode & Language tiles
+        await tester.pumpWidget(
+          buildAppHarness(authenticated: true, home: const ProfileScreen()),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 700));
+        expect(find.text('Youssef Ahmed'), findsOneWidget);
+        expect(find.text('youssef@labella.com'), findsOneWidget);
 
-      expect(
-        capturedErrors.where(
-          (e) => e.exceptionAsString().contains('ListTile background color'),
-        ),
-        isEmpty,
-      );
-      expect(tester.takeException(), isNull);
-    });
-
-    testWidgets('CartScreen renders guest, empty, and populated cart item states cleanly', (tester) async {
-      await tester.pumpWidget(
-        buildAppHarness(authenticated: false, home: const CartScreen(role: 'user')),
-      );
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 500));
-      expect(find.text('Your cart is waiting'), findsOneWidget);
-
-      const cartWithItem = CartModel(
-        id: 'c1',
-        totalPrice: 700,
-        items: [
-          CartItemModel(
-            id: 'ci1',
-            productId: 'prod_1',
-            product: sampleProduct,
-            quantity: 2,
-            price: 350,
+        expect(
+          capturedErrors.where(
+            (e) => e.exceptionAsString().contains('ListTile background color'),
           ),
-        ],
-      );
+          isEmpty,
+        );
+        expect(tester.takeException(), isNull);
+      },
+    );
 
-      await tester.pumpWidget(
-        buildAppHarness(
-          authenticated: true,
-          initialCart: cartWithItem,
-          home: const CartScreen(role: 'user'),
-        ),
-      );
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 500));
-      expect(find.text('La Bella Retinol Serum'), findsOneWidget);
-      // Shown in both Subtotal and Total rows
-      expect(find.text('\$700.00'), findsNWidgets(2));
-      expect(tester.takeException(), isNull);
-    });
+    testWidgets(
+      'CartScreen renders guest, empty, and populated cart item states cleanly',
+      (tester) async {
+        await tester.pumpWidget(
+          buildAppHarness(
+            authenticated: false,
+            home: const CartScreen(role: 'user'),
+          ),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 500));
+        expect(find.text('Your cart is waiting'), findsOneWidget);
 
-    testWidgets('CheckoutScreen renders address list, Sharqia free delivery policy, and opens Add Address sheet', (tester) async {
-      const addresses = [
-        AddressModel(
-          id: 'addr1',
-          street: '10 El-Gomhoria St',
-          city: 'Zagazig',
-          state: EgyptGovernorates.sharqia,
-          zip: '44511',
-        ),
-      ];
+        const cartWithItem = CartModel(
+          id: 'c1',
+          totalPrice: 700,
+          items: [
+            CartItemModel(
+              id: 'ci1',
+              productId: 'prod_1',
+              product: sampleProduct,
+              quantity: 2,
+              price: 350,
+            ),
+          ],
+        );
 
-      await tester.pumpWidget(
-        buildAppHarness(
-          authenticated: true,
-          addresses: addresses,
-          home: const CheckoutScreen(),
-        ),
-      );
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 500));
+        await tester.pumpWidget(
+          buildAppHarness(
+            authenticated: true,
+            initialCart: cartWithItem,
+            home: const CartScreen(role: 'user'),
+          ),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 500));
+        expect(find.text('La Bella Retinol Serum'), findsOneWidget);
+        // Shown in both Subtotal and Total rows
+        expect(find.text('\$700.00'), findsNWidgets(2));
+        expect(tester.takeException(), isNull);
+      },
+    );
 
-      expect(find.textContaining('Zagazig'), findsOneWidget);
-      expect(find.text('Free (Sharqia)'), findsOneWidget);
+    testWidgets(
+      'CheckoutScreen renders address list, Sharqia free delivery policy, and opens Add Address sheet',
+      (tester) async {
+        const addresses = [
+          AddressModel(
+            id: 'addr1',
+            street: '10 El-Gomhoria St',
+            city: 'Zagazig',
+            state: EgyptGovernorates.sharqia,
+            zip: '44511',
+          ),
+        ];
 
-      await tester.tap(find.text('Add New'));
-      await tester.pumpAndSettle();
-      expect(find.text('Add Address'), findsOneWidget);
-      expect(tester.takeException(), isNull);
-    });
+        await tester.pumpWidget(
+          buildAppHarness(
+            authenticated: true,
+            addresses: addresses,
+            home: const CheckoutScreen(),
+          ),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 500));
 
-    testWidgets('AdminScreen renders all 5 modular tabs and opens ProductForm cleanly', (tester) async {
-      await tester.pumpWidget(
-        buildAppHarness(authenticated: true, home: const AdminScreen()),
-      );
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 500));
+        expect(find.textContaining('Zagazig'), findsOneWidget);
+        expect(find.text('Free (Sharqia)'), findsOneWidget);
 
-      expect(find.text('La Bella Retinol Serum'), findsOneWidget);
-      expect(find.text('Products'), findsOneWidget);
-      expect(find.text('Orders'), findsOneWidget);
-      expect(find.text('Users'), findsOneWidget);
-      expect(find.text('Categories'), findsOneWidget);
-      expect(find.text('Subcategories'), findsOneWidget);
+        await tester.tap(find.text('Add New'));
+        await tester.pumpAndSettle();
+        expect(find.text('Add Address'), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      },
+    );
 
-      // Tap FAB to verify ProductForm modal renders cleanly
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
-      expect(find.byType(ProductForm), findsOneWidget);
-      expect(tester.takeException(), isNull);
-    });
+    testWidgets(
+      'AdminScreen renders all 5 modular tabs and opens ProductForm cleanly',
+      (tester) async {
+        await tester.pumpWidget(
+          buildAppHarness(authenticated: true, home: const AdminScreen()),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 500));
+
+        expect(find.text('La Bella Retinol Serum'), findsOneWidget);
+        expect(find.text('Products'), findsOneWidget);
+        expect(find.text('Orders'), findsOneWidget);
+        expect(find.text('Users'), findsOneWidget);
+        expect(find.text('Categories'), findsOneWidget);
+        expect(find.text('Subcategories'), findsOneWidget);
+
+        // Tap FAB to verify ProductForm modal renders cleanly
+        await tester.tap(find.byType(FloatingActionButton));
+        await tester.pumpAndSettle();
+        expect(find.byType(ProductForm), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      },
+    );
   });
 }
