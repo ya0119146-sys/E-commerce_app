@@ -1,15 +1,18 @@
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_dimensions.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/localization/app_translations.dart';
 import '../../../store/data/models/category_model.dart';
 import '../../../store/data/models/product_model.dart';
 import '../../../store/data/models/sub_category_model.dart';
 import '../../data/repos/admin_repository.dart';
+import 'product_form_sections/product_form_category_dropdowns.dart';
+import 'product_form_sections/product_form_images_section.dart';
 
 class ProductForm extends StatefulWidget {
   final ProductModel? product;
@@ -245,234 +248,25 @@ class _ProductFormState extends State<ProductForm> {
                 ),
                 const SizedBox(height: 20),
 
-                // Cover Image Header with Optional Remove Button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Cover Image'.tr(context),
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    if (_coverImage != null ||
-                        (widget.product?.cover != null && !_coverRemoved))
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _coverImage = null;
-                            _coverRemoved = true;
-                          });
-                        },
-                        child: Text(
-                          'Remove'.tr(context),
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.redAccent.shade200,
-                          ),
-                        ),
-                      ),
-                  ],
+                ProductFormImagesSection(
+                  coverImage: _coverImage,
+                  existingCoverUrl: widget.product?.cover,
+                  coverRemoved: _coverRemoved,
+                  existingImages: _existingImages,
+                  additionalImages: _additionalImages,
+                  onPickCover: _pickCover,
+                  onRemoveCover: () {
+                    setState(() {
+                      _coverImage = null;
+                      _coverRemoved = true;
+                    });
+                  },
+                  onPickAdditional: _pickAdditional,
+                  onRemoveExistingImage: (url) =>
+                      setState(() => _existingImages.remove(url)),
+                  onRemoveAdditionalImage: (file) =>
+                      setState(() => _additionalImages.remove(file)),
                 ),
-                const SizedBox(height: 8),
-                GestureDetector(
-                  onTap: _pickCover,
-                  child: Container(
-                    height: 150,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: AppColors.muted(brightness),
-                      borderRadius: BorderRadius.circular(
-                        AppDimensions.radiusMd,
-                      ),
-                      border: Border.all(
-                        color: AppColors.border(
-                          brightness,
-                        ).withValues(alpha: 0.3),
-                      ),
-                      image: _coverImage != null
-                          ? DecorationImage(
-                              image: FileImage(_coverImage!),
-                              fit: BoxFit.cover,
-                            )
-                          : ((widget.product?.cover != null && !_coverRemoved)
-                                ? DecorationImage(
-                                    image: NetworkImage(widget.product!.cover!),
-                                    fit: BoxFit.cover,
-                                  )
-                                : null),
-                    ),
-                    child:
-                        (_coverImage == null &&
-                            (widget.product?.cover == null || _coverRemoved))
-                        ? Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(
-                                  Icons.add_a_photo_outlined,
-                                  size: 36,
-                                ),
-                                const SizedBox(height: 6),
-                                Text(
-                                  'Tap to choose cover'.tr(context),
-                                  style: const TextStyle(fontSize: 12),
-                                ),
-                              ],
-                            ),
-                          )
-                        : null,
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                // Additional Images Header & Pick Button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Additional Images'.tr(context),
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    TextButton.icon(
-                      onPressed: _pickAdditional,
-                      icon: const Icon(
-                        Icons.add_photo_alternate_outlined,
-                        size: 18,
-                      ),
-                      label: Text('Add More'.tr(context)),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                if (_additionalImages.isNotEmpty || _existingImages.isNotEmpty)
-                  SizedBox(
-                    height: 100,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        // Retained existing images with close button
-                        ..._existingImages.map(
-                          (url) => Stack(
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.only(right: 8),
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                    color: AppColors.border(
-                                      brightness,
-                                    ).withValues(alpha: 0.3),
-                                  ),
-                                  image: DecorationImage(
-                                    image: NetworkImage(url),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                top: 4,
-                                right: 12,
-                                child: GestureDetector(
-                                  onTap: () => setState(
-                                    () => _existingImages.remove(url),
-                                  ),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(3),
-                                    decoration: const BoxDecoration(
-                                      color: Colors.black54,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const Icon(
-                                      Icons.close,
-                                      size: 14,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        // Newly picked images with close button
-                        ..._additionalImages.map(
-                          (file) => Stack(
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.only(right: 8),
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                    color: AppColors.border(
-                                      brightness,
-                                    ).withValues(alpha: 0.3),
-                                  ),
-                                  image: DecorationImage(
-                                    image: FileImage(file),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                top: 4,
-                                right: 12,
-                                child: GestureDetector(
-                                  onTap: () => setState(
-                                    () => _additionalImages.remove(file),
-                                  ),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(3),
-                                    decoration: const BoxDecoration(
-                                      color: Colors.black54,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const Icon(
-                                      Icons.close,
-                                      size: 14,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                else
-                  GestureDetector(
-                    onTap: _pickAdditional,
-                    child: Container(
-                      height: 80,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: AppColors.muted(brightness),
-                        borderRadius: BorderRadius.circular(
-                          AppDimensions.radiusMd,
-                        ),
-                        border: Border.all(
-                          color: AppColors.border(
-                            brightness,
-                          ).withValues(alpha: 0.3),
-                        ),
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(Icons.add_photo_alternate_outlined),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Pick multiple images'.tr(context),
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
                 const SizedBox(height: 20),
 
                 TextFormField(
@@ -584,81 +378,12 @@ class _ProductFormState extends State<ProductForm> {
                 ),
                 const SizedBox(height: 12),
 
-                // Category Dropdown with Luxury Styling & Selection Checkmark (Optional)
-                DropdownButtonFormField<String?>(
-                  initialValue: _selectedCategoryId,
-                  dropdownColor: AppColors.card(brightness),
-                  borderRadius: BorderRadius.circular(16),
-                  icon: Icon(
-                    Icons.keyboard_arrow_down_rounded,
-                    color: AppColors.secondary(brightness),
-                  ),
-                  decoration: InputDecoration(
-                    labelText: 'Category (Optional)'.tr(context),
-                    prefixIcon: const Icon(Icons.category_outlined),
-                  ),
-                  items: [
-                    DropdownMenuItem<String?>(
-                      value: null,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'None (Optional)'.tr(context),
-                            style: TextStyle(
-                              fontWeight: _selectedCategoryId == null
-                                  ? FontWeight.w700
-                                  : FontWeight.w500,
-                              color: _selectedCategoryId == null
-                                  ? AppColors.secondary(brightness)
-                                  : AppColors.foreground(
-                                      brightness,
-                                    ).withValues(alpha: 0.6),
-                            ),
-                          ),
-                          if (_selectedCategoryId == null) ...[
-                            const SizedBox(width: 12),
-                            Icon(
-                              Icons.check_circle_rounded,
-                              size: 18,
-                              color: AppColors.secondary(brightness),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                    ...widget.categories.map((c) {
-                      final isSelected = c.id == _selectedCategoryId;
-                      return DropdownMenuItem<String?>(
-                        value: c.id,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              c.name,
-                              style: TextStyle(
-                                fontWeight: isSelected
-                                    ? FontWeight.w700
-                                    : FontWeight.w500,
-                                color: isSelected
-                                    ? AppColors.secondary(brightness)
-                                    : AppColors.foreground(brightness),
-                              ),
-                            ),
-                            if (isSelected) ...[
-                              const SizedBox(width: 12),
-                              Icon(
-                                Icons.check_circle_rounded,
-                                size: 18,
-                                color: AppColors.secondary(brightness),
-                              ),
-                            ],
-                          ],
-                        ),
-                      );
-                    }),
-                  ],
-                  onChanged: (v) {
+                ProductFormCategoryDropdowns(
+                  categories: widget.categories,
+                  subcategories: _subcategoriesList,
+                  selectedCategoryId: _selectedCategoryId,
+                  selectedSubcategoryId: _selectedSubcategoryId,
+                  onCategoryChanged: (v) {
                     setState(() {
                       _selectedCategoryId = v;
                       if (v == null) {
@@ -679,108 +404,8 @@ class _ProductFormState extends State<ProductForm> {
                       }
                     });
                   },
-                ),
-                const SizedBox(height: 12),
-
-                // Subcategory Dropdown with Luxury Styling & Selection Checkmark (Optional)
-                Builder(
-                  builder: (context) {
-                    final filteredSubcats = _selectedCategoryId == null
-                        ? _subcategoriesList
-                        : _subcategoriesList
-                              .where(
-                                (s) =>
-                                    s.categoryId.isEmpty ||
-                                    s.categoryId == _selectedCategoryId,
-                              )
-                              .toList();
-                    final subcatsToShow = filteredSubcats.isNotEmpty
-                        ? filteredSubcats
-                        : _subcategoriesList;
-
-                    // Ensure _selectedSubcategoryId is actually present in subcatsToShow
-                    final currentValue =
-                        subcatsToShow.any((s) => s.id == _selectedSubcategoryId)
-                        ? _selectedSubcategoryId
-                        : null;
-
-                    return DropdownButtonFormField<String?>(
-                      initialValue: currentValue,
-                      dropdownColor: AppColors.card(brightness),
-                      borderRadius: BorderRadius.circular(16),
-                      icon: Icon(
-                        Icons.keyboard_arrow_down_rounded,
-                        color: AppColors.secondary(brightness),
-                      ),
-                      decoration: InputDecoration(
-                        labelText: 'Subcategory (Optional)'.tr(context),
-                        prefixIcon: const Icon(Icons.account_tree_outlined),
-                      ),
-                      items: [
-                        DropdownMenuItem<String?>(
-                          value: null,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'None (Optional)'.tr(context),
-                                style: TextStyle(
-                                  fontWeight: currentValue == null
-                                      ? FontWeight.w700
-                                      : FontWeight.w500,
-                                  color: currentValue == null
-                                      ? AppColors.secondary(brightness)
-                                      : AppColors.foreground(
-                                          brightness,
-                                        ).withValues(alpha: 0.6),
-                                ),
-                              ),
-                              if (currentValue == null) ...[
-                                const SizedBox(width: 12),
-                                Icon(
-                                  Icons.check_circle_rounded,
-                                  size: 18,
-                                  color: AppColors.secondary(brightness),
-                                ),
-                              ],
-                            ],
-                          ),
-                        ),
-                        ...subcatsToShow.map((s) {
-                          final isSelected = s.id == currentValue;
-                          return DropdownMenuItem<String?>(
-                            value: s.id,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  s.name,
-                                  style: TextStyle(
-                                    fontWeight: isSelected
-                                        ? FontWeight.w700
-                                        : FontWeight.w500,
-                                    color: isSelected
-                                        ? AppColors.secondary(brightness)
-                                        : AppColors.foreground(brightness),
-                                  ),
-                                ),
-                                if (isSelected) ...[
-                                  const SizedBox(width: 12),
-                                  Icon(
-                                    Icons.check_circle_rounded,
-                                    size: 18,
-                                    color: AppColors.secondary(brightness),
-                                  ),
-                                ],
-                              ],
-                            ),
-                          );
-                        }),
-                      ],
-                      onChanged: (v) =>
-                          setState(() => _selectedSubcategoryId = v),
-                    );
-                  },
+                  onSubcategoryChanged: (v) =>
+                      setState(() => _selectedSubcategoryId = v),
                 ),
                 const SizedBox(height: 30),
                 SizedBox(
