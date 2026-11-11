@@ -1,9 +1,9 @@
 import 'package:e_commerce/core/network/dio_client.dart';
-import 'package:e_commerce/features/profile/logic/cubit/delete_profile_state.dart';
+import 'package:e_commerce/features/profile/logic/delete_profile_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../data/repos/profile_repo.dart';
-import '../../../../core/network/api_exception.dart';
+import '../data/repos/profile_repository.dart';
+import '../../../core/network/api_exception.dart';
 
 class DeleteProfileCubit extends Cubit<DeleteProfileState> {
   DeleteProfileCubit(this._repository, this._client)

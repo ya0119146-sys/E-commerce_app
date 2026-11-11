@@ -6,11 +6,11 @@ import 'dart:io';
 
 import 'package:e_commerce/features/auth/ui/login_screen.dart';
 
-import 'package:e_commerce/features/profile/logic/cubit/cubit/get_profile_cubit.dart';
+import 'package:e_commerce/features/profile/logic/get_profile_cubit.dart';
 
-import 'package:e_commerce/features/profile/logic/cubit/cubit/get_profile_state.dart';
+import 'package:e_commerce/features/profile/logic/get_profile_state.dart';
 
-import 'package:e_commerce/features/profile/logic/cubit/delete_profile_cubit.dart';
+import 'package:e_commerce/features/profile/logic/delete_profile_cubit.dart';
 
 import 'package:flutter/material.dart';
 

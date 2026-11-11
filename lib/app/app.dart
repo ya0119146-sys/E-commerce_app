@@ -1,8 +1,8 @@
-import 'package:e_commerce/app/splash_veiw.dart';
+import 'package:e_commerce/app/splash_view.dart';
 import 'package:e_commerce/core/network/dio_client.dart';
-import 'package:e_commerce/features/profile/data/repos/profile_repo.dart';
-import 'package:e_commerce/features/profile/logic/cubit/cubit/get_profile_cubit.dart';
-import 'package:e_commerce/features/profile/logic/cubit/delete_profile_cubit.dart';
+import 'package:e_commerce/features/profile/data/repos/profile_repository.dart';
+import 'package:e_commerce/features/profile/logic/get_profile_cubit.dart';
+import 'package:e_commerce/features/profile/logic/delete_profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

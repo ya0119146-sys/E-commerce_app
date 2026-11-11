@@ -1,4 +1,4 @@
-import 'package:e_commerce/features/profile/data/repos/profile_repo.dart';
+import 'package:e_commerce/features/profile/data/repos/profile_repository.dart';
 import 'package:get_it/get_it.dart';
 import '../network/dio_client.dart';
 import '../../features/auth/data/repos/auth_repository.dart';
