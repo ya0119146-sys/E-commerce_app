@@ -112,8 +112,8 @@ class ProductsCubit extends Cubit<ProductsState> {
       final combined = [...state.products, ...newProducts];
       final finalProducts =
           (state.keyword != null && state.keyword!.trim().isNotEmpty)
-              ? SearchRelevanceHelper.sortByRelevance(combined, state.keyword!)
-              : combined;
+          ? SearchRelevanceHelper.sortByRelevance(combined, state.keyword!)
+          : combined;
 
       emit(
         state.copyWith(
@@ -132,11 +132,7 @@ class ProductsCubit extends Cubit<ProductsState> {
 
   /// Search products by keyword across all categories.
   Future<void> search(String keyword) async {
-    await fetchProducts(
-      keyword: keyword,
-      clearCategory: true,
-      refresh: true,
-    );
+    await fetchProducts(keyword: keyword, clearCategory: true, refresh: true);
   }
 
   /// Clear search and reload.

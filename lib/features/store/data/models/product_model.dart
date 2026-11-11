@@ -57,9 +57,8 @@ class ProductModel {
     if (s == null || s.length != 24) return false;
     for (var i = 0; i < 24; i++) {
       final c = s.codeUnitAt(i);
-      final isHex = (c >= 48 && c <= 57) ||
-          (c >= 97 && c <= 102) ||
-          (c >= 65 && c <= 70);
+      final isHex =
+          (c >= 48 && c <= 57) || (c >= 97 && c <= 102) || (c >= 65 && c <= 70);
       if (!isHex) return false;
     }
     return true;

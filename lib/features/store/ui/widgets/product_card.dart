@@ -2,17 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/widgets/custom_snackbar.dart';
 import '../../../../core/widgets/shimmer_loading.dart';
-import '../../../wishlist/logic/wishlist_cubit.dart';
-import '../../../cart/logic/cart_cubit.dart';
 import '../../../admin/logic/admin_cubit.dart';
 import '../../../admin/ui/widgets/product_form.dart';
 import '../../logic/categories_cubit.dart';
 import '../../logic/products_cubit.dart';
 import '../../data/models/product_model.dart';
 import '../product_detail_screen.dart';
-import '../../../../core/utils/auth_guard.dart';
+import 'product_card_actions.dart';
 import '../../../../core/localization/app_translations.dart';
 
 /// Concept 2: Minimalist High-Fashion / Luxury Farfetch & Zara Style Product Card.
@@ -181,7 +178,7 @@ class _ProductCardState extends State<ProductCard>
                       PositionedDirectional(
                         top: 8,
                         end: 8,
-                        child: _FrostedWishlistHeart(
+                        child: FrostedWishlistHeart(
                           product: product,
                           isDark: isDark,
                         ),
@@ -364,7 +361,7 @@ class _ProductCardState extends State<ProductCard>
                           ),
                         )
                       else if (product.inStock)
-                        _SleekAddToCartPill(product: product)
+                        SleekAddToCartPill(product: product)
                       else
                         Container(
                           width: double.infinity,
@@ -406,196 +403,6 @@ class _ProductCardState extends State<ProductCard>
           Icons.shopping_bag_outlined,
           size: 38,
           color: AppColors.foreground(brightness).withValues(alpha: 0.15),
-        ),
-      ),
-    );
-  }
-}
-
-/// Floating Frosted Glass Wishlist Heart with smooth scale-bounce animation.
-class _FrostedWishlistHeart extends StatefulWidget {
-  final ProductModel product;
-  final bool isDark;
-
-  const _FrostedWishlistHeart({required this.product, required this.isDark});
-
-  @override
-  State<_FrostedWishlistHeart> createState() => _FrostedWishlistHeartState();
-}
-
-class _FrostedWishlistHeartState extends State<_FrostedWishlistHeart>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 280),
-      vsync: this,
-    );
-    _scaleAnimation = TweenSequence<double>([
-      TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.35), weight: 50),
-      TweenSequenceItem(tween: Tween(begin: 1.35, end: 1.0), weight: 50),
-    ]).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final brightness = Theme.of(context).brightness;
-
-    return BlocBuilder<WishlistCubit, WishlistState>(
-      // ⚡ Only rebuild when THIS product's wishlist status changes.
-      // Without this, every ProductCard rebuilds on any wishlist event
-      // (e.g. fetch, toggle of ANY product) causing heavy jank during scroll.
-      buildWhen: (prev, next) =>
-          prev.isInWishlist(widget.product.id) !=
-          next.isInWishlist(widget.product.id),
-      builder: (context, state) {
-        final isFav = state.isInWishlist(widget.product.id);
-
-        return ScaleTransition(
-          scale: _scaleAnimation,
-          child: GestureDetector(
-            onTap: () {
-              AuthGuard.requireAuth(
-                context,
-                action: AuthActionType.wishlist,
-                onAuthenticated: () {
-                  _controller.forward(from: 0);
-                  context.read<WishlistCubit>().toggleWishlist(
-                    widget.product.id,
-                    widget.product,
-                  );
-                },
-              );
-            },
-            child: Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: widget.isDark
-                    ? Colors.black.withValues(alpha: 0.55)
-                    : Colors.white.withValues(alpha: 0.9),
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.35),
-                  width: 0.8,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.08),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Icon(
-                isFav ? Icons.favorite : Icons.favorite_border,
-                size: 16,
-                color: isFav
-                    ? AppColors.primary(brightness)
-                    : (widget.isDark ? Colors.white70 : Colors.black87),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-/// Concept 2: Sleek Quick-Add Pill "+ أضف للسلة" (`+ Add to Cart`).
-class _SleekAddToCartPill extends StatefulWidget {
-  final ProductModel product;
-  const _SleekAddToCartPill({required this.product});
-
-  @override
-  State<_SleekAddToCartPill> createState() => _SleekAddToCartPillState();
-}
-
-class _SleekAddToCartPillState extends State<_SleekAddToCartPill>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 240),
-      vsync: this,
-    );
-    _scaleAnimation = TweenSequence<double>([
-      TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.94), weight: 50),
-      TweenSequenceItem(tween: Tween(begin: 0.94, end: 1.0), weight: 50),
-    ]).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final brightness = Theme.of(context).brightness;
-
-    return ScaleTransition(
-      scale: _scaleAnimation,
-      child: GestureDetector(
-        onTap: () {
-          AuthGuard.requireAuth(
-            context,
-            action: AuthActionType.cart,
-            onAuthenticated: () {
-              _controller.forward(from: 0);
-              context.read<CartCubit>().addToCart(widget.product.id);
-              CustomSnackBar.showCart(
-                context,
-                '${'add_to_cart'.tr(context)} ✨',
-              );
-            },
-          );
-        },
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8),
-          decoration: BoxDecoration(
-            color: AppColors.secondary(brightness).withValues(alpha: 0.08),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: AppColors.secondary(brightness).withValues(alpha: 0.25),
-              width: 0.9,
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.shopping_bag_outlined,
-                size: 13,
-                color: AppColors.secondary(brightness),
-              ),
-              const SizedBox(width: 5),
-              Text(
-                'add_to_cart'.tr(context),
-                style: TextStyle(
-                  fontSize: 10.5,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.secondary(brightness),
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );
